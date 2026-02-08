@@ -63,7 +63,7 @@ const Contact = ({ motionEnabled = true }) => {
                         href={SITE_CONFIG.resumeUrl}
                         target="_blank"
                         rel="noreferrer"
-                        className="px-8 py-4 border border-white/20 rounded-full hover:bg-white/5 transition-colors"
+                        className="px-8 py-4 border border-primary/50 text-primary font-semibold rounded-full hover:bg-primary hover:text-dark transition-all"
                     >
                         View Resume
                     </a>

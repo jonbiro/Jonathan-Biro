@@ -54,17 +54,35 @@ const About = ({ motionEnabled = true, pointerEffectsEnabled = true }) => {
                             <h3 className="text-sm uppercase tracking-wider text-gray-500 mb-4">Tech Stack</h3>
                             <div className="flex flex-wrap gap-3">
                                 {[
-                                    "React.js", "Node.js", "Express.js", "Redux", "React Native",
-                                    "Ruby on Rails", "TypeScript", "JavaScript", "HTML", "CSS",
-                                    "Bootstrap", "Gatsby.js", "GraphQL"
-                                ].map((skill, index) => (
-                                    <span
-                                        key={index}
-                                        className="px-4 py-2 bg-white/5 border border-white/10 rounded-full text-sm text-gray-300 hover:bg-white/10 hover:border-primary/50 hover:text-white transition-all cursor-default"
-                                    >
-                                        {skill}
-                                    </span>
-                                ))}
+                                    { name: "React.js", category: "frontend" },
+                                    { name: "React Native", category: "frontend" },
+                                    { name: "Gatsby.js", category: "frontend" },
+                                    { name: "Node.js", category: "backend" },
+                                    { name: "Express.js", category: "backend" },
+                                    { name: "Ruby on Rails", category: "backend" },
+                                    { name: "Redux", category: "frontend" },
+                                    { name: "GraphQL", category: "backend" },
+                                    { name: "TypeScript", category: "language" },
+                                    { name: "JavaScript", category: "language" },
+                                    { name: "HTML", category: "language" },
+                                    { name: "CSS", category: "language" },
+                                    { name: "Bootstrap", category: "tool" },
+                                ].map((skill, index) => {
+                                    const categoryStyles = {
+                                        frontend: "hover:border-primary/60 hover:text-primary",
+                                        backend: "hover:border-secondary/60 hover:text-secondary",
+                                        language: "hover:border-accent/60 hover:text-accent",
+                                        tool: "hover:border-white/40 hover:text-white",
+                                    };
+                                    return (
+                                        <span
+                                            key={index}
+                                            className={`px-4 py-2 bg-white/5 border border-white/10 rounded-full text-sm text-gray-300 transition-all duration-300 cursor-default hover:bg-white/10 hover:scale-105 ${categoryStyles[skill.category]}`}
+                                        >
+                                            {skill.name}
+                                        </span>
+                                    );
+                                })}
                             </div>
                         </div>
 

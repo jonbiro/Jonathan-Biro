@@ -222,14 +222,7 @@ function App() {
         <Contact motionEnabled={motionEnabled} />
       </Suspense>
 
-      <button
-        type="button"
-        onClick={openCommandPalette}
-        className="fixed bottom-4 left-4 z-40 hidden items-center gap-2 rounded-full border border-white/15 bg-black/50 px-3 py-2 text-xs text-zinc-200 backdrop-blur-md transition hover:bg-black/70 sm:flex"
-      >
-        Command Menu
-        <span className="rounded border border-white/20 px-1.5 py-0.5 text-[10px]">Ctrl/Cmd + K</span>
-      </button>
+
 
       {(isCommandPaletteOpen || isChallengeOpen) && (
         <Suspense fallback={null}>

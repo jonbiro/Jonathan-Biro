@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { FaEnvelope, FaGithub, FaLinkedin } from "react-icons/fa";
+import { FaEnvelope, FaGithub, FaLinkedin, FaChevronDown, FaTerminal } from "react-icons/fa";
 
 import HackerText from "./ui/HackerText";
 import LiveStatusCard from "./ui/LiveStatusCard";
@@ -85,13 +85,14 @@ const Hero = ({
                         </a>
                     </MagneticButton>
                     <MagneticButton enabled={pointerEffectsEnabled}>
-                        <button
-                            type="button"
-                            onClick={onOpenCommandPalette}
+                        <a
+                            href={SITE_CONFIG.resumeUrl}
+                            target="_blank"
+                            rel="noreferrer"
                             className="px-6 py-3 rounded-full border border-white/20 text-white font-semibold hover:bg-white/10 transition-colors block"
                         >
-                            Command Menu
-                        </button>
+                            View Resume
+                        </a>
                     </MagneticButton>
                     <MagneticButton enabled={pointerEffectsEnabled}>
                         <button
@@ -100,6 +101,17 @@ const Hero = ({
                             className="px-6 py-3 rounded-full border border-primary/40 text-primary font-semibold hover:bg-primary/15 transition-colors block"
                         >
                             QA Challenge
+                        </button>
+                    </MagneticButton>
+                    <MagneticButton enabled={pointerEffectsEnabled}>
+                        <button
+                            type="button"
+                            onClick={onOpenCommandPalette}
+                            aria-label="Open command menu (Ctrl+K)"
+                            title="Command Menu (Ctrl+K)"
+                            className="p-3 rounded-full border border-white/10 text-gray-400 hover:text-white hover:bg-white/10 transition-all block"
+                        >
+                            <FaTerminal className="text-lg" />
                         </button>
                     </MagneticButton>
                 </motion.div>
@@ -115,6 +127,28 @@ const Hero = ({
                     <SocialLink href={`mailto:${SITE_CONFIG.email}`} icon={<FaEnvelope />} label="Email Me" />
                 </motion.div>
             </div>
+
+            {/* Scroll Down Indicator */}
+            <motion.div
+                initial={motionEnabled ? { opacity: 0, y: -10 } : false}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: motionEnabled ? 1.5 : 0, duration: motionEnabled ? 0.8 : 0 }}
+                className="absolute bottom-8 left-1/2 -translate-x-1/2"
+            >
+                <a
+                    href="#about"
+                    aria-label="Scroll to about section"
+                    className="flex flex-col items-center gap-2 text-gray-500 hover:text-white transition-colors group"
+                >
+                    <span className="text-xs uppercase tracking-widest">Scroll</span>
+                    <motion.div
+                        animate={motionEnabled ? { y: [0, 8, 0] } : {}}
+                        transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                    >
+                        <FaChevronDown className="text-lg group-hover:text-primary transition-colors" />
+                    </motion.div>
+                </a>
+            </motion.div>
         </section>
     );
 };
