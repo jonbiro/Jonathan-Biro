@@ -27,6 +27,7 @@ function App() {
   const [isChallengeOpen, setIsChallengeOpen] = useState(false);
   const [challengeSession, setChallengeSession] = useState(0);
   const [toastMessage, setToastMessage] = useState("");
+  const showCustomCursor = pointerEffectsEnabled && !isCommandPaletteOpen && !isChallengeOpen;
 
   const openCommandPalette = useCallback(() => {
     setCommandPaletteSession((currentSession) => currentSession + 1);
@@ -203,9 +204,9 @@ function App() {
 
   return (
     <main
-      className={`bg-dark text-white min-h-screen selection:bg-primary selection:text-white relative ${pointerEffectsEnabled ? "cursor-none" : ""}`}
+      className={`bg-dark text-white min-h-screen selection:bg-primary selection:text-white relative ${showCustomCursor ? "cursor-none" : ""}`}
     >
-      {pointerEffectsEnabled && !isCommandPaletteOpen && !isChallengeOpen && <CustomCursor />}
+      {showCustomCursor && <CustomCursor />}
       {motionEnabled && <ParticlesBackground />}
       {motionEnabled && <ScrollProgress />}
       <Hero

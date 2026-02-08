@@ -87,6 +87,16 @@ const isMobileLikeDevice = () => {
 const supportsHaptics = () =>
     typeof navigator !== "undefined" && typeof navigator.vibrate === "function";
 
+const isPrimaryPointerEvent = (event) => {
+    if (!event.isPrimary) {
+        return false;
+    }
+    if (event.pointerType === "mouse") {
+        return event.button === 0;
+    }
+    return true;
+};
+
 const readBooleanPreference = (key, fallback) => {
     if (typeof window === "undefined") {
         return fallback;
@@ -506,6 +516,9 @@ const QAChallengeModal = ({ isOpen, onClose, motionEnabled = true }) => {
             if (event.target !== event.currentTarget || phase !== "running") {
                 return;
             }
+            if (!isPrimaryPointerEvent(event)) {
+                return;
+            }
 
             comboRef.current = 0;
             setCombo(0);
@@ -778,7 +791,7 @@ const QAChallengeModal = ({ isOpen, onClose, motionEnabled = true }) => {
                             animate={isArenaShaking ? { x: [0, -8, 7, -5, 0] } : { x: 0 }}
                             transition={{ duration: 0.22 }}
                             onPointerDown={handleArenaMiss}
-                            style={{ touchAction: "manipulation" }}
+                            style={{ touchAction: "manipulation", cursor: "crosshair" }}
                         >
                             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,#1e293b_0%,#020617_62%)]" />
                             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(59,130,246,0.18),transparent_45%),radial-gradient(circle_at_80%_75%,rgba(236,72,153,0.14),transparent_42%)]" />
@@ -823,6 +836,9 @@ const QAChallengeModal = ({ isOpen, onClose, motionEnabled = true }) => {
                                             <motion.button
                                                 key={bug.id}
                                                 onPointerDown={(event) => {
+                                                    if (!isPrimaryPointerEvent(event)) {
+                                                        return;
+                                                    }
                                                     event.preventDefault();
                                                     event.stopPropagation();
                                                     handleBugHit(bug.id);
@@ -841,6 +857,7 @@ const QAChallengeModal = ({ isOpen, onClose, motionEnabled = true }) => {
                                                     width: `${bugSize}px`,
                                                     height: `${bugSize}px`,
                                                     touchAction: "manipulation",
+                                                    cursor: "pointer",
                                                 }}
                                                 initial={{ opacity: 0, scale: 0.5 }}
                                                 animate={
