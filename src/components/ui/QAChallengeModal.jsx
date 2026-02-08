@@ -14,7 +14,8 @@ import {
 const GAME_DURATION_SECONDS = 25;
 const BASE_BUG_COUNT_DESKTOP = 12;
 const BASE_BUG_COUNT_MOBILE = 9;
-const TICK_RATE_MS = 33;
+const MOVEMENT_TICK_RATE_MS = 33;
+const TIMER_TICK_RATE_MS = 100;
 const COMBO_WINDOW_MS = 900;
 const MISS_TIME_PENALTY = 1.2;
 const MAX_TIME_CAP = 35;
@@ -602,14 +603,14 @@ const QAChallengeModal = ({ isOpen, onClose, motionEnabled = true }) => {
             setTimeLeft((currentTime) => {
                 const nextTime = Math.max(
                     0,
-                    Number((currentTime - TICK_RATE_MS / 1000).toFixed(2))
+                    Number((currentTime - TIMER_TICK_RATE_MS / 1000).toFixed(2))
                 );
                 if (nextTime <= 0) {
                     endGame(scoreRef.current);
                 }
                 return nextTime;
             });
-        }, TICK_RATE_MS);
+        }, TIMER_TICK_RATE_MS);
 
         return () => window.clearInterval(timerId);
     }, [endGame, phase]);
@@ -649,7 +650,7 @@ const QAChallengeModal = ({ isOpen, onClose, motionEnabled = true }) => {
                     };
                 })
             );
-        }, TICK_RATE_MS);
+        }, MOVEMENT_TICK_RATE_MS);
 
         return () => window.clearInterval(movementId);
     }, [phase]);

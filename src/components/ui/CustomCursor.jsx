@@ -17,15 +17,41 @@ const CustomCursor = () => {
     const smoothOuterScale = useSpring(outerScale, { stiffness: 320, damping: 26 });
 
     useEffect(() => {
-        const updateMousePosition = (e) => {
-            innerX.set(e.clientX - 8);
-            innerY.set(e.clientY - 8);
-            outerX.set(e.clientX - 16);
-            outerY.set(e.clientY - 16);
+        let targetX = -100;
+        let targetY = -100;
+        let frameId = 0;
+
+        const applyPointerPosition = () => {
+            frameId = 0;
+            innerX.set(targetX - 8);
+            innerY.set(targetY - 8);
+            outerX.set(targetX - 16);
+            outerY.set(targetY - 16);
         };
 
-        const handleMouseOver = (e) => {
-            if (e.target.tagName === 'A' || e.target.tagName === 'BUTTON' || e.target.closest('a') || e.target.closest('button')) {
+        const schedulePointerUpdate = () => {
+            if (frameId) {
+                return;
+            }
+            frameId = window.requestAnimationFrame(applyPointerPosition);
+        };
+
+        const updatePointerPosition = (event) => {
+            targetX = event.clientX;
+            targetY = event.clientY;
+            schedulePointerUpdate();
+        };
+
+        const handlePointerOver = (event) => {
+            if (!(event.target instanceof Element)) {
+                return;
+            }
+
+            const isInteractive = Boolean(
+                event.target.closest("a,button,[role='button'],input,textarea,select,label")
+            );
+
+            if (isInteractive) {
                 innerScale.set(1.5);
                 outerScale.set(2.5);
             } else {
@@ -34,12 +60,15 @@ const CustomCursor = () => {
             }
         };
 
-        window.addEventListener('mousemove', updateMousePosition);
-        window.addEventListener('mouseover', handleMouseOver);
+        window.addEventListener("pointermove", updatePointerPosition, { passive: true });
+        window.addEventListener("pointerover", handlePointerOver, { passive: true });
 
         return () => {
-            window.removeEventListener('mousemove', updateMousePosition);
-            window.removeEventListener('mouseover', handleMouseOver);
+            if (frameId) {
+                window.cancelAnimationFrame(frameId);
+            }
+            window.removeEventListener("pointermove", updatePointerPosition);
+            window.removeEventListener("pointerover", handlePointerOver);
         };
     }, [innerScale, innerX, innerY, outerScale, outerX, outerY]);
 

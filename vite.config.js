@@ -16,5 +16,28 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [react()],
     base: normalizeBasePath(env.VITE_BASE_PATH ?? env.BASE_PATH ?? ''),
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            if (!id.includes('node_modules')) {
+              return undefined
+            }
+
+            if (id.includes('node_modules/react/') || id.includes('node_modules/react-dom/')) {
+              return 'vendor-react'
+            }
+            if (id.includes('node_modules/framer-motion/')) {
+              return 'vendor-motion'
+            }
+            if (id.includes('node_modules/react-icons/')) {
+              return 'vendor-icons'
+            }
+
+            return 'vendor'
+          },
+        },
+      },
+    },
   }
 })

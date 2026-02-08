@@ -2,8 +2,29 @@ import { useEffect, useRef } from "react";
 
 const getParticleCount = (width, height) => {
     const area = width * height;
-    return Math.max(28, Math.min(82, Math.floor(area / 26000)));
+    return Math.max(18, Math.min(64, Math.floor(area / 36000)));
 };
+
+const hasFinePointer = () =>
+    typeof window !== "undefined" &&
+    typeof window.matchMedia === "function" &&
+    window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+
+const getQualityMultiplier = () => {
+    if (typeof navigator === "undefined") {
+        return 1;
+    }
+
+    const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+    const saveDataEnabled = Boolean(connection && connection.saveData);
+    const lowCoreDevice =
+        typeof navigator.hardwareConcurrency === "number" && navigator.hardwareConcurrency <= 4;
+
+    return saveDataEnabled || lowCoreDevice ? 0.68 : 1;
+};
+
+const TARGET_FPS = 30;
+const FRAME_INTERVAL_MS = 1000 / TARGET_FPS;
 
 const ParticlesBackground = () => {
     const canvasRef = useRef(null);
@@ -18,8 +39,12 @@ const ParticlesBackground = () => {
 
         const particles = [];
         let animationFrameId = 0;
+        let lastFrameAt = 0;
+        let drawConnectionsOnThisFrame = true;
         let width = window.innerWidth;
         let height = window.innerHeight;
+        const qualityMultiplier = getQualityMultiplier();
+        const finePointerEnabled = hasFinePointer();
 
         const mouse = {
             x: null,
@@ -78,7 +103,10 @@ const ParticlesBackground = () => {
 
         const init = () => {
             particles.length = 0;
-            const numberOfParticles = getParticleCount(width, height);
+            const numberOfParticles = Math.max(
+                16,
+                Math.round(getParticleCount(width, height) * qualityMultiplier)
+            );
 
             for (let i = 0; i < numberOfParticles; i += 1) {
                 const size = Math.random() * 2 + 1;
@@ -92,6 +120,9 @@ const ParticlesBackground = () => {
         };
 
         const connect = () => {
+            if (width < 640) {
+                return;
+            }
             const maxDistance = Math.min(180, width * 0.12);
             const maxDistanceSq = maxDistance * maxDistance;
 
@@ -114,22 +145,32 @@ const ParticlesBackground = () => {
             }
         };
 
-        const animate = () => {
+        const animate = (timestamp) => {
             if (document.hidden) {
                 animationFrameId = 0;
                 return;
             }
 
+            if (timestamp - lastFrameAt < FRAME_INTERVAL_MS) {
+                animationFrameId = window.requestAnimationFrame(animate);
+                return;
+            }
+
+            lastFrameAt = timestamp;
             ctx.clearRect(0, 0, width, height);
             for (let i = 0; i < particles.length; i += 1) {
                 particles[i].update();
             }
-            connect();
+            drawConnectionsOnThisFrame = !drawConnectionsOnThisFrame;
+            if (drawConnectionsOnThisFrame) {
+                connect();
+            }
             animationFrameId = window.requestAnimationFrame(animate);
         };
 
         const startAnimation = () => {
             if (!animationFrameId) {
+                lastFrameAt = 0;
                 animationFrameId = window.requestAnimationFrame(animate);
             }
         };
@@ -161,12 +202,16 @@ const ParticlesBackground = () => {
         init();
         startAnimation();
 
-        window.addEventListener("mousemove", handleMouseMove);
+        if (finePointerEnabled) {
+            window.addEventListener("mousemove", handleMouseMove, { passive: true });
+        }
         window.addEventListener("resize", handleResize);
         document.addEventListener("visibilitychange", handleVisibilityChange);
 
         return () => {
-            window.removeEventListener("mousemove", handleMouseMove);
+            if (finePointerEnabled) {
+                window.removeEventListener("mousemove", handleMouseMove);
+            }
             window.removeEventListener("resize", handleResize);
             document.removeEventListener("visibilitychange", handleVisibilityChange);
             if (animationFrameId) {

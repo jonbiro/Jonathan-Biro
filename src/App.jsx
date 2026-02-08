@@ -10,15 +10,15 @@ import {
 } from "react-icons/fa";
 import Hero from "./components/Hero";
 import SITE_CONFIG from "./config/site";
-import CustomCursor from "./components/ui/CustomCursor";
-import ParticlesBackground from "./components/ui/ParticlesBackground";
-import ScrollProgress from "./components/ui/ScrollProgress";
 import useUiPreferences from "./hooks/useUiPreferences";
 
 const About = lazy(() => import("./components/About"));
 const Contact = lazy(() => import("./components/Contact"));
 const CommandPalette = lazy(() => import("./components/ui/CommandPalette"));
 const QAChallengeModal = lazy(() => import("./components/ui/QAChallengeModal"));
+const CustomCursor = lazy(() => import("./components/ui/CustomCursor"));
+const ParticlesBackground = lazy(() => import("./components/ui/ParticlesBackground"));
+const ScrollProgress = lazy(() => import("./components/ui/ScrollProgress"));
 
 function App() {
   const { motionEnabled, motionPreference, pointerEffectsEnabled, setMotionPreference } = useUiPreferences();
@@ -206,9 +206,11 @@ function App() {
     <main
       className={`bg-dark text-white min-h-screen selection:bg-primary selection:text-white relative ${showCustomCursor ? "cursor-none" : ""}`}
     >
-      {showCustomCursor && <CustomCursor />}
-      {motionEnabled && <ParticlesBackground />}
-      {motionEnabled && <ScrollProgress />}
+      <Suspense fallback={null}>
+        {showCustomCursor && <CustomCursor />}
+        {motionEnabled && <ParticlesBackground />}
+        {motionEnabled && <ScrollProgress />}
+      </Suspense>
       <Hero
         motionEnabled={motionEnabled}
         pointerEffectsEnabled={pointerEffectsEnabled}
