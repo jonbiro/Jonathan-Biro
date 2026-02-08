@@ -87,13 +87,21 @@ const isMobileLikeDevice = () => {
 const supportsHaptics = () =>
     typeof navigator !== "undefined" && typeof navigator.vibrate === "function";
 
-const isPrimaryPointerEvent = (event) => {
-    if (!event.isPrimary) {
-        return false;
-    }
-    if (event.pointerType === "mouse") {
+const supportsPointerEvents = () =>
+    typeof window !== "undefined" && "PointerEvent" in window;
+
+const shouldHandlePrimaryActivation = (event) => {
+    if (event.type === "mousedown") {
+        if (supportsPointerEvents()) {
+            return false;
+        }
         return event.button === 0;
     }
+
+    if ("pointerType" in event && event.pointerType === "mouse") {
+        return event.button === 0;
+    }
+
     return true;
 };
 
@@ -516,9 +524,6 @@ const QAChallengeModal = ({ isOpen, onClose, motionEnabled = true }) => {
             if (event.target !== event.currentTarget || phase !== "running") {
                 return;
             }
-            if (!isPrimaryPointerEvent(event)) {
-                return;
-            }
 
             comboRef.current = 0;
             setCombo(0);
@@ -547,6 +552,28 @@ const QAChallengeModal = ({ isOpen, onClose, motionEnabled = true }) => {
             });
         },
         [endGame, phase, playMissFeedback]
+    );
+
+    const handleArenaPress = useCallback(
+        (event) => {
+            if (!shouldHandlePrimaryActivation(event)) {
+                return;
+            }
+            handleArenaMiss(event);
+        },
+        [handleArenaMiss]
+    );
+
+    const handleBugPress = useCallback(
+        (event, bugId) => {
+            if (!shouldHandlePrimaryActivation(event)) {
+                return;
+            }
+            event.preventDefault();
+            event.stopPropagation();
+            handleBugHit(bugId);
+        },
+        [handleBugHit]
     );
 
     useEffect(() => {
@@ -790,7 +817,8 @@ const QAChallengeModal = ({ isOpen, onClose, motionEnabled = true }) => {
                             className="relative mt-3 flex min-h-[360px] flex-1 overflow-hidden rounded-2xl border border-white/10 bg-[#02050c] sm:min-h-[430px]"
                             animate={isArenaShaking ? { x: [0, -8, 7, -5, 0] } : { x: 0 }}
                             transition={{ duration: 0.22 }}
-                            onPointerDown={handleArenaMiss}
+                            onPointerDown={handleArenaPress}
+                            onMouseDown={handleArenaPress}
                             style={{ touchAction: "manipulation", cursor: "crosshair" }}
                         >
                             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,#1e293b_0%,#020617_62%)]" />
@@ -830,19 +858,13 @@ const QAChallengeModal = ({ isOpen, onClose, motionEnabled = true }) => {
                                         const variant = BUG_VARIANTS[bug.variantId];
                                         const bugSize = mobileLikeMode
                                             ? Math.max(bug.size, 44)
-                                            : bug.size;
+                                            : Math.max(bug.size, 34);
 
                                         return (
                                             <motion.button
                                                 key={bug.id}
-                                                onPointerDown={(event) => {
-                                                    if (!isPrimaryPointerEvent(event)) {
-                                                        return;
-                                                    }
-                                                    event.preventDefault();
-                                                    event.stopPropagation();
-                                                    handleBugHit(bug.id);
-                                                }}
+                                                onPointerDown={(event) => handleBugPress(event, bug.id)}
+                                                onMouseDown={(event) => handleBugPress(event, bug.id)}
                                                 onKeyDown={(event) => {
                                                     if (event.key === "Enter" || event.key === " ") {
                                                         event.preventDefault();
@@ -850,7 +872,7 @@ const QAChallengeModal = ({ isOpen, onClose, motionEnabled = true }) => {
                                                     }
                                                 }}
                                                 disabled={bug.squashed}
-                                                className={`absolute -translate-x-1/2 -translate-y-1/2 rounded-full border text-[0.75rem] font-bold uppercase tracking-wider transition ${variant.className} ${bug.squashed ? "pointer-events-none" : ""}`}
+                                                className={`absolute flex items-center justify-center rounded-full border text-[0.78rem] leading-none transition ${variant.className} ${bug.squashed ? "pointer-events-none" : ""}`}
                                                 style={{
                                                     left: `${bug.x}%`,
                                                     top: `${bug.y}%`,
@@ -859,6 +881,11 @@ const QAChallengeModal = ({ isOpen, onClose, motionEnabled = true }) => {
                                                     touchAction: "manipulation",
                                                     cursor: "pointer",
                                                 }}
+                                                transformTemplate={(_, generatedTransform) =>
+                                                    generatedTransform && generatedTransform !== "none"
+                                                        ? `translate(-50%, -50%) ${generatedTransform}`
+                                                        : "translate(-50%, -50%)"
+                                                }
                                                 initial={{ opacity: 0, scale: 0.5 }}
                                                 animate={
                                                     bug.squashed
@@ -891,7 +918,9 @@ const QAChallengeModal = ({ isOpen, onClose, motionEnabled = true }) => {
                                                 aria-label={`Smash ${bug.variantName} bug`}
                                                 title={`${bug.variantName}: ${bug.points} pts`}
                                             >
-                                                {bug.variantId === "gold" ? <FaBolt /> : <FaBug />}
+                                                <span className="pointer-events-none">
+                                                    {bug.variantId === "gold" ? <FaBolt /> : <FaBug />}
+                                                </span>
                                             </motion.button>
                                         );
                                     })}
