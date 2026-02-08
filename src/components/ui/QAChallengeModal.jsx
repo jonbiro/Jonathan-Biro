@@ -87,19 +87,14 @@ const isMobileLikeDevice = () => {
 const supportsHaptics = () =>
     typeof navigator !== "undefined" && typeof navigator.vibrate === "function";
 
-const supportsPointerEvents = () =>
-    typeof window !== "undefined" && "PointerEvent" in window;
-
 const shouldHandlePrimaryActivation = (event) => {
-    if (event.type === "mousedown") {
-        if (supportsPointerEvents()) {
-            return false;
-        }
-        return event.button === 0;
+    if ("pointerType" in event && event.pointerType === "mouse") {
+        const mouseButton = typeof event.button === "number" ? event.button : 0;
+        return mouseButton <= 0;
     }
 
-    if ("pointerType" in event && event.pointerType === "mouse") {
-        return event.button === 0;
+    if ("button" in event && typeof event.button === "number") {
+        return event.button <= 0;
     }
 
     return true;
@@ -818,7 +813,6 @@ const QAChallengeModal = ({ isOpen, onClose, motionEnabled = true }) => {
                             animate={isArenaShaking ? { x: [0, -8, 7, -5, 0] } : { x: 0 }}
                             transition={{ duration: 0.22 }}
                             onPointerDown={handleArenaPress}
-                            onMouseDown={handleArenaPress}
                             style={{ touchAction: "manipulation", cursor: "crosshair" }}
                         >
                             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,#1e293b_0%,#020617_62%)]" />
@@ -864,7 +858,6 @@ const QAChallengeModal = ({ isOpen, onClose, motionEnabled = true }) => {
                                             <motion.button
                                                 key={bug.id}
                                                 onPointerDown={(event) => handleBugPress(event, bug.id)}
-                                                onMouseDown={(event) => handleBugPress(event, bug.id)}
                                                 onKeyDown={(event) => {
                                                     if (event.key === "Enter" || event.key === " ") {
                                                         event.preventDefault();
