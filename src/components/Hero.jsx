@@ -2,7 +2,6 @@ import { motion } from "framer-motion";
 import { FaEnvelope, FaGithub, FaLinkedin, FaChevronDown, FaTerminal } from "react-icons/fa";
 
 import HackerText from "./ui/HackerText";
-import LiveStatusCard from "./ui/LiveStatusCard";
 import MagneticButton from "./ui/MagneticButton";
 import RotatingRoles from "./ui/RotatingRoles";
 import SITE_CONFIG from "../config/site";
@@ -68,8 +67,6 @@ const Hero = ({
                         Based in {SITE_CONFIG.location}
                     </p>
                 </motion.div>
-                <LiveStatusCard motionEnabled={motionEnabled} />
-
                 <motion.div
                     initial={motionEnabled ? { opacity: 0, y: 20 } : false}
                     animate={{ opacity: 1, y: 0 }}

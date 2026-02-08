@@ -1,4 +1,3 @@
-import { AnimatePresence, motion } from "framer-motion";
 import { Suspense, lazy, useCallback, useEffect, useMemo, useState } from "react";
 import {
   FaEnvelope,
@@ -12,7 +11,6 @@ import {
 import Hero from "./components/Hero";
 import SITE_CONFIG from "./config/site";
 import useUiPreferences from "./hooks/useUiPreferences";
-import Preloader from "./components/ui/Preloader";
 
 const About = lazy(() => import("./components/About"));
 const Contact = lazy(() => import("./components/Contact"));
@@ -23,7 +21,6 @@ const ParticlesBackground = lazy(() => import("./components/ui/ParticlesBackgrou
 const ScrollProgress = lazy(() => import("./components/ui/ScrollProgress"));
 
 function App() {
-  const [isLoading, setIsLoading] = useState(true);
   const { motionEnabled, motionPreference, pointerEffectsEnabled, setMotionPreference } = useUiPreferences();
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
   const [commandPaletteSession, setCommandPaletteSession] = useState(0);
@@ -209,34 +206,21 @@ function App() {
     <main
       className={`bg-dark text-white min-h-screen selection:bg-primary selection:text-white relative ${showCustomCursor ? "cursor-none" : ""}`}
     >
-      <AnimatePresence mode="wait">
-        {isLoading && <Preloader onComplete={() => setIsLoading(false)} />}
-      </AnimatePresence>
-
       <Suspense fallback={null}>
         {showCustomCursor && <CustomCursor />}
         {motionEnabled && <ParticlesBackground />}
         {motionEnabled && <ScrollProgress />}
       </Suspense>
-
-      {!isLoading && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
-        >
-          <Hero
-            motionEnabled={motionEnabled}
-            pointerEffectsEnabled={pointerEffectsEnabled}
-            onOpenCommandPalette={openCommandPalette}
-            onLaunchChallenge={openChallenge}
-          />
-          <Suspense fallback={<div className="min-h-screen flex items-center justify-center text-primary">Loading content...</div>}>
-            <About motionEnabled={motionEnabled} pointerEffectsEnabled={pointerEffectsEnabled} />
-            <Contact motionEnabled={motionEnabled} />
-          </Suspense>
-        </motion.div>
-      )}
+      <Hero
+        motionEnabled={motionEnabled}
+        pointerEffectsEnabled={pointerEffectsEnabled}
+        onOpenCommandPalette={openCommandPalette}
+        onLaunchChallenge={openChallenge}
+      />
+      <Suspense fallback={<div className="min-h-screen flex items-center justify-center text-primary">Loading content...</div>}>
+        <About motionEnabled={motionEnabled} pointerEffectsEnabled={pointerEffectsEnabled} />
+        <Contact motionEnabled={motionEnabled} />
+      </Suspense>
 
       {(isCommandPaletteOpen || isChallengeOpen) && (
         <Suspense fallback={null}>
