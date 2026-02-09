@@ -27,8 +27,9 @@ const About = ({ motionEnabled = true, pointerEffectsEnabled = true }) => {
                         <img
                             src={headshot}
                             alt="Jonathan Biro"
-                            loading="lazy"
+                            loading="eager"
                             decoding="async"
+                            fetchPriority="high"
                             className="relative w-64 h-64 md:w-80 md:h-80 object-cover rounded-2xl shadow-2xl grayscale hover:grayscale-0 transition-all duration-500"
                             width="320"
                             height="320"
@@ -92,7 +93,7 @@ const About = ({ motionEnabled = true, pointerEffectsEnabled = true }) => {
                             <a
                                 href={SITE_CONFIG.resumeUrl}
                                 target="_blank"
-                                rel="noreferrer"
+                                rel="noopener noreferrer"
                                 className="inline-flex items-center gap-2 px-6 py-2 border border-primary text-primary rounded-full hover:bg-primary hover:text-white transition-all text-sm uppercase tracking-wider"
                             >
                                 Download Resume
