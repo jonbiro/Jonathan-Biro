@@ -11,7 +11,7 @@ import {
 import Hero from "./components/Hero";
 import About from "./components/About";
 import Contact from "./components/Contact";
-import CustomCursor from "./components/ui/CustomCursor";
+
 import ErrorBoundary from "./components/ui/ErrorBoundary";
 import ParticlesBackground from "./components/ui/ParticlesBackground";
 import ScrollProgress from "./components/ui/ScrollProgress";
@@ -29,7 +29,7 @@ function App() {
   const [isChallengeOpen, setIsChallengeOpen] = useState(false);
   const [challengeSession, setChallengeSession] = useState(0);
   const [toastMessage, setToastMessage] = useState("");
-  const showCustomCursor = pointerEffectsEnabled && !isCommandPaletteOpen && !isChallengeOpen;
+
 
   const openCommandPalette = useCallback(() => {
     setCommandPaletteSession((currentSession) => currentSession + 1);
@@ -214,9 +214,9 @@ function App() {
       </a>
       <main
         id="main-content"
-        className={`bg-dark text-white min-h-screen w-full overflow-x-hidden selection:bg-primary selection:text-white relative ${showCustomCursor ? "cursor-none" : ""}`}
+        className="bg-dark text-white min-h-screen w-full overflow-x-hidden selection:bg-primary selection:text-white relative"
       >
-        {showCustomCursor && <CustomCursor />}
+
         {motionEnabled && <ParticlesBackground />}
         {motionEnabled && <ScrollProgress />}
 

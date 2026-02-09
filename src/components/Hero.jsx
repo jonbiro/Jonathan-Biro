@@ -35,8 +35,8 @@ const Hero = ({
     return (
         <section className="min-h-[100dvh] flex flex-col items-center relative overflow-hidden px-4 py-8 md:py-0">
             <div className="absolute top-0 left-0 w-full h-full z-0 pointer-events-none" aria-hidden="true">
-                <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/10 rounded-full blur-[120px] animate-pulse" />
-                <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-secondary/10 rounded-full blur-[120px] animate-pulse delay-1000" />
+                <div className={`absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/10 rounded-full blur-[120px] ${motionEnabled ? "animate-pulse" : ""}`} />
+                <div className={`absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-secondary/10 rounded-full blur-[120px] ${motionEnabled ? "animate-pulse delay-1000" : ""}`} />
             </div>
 
             <div className="flex-grow flex flex-col justify-center items-center w-full max-w-4xl z-10">
@@ -52,7 +52,7 @@ const Hero = ({
                         as="h1"
                         animate={motionEnabled}
                         interactive={pointerEffectsEnabled}
-                        className={`text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-accent animate-gradient bg-300% block ${pointerEffectsEnabled ? "cursor-crosshair" : ""}`}
+                        className={`text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-accent bg-300% block ${motionEnabled ? "animate-gradient" : ""} ${pointerEffectsEnabled ? "cursor-crosshair" : ""}`}
                     />
                 </div>
 
