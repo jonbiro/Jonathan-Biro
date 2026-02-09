@@ -14,7 +14,7 @@ import Contact from "./components/Contact";
 
 import ErrorBoundary from "./components/ui/ErrorBoundary";
 import ParticlesBackground from "./components/ui/ParticlesBackground";
-import ScrollProgress from "./components/ui/ScrollProgress";
+
 import Toast from "./components/ui/Toast";
 import SITE_CONFIG from "./config/site";
 import useUiPreferences from "./hooks/useUiPreferences";
@@ -218,7 +218,7 @@ function App() {
       >
 
         {motionEnabled && <ParticlesBackground />}
-        {motionEnabled && <ScrollProgress />}
+
 
         <Hero
           motionEnabled={motionEnabled}

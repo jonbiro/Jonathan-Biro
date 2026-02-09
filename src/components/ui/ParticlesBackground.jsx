@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 
 const getParticleCount = (width, height) => {
     const area = width * height;
-    return Math.max(18, Math.min(64, Math.floor(area / 36000)));
+    return Math.max(12, Math.min(50, Math.floor(area / 48000)));
 };
 
 const hasFinePointer = () =>
@@ -124,7 +124,7 @@ const ParticlesBackground = () => {
             if (width < 640) {
                 return;
             }
-            const maxDistance = Math.min(180, width * 0.12);
+            const maxDistance = Math.min(150, width * 0.1);
             const maxDistanceSq = maxDistance * maxDistance;
 
             for (let a = 0; a < particles.length; a += 1) {
