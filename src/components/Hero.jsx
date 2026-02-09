@@ -130,7 +130,7 @@ const Hero = ({
                 initial={motionEnabled ? { opacity: 0, y: -10 } : false}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: motionEnabled ? 1.5 : 0, duration: motionEnabled ? 0.8 : 0 }}
-                className="w-full flex justify-center pb-8 z-10"
+                className="w-full flex justify-center pb-8 mt-12 z-20"
             >
                 <a
                     href="#about"
