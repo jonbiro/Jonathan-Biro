@@ -62,7 +62,7 @@ const Contact = ({ motionEnabled = true }) => {
                     <a
                         href={SITE_CONFIG.resumeUrl}
                         target="_blank"
-                        rel="noreferrer"
+                        rel="noopener noreferrer"
                         className="px-8 py-4 border border-primary/50 text-primary font-semibold rounded-full hover:bg-primary hover:text-dark transition-all"
                     >
                         View Resume
@@ -70,12 +70,12 @@ const Contact = ({ motionEnabled = true }) => {
                 </div>
 
                 <div className="flex gap-6 justify-center text-3xl text-gray-400">
-                    <a href={SITE_CONFIG.githubUrl} target="_blank" rel="noreferrer" aria-label="GitHub Profile" className="hover:text-white hover:scale-110 transition-all"><FaGithub /></a>
-                    <a href={SITE_CONFIG.linkedinUrl} target="_blank" rel="noreferrer" aria-label="LinkedIn Profile" className="hover:text-white hover:scale-110 transition-all"><FaLinkedin /></a>
+                    <a href={SITE_CONFIG.githubUrl} target="_blank" rel="noopener noreferrer" aria-label="GitHub Profile" className="hover:text-white hover:scale-110 transition-all"><FaGithub /></a>
+                    <a href={SITE_CONFIG.linkedinUrl} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn Profile" className="hover:text-white hover:scale-110 transition-all"><FaLinkedin /></a>
                 </div>
             </motion.div>
 
-            <footer className="mt-16 text-gray-500 text-sm">
+            <footer className="mt-16 text-gray-400 text-sm">
                 <p>&copy; {new Date().getFullYear()} Jonathan Biro. All rights reserved.</p>
                 <button
                     onClick={() => window.scrollTo({ top: 0, behavior: motionEnabled ? "smooth" : "auto" })}

@@ -30,6 +30,8 @@ const About = ({ motionEnabled = true, pointerEffectsEnabled = true }) => {
                             loading="lazy"
                             decoding="async"
                             className="relative w-64 h-64 md:w-80 md:h-80 object-cover rounded-2xl shadow-2xl grayscale hover:grayscale-0 transition-all duration-500"
+                            width="320"
+                            height="320"
                         />
                     </div>
                 </motion.div>
@@ -51,7 +53,7 @@ const About = ({ motionEnabled = true, pointerEffectsEnabled = true }) => {
                         </p>
 
                         <div className="py-4">
-                            <h3 className="text-sm uppercase tracking-wider text-gray-500 mb-4">Tech Stack</h3>
+                            <h3 className="text-sm uppercase tracking-wider text-gray-400 mb-4">Tech Stack</h3>
                             <div className="flex flex-wrap gap-3">
                                 {[
                                     { name: "React.js", category: "frontend" },

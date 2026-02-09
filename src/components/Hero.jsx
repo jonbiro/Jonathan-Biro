@@ -85,7 +85,7 @@ const Hero = ({
                         <a
                             href={SITE_CONFIG.resumeUrl}
                             target="_blank"
-                            rel="noreferrer"
+                            rel="noopener noreferrer"
                             className="px-6 py-3 rounded-full border border-white/20 text-white font-semibold hover:bg-white/10 transition-colors block"
                         >
                             View Resume
@@ -135,7 +135,7 @@ const Hero = ({
                 <a
                     href="#about"
                     aria-label="Scroll to about section"
-                    className="flex flex-col items-center gap-2 text-gray-500 hover:text-white transition-colors group"
+                    className="flex flex-col items-center gap-2 text-gray-400 hover:text-white transition-colors group"
                 >
                     <span className="text-xs uppercase tracking-widest">Scroll</span>
                     <motion.div
@@ -154,7 +154,7 @@ const SocialLink = ({ href, icon, label }) => (
     <a
         href={href}
         target="_blank"
-        rel="noreferrer"
+        rel="noopener noreferrer"
         aria-label={label}
         className="text-2xl text-gray-400 hover:text-white hover:scale-110 transition-all duration-300"
     >

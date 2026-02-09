@@ -10,7 +10,8 @@
 
 html,
 body {
-  background-color: #050505; /* Deep black */
+  background-color: #050505;
+  /* Deep black */
   width: 100%;
   max-width: 100%;
   overflow-x: hidden;
@@ -31,7 +32,9 @@ html {
   }
 }
 
-@media (hover: none), (pointer: coarse) {
+@media (hover: none),
+(pointer: coarse) {
+
   .cursor-none,
   .cursor-none * {
     cursor: auto !important;
