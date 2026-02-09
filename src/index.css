@@ -8,11 +8,16 @@
   color-scheme: dark;
 }
 
+html,
+body {
+  background-color: #050505; /* Deep black */
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
 body {
   @apply bg-dark text-white font-sans antialiased;
-  background-color: #050505;
-  /* Deep black */
-  overflow-x: hidden;
 }
 
 /* Smooth scrolling */

@@ -204,7 +204,7 @@ function App() {
 
   return (
     <main
-      className={`bg-dark text-white min-h-screen selection:bg-primary selection:text-white relative ${showCustomCursor ? "cursor-none" : ""}`}
+      className={`bg-dark text-white min-h-screen w-full overflow-x-hidden selection:bg-primary selection:text-white relative ${showCustomCursor ? "cursor-none" : ""}`}
     >
       <Suspense fallback={null}>
         {showCustomCursor && <CustomCursor />}
