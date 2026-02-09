@@ -24,10 +24,17 @@ body {
   width: 100%;
   max-width: 100%;
   overflow-x: hidden;
+  text-rendering: optimizeLegibility;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
   @apply bg-dark text-white font-sans antialiased;
+}
+
+button,
+a {
+  touch-action: manipulation;
 }
 
 /* Smooth scrolling */
