@@ -32,20 +32,20 @@ const Hero = ({
     };
 
     return (
-        <section className="min-h-screen flex flex-col justify-center items-center relative overflow-hidden px-4">
+        <section className="min-h-[100dvh] flex flex-col items-center relative overflow-hidden px-4 py-8 md:py-0">
             <div className="absolute top-0 left-0 w-full h-full z-0 pointer-events-none">
                 <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/10 rounded-full blur-[120px] animate-pulse" />
                 <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-secondary/10 rounded-full blur-[120px] animate-pulse delay-1000" />
             </div>
 
-            <div className="z-10 text-center max-w-4xl w-full">
+            <div className="flex-grow flex flex-col justify-center items-center w-full max-w-4xl z-10">
                 <motion.div {...motionProps}>
                     <span className="inline-block py-1 px-3 rounded-full bg-white/5 border border-white/10 text-sm md:text-base text-gray-300 mb-6 backdrop-blur-sm">
                         Hello, I'm
                     </span>
                 </motion.div>
 
-                <div className="mb-6 overflow-hidden">
+                <div className="mb-6 overflow-hidden text-center">
                     <HackerText
                         text={SITE_CONFIG.fullName}
                         as="h1"
@@ -55,7 +55,7 @@ const Hero = ({
                     />
                 </div>
 
-                <motion.div {...fadeProps} className="mb-8 min-h-[4rem]">
+                <motion.div {...fadeProps} className="mb-8 min-h-[4rem] text-center">
                     <h2 className="text-2xl md:text-4xl font-light text-gray-300">
                         <RotatingRoles
                             roles={ROTATING_ROLES}
@@ -125,12 +125,12 @@ const Hero = ({
                 </motion.div>
             </div>
 
-            {/* Scroll Down Indicator */}
+            {/* Scroll Down Indicator - Now part of flex flow to avoid overlap */}
             <motion.div
                 initial={motionEnabled ? { opacity: 0, y: -10 } : false}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: motionEnabled ? 1.5 : 0, duration: motionEnabled ? 0.8 : 0 }}
-                className="absolute bottom-8 left-1/2 -translate-x-1/2"
+                className="w-full flex justify-center pb-8 z-10"
             >
                 <a
                     href="#about"
