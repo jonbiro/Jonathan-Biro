@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import headshot from "../assets/headshot.jpg";
+import headshotWebp from "../assets/headshot.webp";
 import MagneticButton from "./ui/MagneticButton";
 import SITE_CONFIG from "../config/site";
 
@@ -24,16 +25,19 @@ const About = ({ motionEnabled = true, pointerEffectsEnabled = true }) => {
                 <motion.div {...leftRevealProps} className="w-full md:w-5/12 flex justify-center md:justify-end">
                     <div className="relative group">
                         <div className="absolute -inset-1 bg-gradient-to-r from-primary to-accent rounded-2xl blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
-                        <img
-                            src={headshot}
-                            alt="Jonathan Biro"
-                            loading="eager"
-                            decoding="async"
-                            fetchPriority="high"
-                            className="relative w-64 h-64 md:w-80 md:h-80 object-cover rounded-2xl shadow-2xl grayscale hover:grayscale-0 transition-all duration-500"
-                            width="320"
-                            height="320"
-                        />
+                        <picture>
+                            <source srcSet={headshotWebp} type="image/webp" />
+                            <img
+                                src={headshot}
+                                alt="Jonathan Biro"
+                                loading="eager"
+                                decoding="async"
+                                fetchPriority="high"
+                                className="relative w-64 h-64 md:w-80 md:h-80 object-cover rounded-2xl shadow-2xl grayscale hover:grayscale-0 transition-all duration-500"
+                                width="320"
+                                height="320"
+                            />
+                        </picture>
                     </div>
                 </motion.div>
 

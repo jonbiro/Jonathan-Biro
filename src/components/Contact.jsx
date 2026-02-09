@@ -1,9 +1,20 @@
+import { useCallback, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { FaEnvelope, FaGithub, FaLinkedin, FaArrowUp } from "react-icons/fa";
 import SITE_CONFIG from "../config/site";
 
 const Contact = ({ motionEnabled = true }) => {
-    const handleConfetti = async () => {
+    const [showScrollTop, setShowScrollTop] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            setShowScrollTop(window.scrollY > 400);
+        };
+        window.addEventListener("scroll", handleScroll, { passive: true });
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
+    const handleConfetti = useCallback(async () => {
         if (!motionEnabled) {
             return;
         }
@@ -33,7 +44,7 @@ const Contact = ({ motionEnabled = true }) => {
             confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } });
             confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } });
         }, 250);
-    };
+    }, [motionEnabled]);
 
     return (
         <section id="contact" className="py-20 px-4 max-w-4xl mx-auto text-center relative">
@@ -79,7 +90,7 @@ const Contact = ({ motionEnabled = true }) => {
                 <p>&copy; {new Date().getFullYear()} Jonathan Biro. All rights reserved.</p>
                 <button
                     onClick={() => window.scrollTo({ top: 0, behavior: motionEnabled ? "smooth" : "auto" })}
-                    className="absolute bottom-4 right-4 md:right-0 p-3 bg-white/5 rounded-full hover:bg-white/10 transition-colors"
+                    className={`absolute bottom-4 right-4 md:right-0 p-3 bg-white/5 rounded-full hover:bg-white/10 transition-all duration-300 ${showScrollTop ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2 pointer-events-none'}`}
                     aria-label="Scroll to top"
                 >
                     <FaArrowUp />

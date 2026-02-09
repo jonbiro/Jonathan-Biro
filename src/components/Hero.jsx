@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { motion } from "framer-motion";
 import { FaEnvelope, FaGithub, FaLinkedin, FaChevronDown, FaTerminal } from "react-icons/fa";
 
@@ -33,7 +34,7 @@ const Hero = ({
 
     return (
         <section className="min-h-[100dvh] flex flex-col items-center relative overflow-hidden px-4 py-8 md:py-0">
-            <div className="absolute top-0 left-0 w-full h-full z-0 pointer-events-none">
+            <div className="absolute top-0 left-0 w-full h-full z-0 pointer-events-none" aria-hidden="true">
                 <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/10 rounded-full blur-[120px] animate-pulse" />
                 <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-secondary/10 rounded-full blur-[120px] animate-pulse delay-1000" />
             </div>
@@ -150,7 +151,7 @@ const Hero = ({
     );
 };
 
-const SocialLink = ({ href, icon, label }) => (
+const SocialLink = memo(({ href, icon, label }) => (
     <a
         href={href}
         target="_blank"
@@ -160,6 +161,8 @@ const SocialLink = ({ href, icon, label }) => (
     >
         {icon}
     </a>
-);
+));
+
+SocialLink.displayName = "SocialLink";
 
 export default Hero;

@@ -41,6 +41,7 @@ const ParticlesBackground = () => {
         let animationFrameId = 0;
         let lastFrameAt = 0;
         let drawConnectionsOnThisFrame = true;
+        let resizeTimerId = 0;
         let width = window.innerWidth;
         let height = window.innerHeight;
         const qualityMultiplier = getQualityMultiplier();
@@ -193,9 +194,15 @@ const ParticlesBackground = () => {
         };
 
         const handleResize = () => {
-            setCanvasSize();
-            init();
-            startAnimation();
+            if (resizeTimerId) {
+                window.clearTimeout(resizeTimerId);
+            }
+            resizeTimerId = window.setTimeout(() => {
+                resizeTimerId = 0;
+                setCanvasSize();
+                init();
+                startAnimation();
+            }, 250);
         };
 
         setCanvasSize();
@@ -217,10 +224,13 @@ const ParticlesBackground = () => {
             if (animationFrameId) {
                 window.cancelAnimationFrame(animationFrameId);
             }
+            if (resizeTimerId) {
+                window.clearTimeout(resizeTimerId);
+            }
         };
     }, []);
 
-    return <canvas ref={canvasRef} className="fixed top-0 left-0 w-full h-full -z-10 pointer-events-none" />;
+    return <canvas ref={canvasRef} className="fixed top-0 left-0 w-full h-full -z-10 pointer-events-none" style={{ willChange: 'transform' }} />;
 };
 
 export default ParticlesBackground;

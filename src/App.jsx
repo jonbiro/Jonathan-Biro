@@ -12,8 +12,10 @@ import Hero from "./components/Hero";
 import About from "./components/About";
 import Contact from "./components/Contact";
 import CustomCursor from "./components/ui/CustomCursor";
+import ErrorBoundary from "./components/ui/ErrorBoundary";
 import ParticlesBackground from "./components/ui/ParticlesBackground";
 import ScrollProgress from "./components/ui/ScrollProgress";
+import Toast from "./components/ui/Toast";
 import SITE_CONFIG from "./config/site";
 import useUiPreferences from "./hooks/useUiPreferences";
 
@@ -203,51 +205,56 @@ function App() {
   }, [toastMessage]);
 
   return (
-    <main
-      className={`bg-dark text-white min-h-screen w-full overflow-x-hidden selection:bg-primary selection:text-white relative ${showCustomCursor ? "cursor-none" : ""}`}
-    >
-      {showCustomCursor && <CustomCursor />}
-      {motionEnabled && <ParticlesBackground />}
-      {motionEnabled && <ScrollProgress />}
+    <ErrorBoundary>
+      <a
+        href="#main-content"
+        className="skip-link"
+      >
+        Skip to main content
+      </a>
+      <main
+        id="main-content"
+        className={`bg-dark text-white min-h-screen w-full overflow-x-hidden selection:bg-primary selection:text-white relative ${showCustomCursor ? "cursor-none" : ""}`}
+      >
+        {showCustomCursor && <CustomCursor />}
+        {motionEnabled && <ParticlesBackground />}
+        {motionEnabled && <ScrollProgress />}
 
-      <Hero
-        motionEnabled={motionEnabled}
-        pointerEffectsEnabled={pointerEffectsEnabled}
-        onOpenCommandPalette={openCommandPalette}
-        onLaunchChallenge={openChallenge}
-      />
+        <Hero
+          motionEnabled={motionEnabled}
+          pointerEffectsEnabled={pointerEffectsEnabled}
+          onOpenCommandPalette={openCommandPalette}
+          onLaunchChallenge={openChallenge}
+        />
 
-      <About motionEnabled={motionEnabled} pointerEffectsEnabled={pointerEffectsEnabled} />
-      <Contact motionEnabled={motionEnabled} />
+        <About motionEnabled={motionEnabled} pointerEffectsEnabled={pointerEffectsEnabled} />
+        <Contact motionEnabled={motionEnabled} />
 
-      {(isCommandPaletteOpen || isChallengeOpen) && (
-        <Suspense fallback={null}>
-          {isCommandPaletteOpen && (
-            <CommandPalette
-              key={commandPaletteSession}
-              isOpen={isCommandPaletteOpen}
-              onClose={() => setIsCommandPaletteOpen(false)}
-              actions={commandActions}
-              motionEnabled={motionEnabled}
-            />
-          )}
-          {isChallengeOpen && (
-            <QAChallengeModal
-              key={challengeSession}
-              isOpen={isChallengeOpen}
-              onClose={() => setIsChallengeOpen(false)}
-              motionEnabled={motionEnabled}
-            />
-          )}
-        </Suspense>
-      )}
+        {(isCommandPaletteOpen || isChallengeOpen) && (
+          <Suspense fallback={null}>
+            {isCommandPaletteOpen && (
+              <CommandPalette
+                key={commandPaletteSession}
+                isOpen={isCommandPaletteOpen}
+                onClose={() => setIsCommandPaletteOpen(false)}
+                actions={commandActions}
+                motionEnabled={motionEnabled}
+              />
+            )}
+            {isChallengeOpen && (
+              <QAChallengeModal
+                key={challengeSession}
+                isOpen={isChallengeOpen}
+                onClose={() => setIsChallengeOpen(false)}
+                motionEnabled={motionEnabled}
+              />
+            )}
+          </Suspense>
+        )}
 
-      {toastMessage && (
-        <div className="fixed bottom-5 right-4 z-[110] rounded-lg border border-white/15 bg-zinc-950/95 px-3 py-2 text-xs text-zinc-200 shadow-xl">
-          {toastMessage}
-        </div>
-      )}
-    </main>
+        <Toast message={toastMessage} />
+      </main>
+    </ErrorBoundary>
   );
 }
 
