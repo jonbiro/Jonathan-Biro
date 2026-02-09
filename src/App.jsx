@@ -9,16 +9,16 @@ import {
   FaRegClock,
 } from "react-icons/fa";
 import Hero from "./components/Hero";
+import About from "./components/About";
+import Contact from "./components/Contact";
+import CustomCursor from "./components/ui/CustomCursor";
+import ParticlesBackground from "./components/ui/ParticlesBackground";
+import ScrollProgress from "./components/ui/ScrollProgress";
 import SITE_CONFIG from "./config/site";
 import useUiPreferences from "./hooks/useUiPreferences";
 
-const About = lazy(() => import("./components/About"));
-const Contact = lazy(() => import("./components/Contact"));
 const CommandPalette = lazy(() => import("./components/ui/CommandPalette"));
 const QAChallengeModal = lazy(() => import("./components/ui/QAChallengeModal"));
-const CustomCursor = lazy(() => import("./components/ui/CustomCursor"));
-const ParticlesBackground = lazy(() => import("./components/ui/ParticlesBackground"));
-const ScrollProgress = lazy(() => import("./components/ui/ScrollProgress"));
 
 function App() {
   const { motionEnabled, motionPreference, pointerEffectsEnabled, setMotionPreference } = useUiPreferences();
@@ -206,21 +206,19 @@ function App() {
     <main
       className={`bg-dark text-white min-h-screen w-full overflow-x-hidden selection:bg-primary selection:text-white relative ${showCustomCursor ? "cursor-none" : ""}`}
     >
-      <Suspense fallback={null}>
-        {showCustomCursor && <CustomCursor />}
-        {motionEnabled && <ParticlesBackground />}
-        {motionEnabled && <ScrollProgress />}
-      </Suspense>
+      {showCustomCursor && <CustomCursor />}
+      {motionEnabled && <ParticlesBackground />}
+      {motionEnabled && <ScrollProgress />}
+
       <Hero
         motionEnabled={motionEnabled}
         pointerEffectsEnabled={pointerEffectsEnabled}
         onOpenCommandPalette={openCommandPalette}
         onLaunchChallenge={openChallenge}
       />
-      <Suspense fallback={<div className="min-h-screen flex items-center justify-center text-primary">Loading content...</div>}>
-        <About motionEnabled={motionEnabled} pointerEffectsEnabled={pointerEffectsEnabled} />
-        <Contact motionEnabled={motionEnabled} />
-      </Suspense>
+
+      <About motionEnabled={motionEnabled} pointerEffectsEnabled={pointerEffectsEnabled} />
+      <Contact motionEnabled={motionEnabled} />
 
       {(isCommandPaletteOpen || isChallengeOpen) && (
         <Suspense fallback={null}>
