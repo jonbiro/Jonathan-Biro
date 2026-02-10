@@ -203,6 +203,17 @@ function App() {
     return () => window.clearTimeout(timeoutId);
   }, [toastMessage]);
 
+  useEffect(() => {
+    if (isCommandPaletteOpen || isChallengeOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isCommandPaletteOpen, isChallengeOpen]);
+
   return (
     <ErrorBoundary>
       <a
