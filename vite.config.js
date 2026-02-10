@@ -33,6 +33,9 @@ export default defineConfig(({ mode }) => {
             if (id.includes('node_modules/react-icons/')) {
               return 'vendor-icons'
             }
+            if (id.includes('node_modules/canvas-confetti/')) {
+              return 'vendor-confetti'
+            }
 
             return 'vendor'
           },
