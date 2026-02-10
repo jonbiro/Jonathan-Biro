@@ -94,11 +94,16 @@ const Contact = ({ motionEnabled = true }) => {
                 </div>
             </motion.div>
 
-            <footer className="mt-16 text-gray-400 text-sm">
+            <footer className="mt-20 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 text-gray-500 text-sm">
                 <p>&copy; {new Date().getFullYear()} Jonathan Biro. All rights reserved.</p>
+                <div className="flex items-center gap-2">
+                    <span>Built with React & Tailwind</span>
+                    <span className="w-1 h-1 rounded-full bg-gray-600"></span>
+                    <span>Deployed on Vercel</span>
+                </div>
                 <button
                     onClick={() => window.scrollTo({ top: 0, behavior: motionEnabled ? "smooth" : "auto" })}
-                    className={`absolute bottom-4 right-4 md:right-0 p-3 bg-white/5 rounded-full hover:bg-white/10 transition-all duration-300 ${showScrollTop ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2 pointer-events-none'}`}
+                    className={`fixed bottom-6 right-6 p-3 bg-primary/90 text-white shadow-lg shadow-primary/20 rounded-full hover:bg-primary transition-all duration-300 z-50 ${showScrollTop ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10 pointer-events-none'}`}
                     aria-label="Scroll to top"
                 >
                     <FaArrowUp />
