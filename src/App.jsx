@@ -13,7 +13,6 @@ import About from "./components/About";
 import Contact from "./components/Contact";
 
 import ErrorBoundary from "./components/ui/ErrorBoundary";
-import ParticlesBackground from "./components/ui/ParticlesBackground";
 
 import Toast from "./components/ui/Toast";
 import SITE_CONFIG from "./config/site";
@@ -216,8 +215,6 @@ function App() {
         id="main-content"
         className="bg-dark text-white min-h-screen w-full overflow-x-hidden selection:bg-primary selection:text-white relative"
       >
-
-        {motionEnabled && <ParticlesBackground paused={isCommandPaletteOpen || isChallengeOpen} />}
 
 
         <Hero
