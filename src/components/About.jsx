@@ -51,10 +51,10 @@ const About = ({ motionEnabled = true, pointerEffectsEnabled = true }) => {
                             Hello! I'm {SITE_CONFIG.fullName}, a <span className="text-white font-semibold">QA Automation Engineer & SDET</span> based in Los Angeles, California.
                         </p>
                         <p>
-                            I'm passionate about technology and its role in our future. My varied employment background gives me a unique insight into multiple fields, such as medical technology, retail sales, and IT support. I am a proud graduate of <span className="text-accent">The Flatiron School</span>.
+                            I am driven by the pursuit of flawless digital experiences. To me, Quality Assurance isn't just about finding bugs—it's about <span className="text-secondary">engineering confidence</span>. I thrive on the challenge of dissecting complex systems and building automated safety nets that allow teams to innovate without fear.
                         </p>
                         <p>
-                            Currently, I specialize in building robust automation frameworks and ensuring software quality.
+                            My passion for automation stems from a desire to make software resilient and scalable. I believe that a robust test infrastructure is the backbone of any successful product, ensuring that every deployment is better than the last.
                         </p>
 
                         <div className="py-4">
