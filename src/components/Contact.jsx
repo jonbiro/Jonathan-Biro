@@ -98,8 +98,6 @@ const Contact = ({ motionEnabled = true }) => {
                 <p>&copy; {new Date().getFullYear()} Jonathan Biro. All rights reserved.</p>
                 <div className="flex items-center gap-2">
                     <span>Built with React & Tailwind</span>
-                    <span className="w-1 h-1 rounded-full bg-gray-600"></span>
-                    <span>Deployed on Vercel</span>
                 </div>
                 <button
                     onClick={() => window.scrollTo({ top: 0, behavior: motionEnabled ? "smooth" : "auto" })}

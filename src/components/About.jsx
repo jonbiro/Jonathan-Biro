@@ -61,30 +61,31 @@ const About = ({ motionEnabled = true, pointerEffectsEnabled = true }) => {
                             <h3 className="text-sm uppercase tracking-wider text-gray-400 mb-4">Tech Stack</h3>
                             <div className="flex flex-wrap gap-3">
                                 {[
-                                    { name: "React.js", category: "frontend" },
-                                    { name: "React Native", category: "frontend" },
-                                    { name: "Gatsby.js", category: "frontend" },
-                                    { name: "Node.js", category: "backend" },
-                                    { name: "Express.js", category: "backend" },
-                                    { name: "Ruby on Rails", category: "backend" },
-                                    { name: "Redux", category: "frontend" },
-                                    { name: "GraphQL", category: "backend" },
+                                    { name: "Playwright", category: "automation" },
+                                    { name: "Cypress", category: "automation" },
+                                    { name: "Selenium", category: "automation" },
                                     { name: "TypeScript", category: "language" },
                                     { name: "JavaScript", category: "language" },
-                                    { name: "HTML", category: "language" },
-                                    { name: "CSS", category: "language" },
-                                    { name: "Bootstrap", category: "tool" },
+                                    { name: "Python", category: "language" },
+                                    { name: "Jest", category: "testing" },
+                                    { name: "k6", category: "testing" },
+                                    { name: "Postman", category: "testing" },
+                                    { name: "GitHub Actions", category: "tool" },
+                                    { name: "Docker", category: "tool" },
+                                    { name: "SQL", category: "language" },
+                                    { name: "React.js", category: "frontend" },
                                 ].map((skill, index) => {
                                     const categoryStyles = {
-                                        frontend: "hover:border-primary/60 hover:text-primary",
-                                        backend: "hover:border-secondary/60 hover:text-secondary",
+                                        automation: "hover:border-primary/60 hover:text-primary",
+                                        testing: "hover:border-secondary/60 hover:text-secondary",
                                         language: "hover:border-accent/60 hover:text-accent",
                                         tool: "hover:border-white/40 hover:text-white",
+                                        frontend: "hover:border-white/40 hover:text-white",
                                     };
                                     return (
                                         <span
                                             key={index}
-                                            className={`px-4 py-2 bg-white/5 border border-white/10 rounded-full text-sm text-gray-300 transition-all duration-300 cursor-default hover:bg-white/10 hover:scale-105 ${categoryStyles[skill.category]}`}
+                                            className={`px-4 py-2 bg-white/5 border border-white/10 rounded-full text-sm text-gray-300 transition-all duration-300 cursor-default hover:bg-white/10 hover:scale-105 ${categoryStyles[skill.category] || "hover:border-white/40"}`}
                                         >
                                             {skill.name}
                                         </span>
