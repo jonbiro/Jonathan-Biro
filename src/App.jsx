@@ -7,6 +7,7 @@ import {
   FaMagic,
   FaMoon,
   FaRegClock,
+  FaTerminal,
 } from "react-icons/fa";
 import Hero from "./components/Hero";
 import About from "./components/About";
@@ -265,6 +266,17 @@ function App() {
 
         <Toast message={toastMessage} />
       </main>
+
+      {/* Easter Egg: Command Palette Trigger */}
+      <button
+        onClick={openCommandPalette}
+        className="fixed top-6 right-6 z-[60] p-3 text-white/30 hover:text-white hover:bg-white/10 rounded-full transition-all duration-300 backdrop-blur-sm"
+        aria-label="Open Command Menu (Cmd+K)"
+        title="Command Menu (Cmd+K)"
+      >
+        <FaTerminal className="text-xl" />
+      </button>
+
     </ErrorBoundary>
   );
 }

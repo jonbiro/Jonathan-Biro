@@ -101,19 +101,6 @@ const Hero = ({
                             Squash the Bugs Game
                         </button>
                     </MagneticButton>
-                    <MagneticButton enabled={pointerEffectsEnabled}>
-                        <button
-                            type="button"
-                            onClick={onOpenCommandPalette}
-                            className="px-6 py-3 rounded-full border border-white/10 text-gray-400 hover:text-white hover:bg-white/10 transition-all flex items-center gap-3 group"
-                        >
-                            <FaTerminal className="text-lg group-hover:text-primary transition-colors" />
-                            <span className="font-medium">Command Menu</span>
-                            <kbd className="hidden md:inline-flex h-5 items-center gap-1 rounded border border-white/15 bg-white/5 px-1.5 font-sans text-[10px] font-medium text-gray-400 group-hover:border-white/30 group-hover:text-gray-300 transition-colors">
-                                <span className="text-xs">⌘</span>K
-                            </kbd>
-                        </button>
-                    </MagneticButton>
                 </motion.div>
 
                 <motion.div
