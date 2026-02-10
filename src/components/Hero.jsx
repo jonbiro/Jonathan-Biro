@@ -10,8 +10,6 @@ import SITE_CONFIG from "../config/site";
 const ROTATING_ROLES = [
     "QA Automation Engineer",
     "SDET",
-    "Full-Stack Developer",
-    "Tech Enthusiast",
 ];
 
 const Hero = ({
