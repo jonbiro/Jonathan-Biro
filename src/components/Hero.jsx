@@ -96,9 +96,9 @@ const Hero = ({
                         <button
                             type="button"
                             onClick={onLaunchChallenge}
-                            className="px-6 py-3 rounded-full border border-primary/40 text-primary font-semibold hover:bg-primary/15 transition-colors block"
+                            className="px-6 py-3 rounded-full border-2 border-primary text-primary font-semibold hover:bg-primary/15 transition-colors block"
                         >
-                            QA Challenge
+                            Squash the Bugs Game
                         </button>
                     </MagneticButton>
                     <MagneticButton enabled={pointerEffectsEnabled}>

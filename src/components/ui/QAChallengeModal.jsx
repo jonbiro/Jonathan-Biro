@@ -759,7 +759,7 @@ const QAChallengeModal = ({ isOpen, onClose, motionEnabled = true }) => {
                                     Mini Challenge
                                 </p>
                                 <h3 className="mt-1 text-xl font-bold text-white sm:text-2xl md:text-3xl">
-                                    Bug Smasher Arena
+                                    Squash the Bugs Game
                                 </h3>
                                 <p className="mt-1 text-xs text-zinc-400 sm:text-sm">
                                     Smash moving bugs, chain combos, and survive escalating waves.
@@ -885,27 +885,27 @@ const QAChallengeModal = ({ isOpen, onClose, motionEnabled = true }) => {
                                                     bug.squashed
                                                         ? { opacity: 0, scale: 0.2, rotate: 220 }
                                                         : {
-                                                              opacity: 1,
-                                                              scale: 1,
-                                                              rotate:
-                                                                  bug.variantId === "glitch"
-                                                                      ? [0, 14, -8, 8, 0]
-                                                                      : 0,
-                                                          }
+                                                            opacity: 1,
+                                                            scale: 1,
+                                                            rotate:
+                                                                bug.variantId === "glitch"
+                                                                    ? [0, 14, -8, 8, 0]
+                                                                    : 0,
+                                                        }
                                                 }
                                                 transition={
                                                     bug.squashed
                                                         ? { duration: 0.16 }
                                                         : {
-                                                              duration:
-                                                                  bug.variantId === "glitch"
-                                                                      ? 0.45
-                                                                      : 0.2,
-                                                              repeat:
-                                                                  bug.variantId === "glitch"
-                                                                      ? Infinity
-                                                                      : 0,
-                                                          }
+                                                            duration:
+                                                                bug.variantId === "glitch"
+                                                                    ? 0.45
+                                                                    : 0.2,
+                                                            repeat:
+                                                                bug.variantId === "glitch"
+                                                                    ? Infinity
+                                                                    : 0,
+                                                        }
                                                 }
                                                 whileHover={{ scale: 1.16 }}
                                                 whileTap={{ scale: 0.9 }}

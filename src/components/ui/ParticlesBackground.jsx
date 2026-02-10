@@ -230,7 +230,7 @@ const ParticlesBackground = () => {
         };
     }, []);
 
-    return <canvas ref={canvasRef} className="fixed top-0 left-0 w-full h-full -z-10 pointer-events-none" style={{ willChange: 'transform' }} />;
+    return <canvas ref={canvasRef} className="fixed top-0 left-0 w-full h-full -z-10 pointer-events-none" />;
 };
 
 export default ParticlesBackground;

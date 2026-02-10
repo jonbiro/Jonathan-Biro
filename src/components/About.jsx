@@ -20,7 +20,7 @@ const About = ({ motionEnabled = true, pointerEffectsEnabled = true }) => {
     };
 
     return (
-        <section id="about" className="py-20 md:py-32 px-4 max-w-7xl mx-auto">
+        <section id="about" className="py-20 md:py-32 px-4 max-w-7xl mx-auto" style={{ contentVisibility: 'auto' }}>
             <div className="flex flex-col md:flex-row items-center gap-12 md:gap-20">
                 <motion.div {...leftRevealProps} className="w-full md:w-5/12 flex justify-center md:justify-end">
                     <div className="relative group">

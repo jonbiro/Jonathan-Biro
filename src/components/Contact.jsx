@@ -7,11 +7,19 @@ const Contact = ({ motionEnabled = true }) => {
     const [showScrollTop, setShowScrollTop] = useState(false);
 
     useEffect(() => {
+        let timeoutId = 0;
         const handleScroll = () => {
-            setShowScrollTop(window.scrollY > 400);
+            if (timeoutId) return;
+            timeoutId = window.setTimeout(() => {
+                setShowScrollTop(window.scrollY > 400);
+                timeoutId = 0;
+            }, 100);
         };
         window.addEventListener("scroll", handleScroll, { passive: true });
-        return () => window.removeEventListener("scroll", handleScroll);
+        return () => {
+            window.removeEventListener("scroll", handleScroll);
+            if (timeoutId) window.clearTimeout(timeoutId);
+        };
     }, []);
 
     const handleConfetti = useCallback(async () => {
@@ -47,7 +55,7 @@ const Contact = ({ motionEnabled = true }) => {
     }, [motionEnabled]);
 
     return (
-        <section id="contact" className="py-20 px-4 max-w-4xl mx-auto text-center relative">
+        <section id="contact" className="py-20 px-4 max-w-4xl mx-auto text-center relative" style={{ contentVisibility: 'auto' }}>
             <motion.div
                 initial={motionEnabled ? { opacity: 0, scale: 0.9 } : false}
                 whileInView={{ opacity: 1, scale: 1 }}

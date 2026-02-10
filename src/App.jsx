@@ -131,7 +131,7 @@ function App() {
       },
       {
         id: "open-challenge",
-        label: "Launch QA Challenge",
+        label: "Launch Squash the Bugs Game",
         description: "Play a 20-second bug hunt mini-game.",
         icon: <FaMagic />,
         keywords: ["game", "challenge", "fun", "qa"],
