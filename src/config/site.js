@@ -6,7 +6,7 @@ const SITE_CONFIG = {
     fullName: "Jonathan Biro",
     title: "Jonathan Biro | QA Automation Engineer & SDET",
     description:
-        "Portfolio of Jonathan Biro, a QA Automation Engineer and SDET based in Los Angeles, CA. Specializing in test automation, full-stack development, and building robust software frameworks.",
+        "Senior QA Automation Engineer & SDET specializing in building robust test frameworks with Playwright and Cypress. Engineering confidence through scalable automation architecture and CI/CD integration.",
     location: "Los Angeles, CA",
     email: "jonathan@biro.dev",
     githubUrl: "https://github.com/jonbiro",
