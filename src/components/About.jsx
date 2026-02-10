@@ -61,36 +61,39 @@ const About = ({ motionEnabled = true, pointerEffectsEnabled = true }) => {
                             <h3 className="text-sm uppercase tracking-wider text-gray-400 mb-4">Tech Stack</h3>
                             <div className="flex flex-wrap gap-3">
                                 {[
-                                    { name: "Playwright", category: "automation" },
-                                    { name: "Webdriver.io", category: "automation" },
-                                    { name: "Cypress", category: "automation" },
-                                    { name: "Selenium", category: "automation" },
-                                    { name: "Appium", category: "automation" },
-                                    { name: "TypeScript", category: "language" },
-                                    { name: "JavaScript", category: "language" },
-                                    { name: "Jenkins", category: "tool" },
-                                    { name: "GitHub Actions", category: "tool" },
-                                    { name: "Docker", category: "tool" },
-                                    { name: "Cucumber", category: "testing" },
-                                    { name: "Jest", category: "testing" },
-                                    { name: "Postman", category: "testing" },
-                                    { name: "SQL", category: "language" },
-                                    { name: "React.js", category: "frontend" },
+                                    { name: "Playwright", category: "automation", url: "https://playwright.dev" },
+                                    { name: "Webdriver.io", category: "automation", url: "https://webdriver.io" },
+                                    { name: "Cypress", category: "automation", url: "https://www.cypress.io" },
+                                    { name: "Selenium", category: "automation", url: "https://www.selenium.dev" },
+                                    { name: "Appium", category: "automation", url: "https://appium.io" },
+                                    { name: "TypeScript", category: "language", url: "https://www.typescriptlang.org" },
+                                    { name: "JavaScript", category: "language", url: "https://developer.mozilla.org/en-US/docs/Web/JavaScript" },
+                                    { name: "Jenkins", category: "tool", url: "https://www.jenkins.io" },
+                                    { name: "GitHub Actions", category: "tool", url: "https://github.com/features/actions" },
+                                    { name: "Docker", category: "tool", url: "https://www.docker.com" },
+                                    { name: "Cucumber", category: "testing", url: "https://cucumber.io" },
+                                    { name: "Jest", category: "testing", url: "https://jestjs.io" },
+                                    { name: "Postman", category: "testing", url: "https://www.postman.com" },
+                                    { name: "SQL", category: "language", url: "https://www.postgresql.org" },
+                                    { name: "React.js", category: "frontend", url: "https://react.dev" },
                                 ].map((skill, index) => {
                                     const categoryStyles = {
-                                        automation: "hover:border-primary/60 hover:text-primary",
-                                        testing: "hover:border-secondary/60 hover:text-secondary",
-                                        language: "hover:border-accent/60 hover:text-accent",
-                                        tool: "hover:border-white/40 hover:text-white",
-                                        frontend: "hover:border-white/40 hover:text-white",
+                                        automation: "hover:border-primary/60 hover:text-primary hover:bg-primary/5",
+                                        testing: "hover:border-secondary/60 hover:text-secondary hover:bg-secondary/5",
+                                        language: "hover:border-accent/60 hover:text-accent hover:bg-accent/5",
+                                        tool: "hover:border-white/40 hover:text-white hover:bg-white/10",
+                                        frontend: "hover:border-white/40 hover:text-white hover:bg-white/10",
                                     };
                                     return (
-                                        <span
+                                        <a
                                             key={index}
-                                            className={`px-4 py-2 bg-white/5 border border-white/10 rounded-full text-sm text-gray-300 transition-all duration-300 cursor-default hover:bg-white/10 hover:scale-105 ${categoryStyles[skill.category] || "hover:border-white/40"}`}
+                                            href={skill.url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className={`px-4 py-2 bg-white/5 border border-white/10 rounded-full text-sm text-gray-300 transition-all duration-300 hover:scale-105 active:scale-95 ${categoryStyles[skill.category] || "hover:border-white/40"}`}
                                         >
                                             {skill.name}
-                                        </span>
+                                        </a>
                                     );
                                 })}
                             </div>
