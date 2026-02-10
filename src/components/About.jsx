@@ -62,16 +62,21 @@ const About = ({ motionEnabled = true, pointerEffectsEnabled = true }) => {
                             <div className="flex flex-wrap gap-3">
                                 {[
                                     { name: "Playwright", category: "automation" },
+                                    { name: "Webdriver.io", category: "automation" },
                                     { name: "Cypress", category: "automation" },
                                     { name: "Selenium", category: "automation" },
+                                    { name: "Appium", category: "automation" },
                                     { name: "TypeScript", category: "language" },
                                     { name: "JavaScript", category: "language" },
                                     { name: "Python", category: "language" },
+                                    { name: "Java", category: "language" },
+                                    { name: "Jenkins", category: "tool" },
+                                    { name: "GitHub Actions", category: "tool" },
+                                    { name: "Docker", category: "tool" },
+                                    { name: "Cucumber", category: "testing" },
                                     { name: "Jest", category: "testing" },
                                     { name: "k6", category: "testing" },
                                     { name: "Postman", category: "testing" },
-                                    { name: "GitHub Actions", category: "tool" },
-                                    { name: "Docker", category: "tool" },
                                     { name: "SQL", category: "language" },
                                     { name: "React.js", category: "frontend" },
                                 ].map((skill, index) => {
