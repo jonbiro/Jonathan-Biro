@@ -92,15 +92,7 @@ const Hero = ({
                             View Resume
                         </a>
                     </MagneticButton>
-                    <MagneticButton enabled={pointerEffectsEnabled}>
-                        <button
-                            type="button"
-                            onClick={onLaunchChallenge}
-                            className="px-6 py-3 rounded-full border-2 border-primary text-primary font-semibold hover:bg-primary/15 transition-colors block"
-                        >
-                            Squash the Bugs Game
-                        </button>
-                    </MagneticButton>
+
                 </motion.div>
 
                 <motion.div

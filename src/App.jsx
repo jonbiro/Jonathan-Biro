@@ -1,5 +1,6 @@
 import { Suspense, lazy, useCallback, useEffect, useMemo, useState } from "react";
 import {
+  FaBug,
   FaEnvelope,
   FaFileAlt,
   FaGithub,
@@ -266,6 +267,16 @@ function App() {
 
         <Toast message={toastMessage} />
       </main>
+
+      {/* Easter Egg: Game Trigger */}
+      <button
+        onClick={openChallenge}
+        className="fixed top-6 left-6 z-[60] p-3 text-white/30 hover:text-primary hover:bg-primary/10 rounded-full transition-all duration-300 backdrop-blur-sm"
+        aria-label="Play Squash the Bugs"
+        title="Found a bug? Squash it!"
+      >
+        <FaBug className="text-xl" />
+      </button>
 
       {/* Easter Egg: Command Palette Trigger */}
       <button
