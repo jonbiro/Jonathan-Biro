@@ -217,7 +217,7 @@ function App() {
         className="bg-dark text-white min-h-screen w-full overflow-x-hidden selection:bg-primary selection:text-white relative"
       >
 
-        {motionEnabled && <ParticlesBackground />}
+        {motionEnabled && <ParticlesBackground paused={isCommandPaletteOpen || isChallengeOpen} />}
 
 
         <Hero
