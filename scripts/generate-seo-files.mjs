@@ -1,7 +1,7 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 
-const DEFAULT_SITE_URL = "https://yonibiro.dev";
+const DEFAULT_SITE_URL = "https://biro.dev";
 const SITE_URL = (process.env.VITE_SITE_URL || DEFAULT_SITE_URL).replace(/\/+$/, "");
 const LAST_MODIFIED = new Date().toISOString().slice(0, 10);
 

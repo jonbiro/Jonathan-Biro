@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://yonibiro.dev/sitemap.xml
+Sitemap: https://biro.dev/sitemap.xml

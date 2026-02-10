@@ -35,7 +35,7 @@ npm run build
 
 1. Connect this repo in Netlify.
 2. Keep the default build settings from `netlify.toml`.
-3. Set `SITE_URL` in Netlify environment variables to your production domain (for example `https://yonibiro.dev`).
+3. Set `SITE_URL` in Netlify environment variables to your production domain (for example `https://biro.dev`).
 
 Netlify will run:
 

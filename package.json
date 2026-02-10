@@ -1,14 +1,14 @@
 {
-  "name": "yonibiro-portfolio",
+  "name": "biro-portfolio",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "VITE_SITE_URL=${VITE_SITE_URL:-https://yonibiro.dev} vite",
+    "dev": "VITE_SITE_URL=${VITE_SITE_URL:-https://biro.dev} vite",
     "prebuild": "node scripts/generate-seo-files.mjs",
-    "build": "VITE_SITE_URL=${VITE_SITE_URL:-https://yonibiro.dev} vite build",
+    "build": "VITE_SITE_URL=${VITE_SITE_URL:-https://biro.dev} vite build",
     "lint": "eslint .",
-    "preview": "VITE_SITE_URL=${VITE_SITE_URL:-https://yonibiro.dev} vite preview"
+    "preview": "VITE_SITE_URL=${VITE_SITE_URL:-https://biro.dev} vite preview"
   },
   "dependencies": {
     "canvas-confetti": "^1.9.4",
