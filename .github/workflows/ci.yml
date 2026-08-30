@@ -6,9 +6,17 @@ on:
       - "**"
   pull_request:
 
+concurrency:
+  group: quality-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
 jobs:
   quality:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     steps:
       - name: Checkout
@@ -26,6 +34,12 @@ jobs:
       - name: Lint
         run: npm run lint
 
+      - name: Test
+        run: npm run test:coverage
+
+      - name: Audit dependencies
+        run: npm audit --audit-level=moderate
+
       - name: Build
         run: npm run build
 
@@ -33,5 +47,5 @@ jobs:
         uses: treosh/lighthouse-ci-action@v12
         with:
           uploadArtifacts: true
-          temporaryPublicStorage: true
+          temporaryPublicStorage: false
           configPath: .lighthouserc.json

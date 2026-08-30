@@ -17,6 +17,7 @@ concurrency:
 
 jobs:
   deploy:
+    timeout-minutes: 20
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -54,13 +55,22 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Lint
+        run: npm run lint
+
+      - name: Test
+        run: npm run test:coverage
+
+      - name: Audit dependencies
+        run: npm audit --audit-level=moderate
+
       - name: Build
         run: npm run build
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./dist
+          path: ./dist/client
 
       - name: Deploy
         id: deployment

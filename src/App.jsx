@@ -1,16 +1,18 @@
-import { Suspense, lazy, useCallback, useEffect, useMemo, useState } from "react";
+import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
-  FaBug,
+  FaBriefcase,
   FaEnvelope,
-  FaFileAlt,
   FaGithub,
   FaLinkedin,
   FaMagic,
   FaMoon,
-  FaRegClock,
-  FaTerminal,
+  FaRoute,
+  FaUser,
 } from "react-icons/fa";
 import Hero from "./components/Hero";
+import SiteHeader from "./components/SiteHeader";
+import Work from "./components/Work";
+import Approach from "./components/Approach";
 import About from "./components/About";
 import Contact from "./components/Contact";
 
@@ -20,8 +22,19 @@ import Toast from "./components/ui/Toast";
 import SITE_CONFIG from "./config/site";
 import useUiPreferences from "./hooks/useUiPreferences";
 
-const CommandPalette = lazy(() => import("./components/ui/CommandPalette"));
-const QAChallengeModal = lazy(() => import("./components/ui/QAChallengeModal"));
+const SECTION_IDS = ["top", "work", "approach", "about", "contact"];
+const loadCommandPalette = () => import("./components/ui/CommandPalette");
+const loadChallenge = () => import("./components/ui/QAChallengeModal");
+const CommandPalette = lazy(loadCommandPalette);
+const QAChallengeModal = lazy(loadChallenge);
+
+const ModalLoadingFallback = ({ label }) => (
+  <div className="fixed inset-0 z-[100] grid place-items-center bg-black/75 px-4 backdrop-blur-md">
+    <div role="status" aria-live="polite" className="rounded-2xl border border-white/10 bg-[#080b10] px-5 py-4 text-sm font-semibold text-zinc-200 shadow-2xl">
+      {label}
+    </div>
+  </div>
+);
 
 function App() {
   const { motionEnabled, motionPreference, pointerEffectsEnabled, setMotionPreference } = useUiPreferences();
@@ -30,17 +43,23 @@ function App() {
   const [isChallengeOpen, setIsChallengeOpen] = useState(false);
   const [challengeSession, setChallengeSession] = useState(0);
   const [toastMessage, setToastMessage] = useState("");
-
+  const [activeSection, setActiveSection] = useState("top");
+  const initialHashHandledRef = useRef(false);
 
   const openCommandPalette = useCallback(() => {
+    setIsChallengeOpen(false);
     setCommandPaletteSession((currentSession) => currentSession + 1);
     setIsCommandPaletteOpen(true);
   }, []);
 
   const openChallenge = useCallback(() => {
+    setIsCommandPaletteOpen(false);
     setChallengeSession((currentSession) => currentSession + 1);
     setIsChallengeOpen(true);
   }, []);
+
+  const closeCommandPalette = useCallback(() => setIsCommandPaletteOpen(false), []);
+  const closeChallenge = useCallback(() => setIsChallengeOpen(false), []);
 
   const scrollToSection = useCallback(
     (sectionId) => {
@@ -50,6 +69,9 @@ function App() {
       }
 
       sectionElement.scrollIntoView({ behavior: motionEnabled ? "smooth" : "auto", block: "start" });
+      sectionElement.focus({ preventScroll: true });
+      setActiveSection(sectionId);
+      window.history.replaceState(null, "", `#${sectionId}`);
     },
     [motionEnabled]
   );
@@ -75,10 +97,26 @@ function App() {
   const commandActions = useMemo(() => {
     const actions = [
       {
+        id: "work",
+        label: "Jump to Selected Work",
+        description: "See public projects and quality engineering details.",
+        icon: <FaBriefcase />,
+        keywords: ["section", "projects", "portfolio", "work"],
+        onSelect: () => scrollToSection("work"),
+      },
+      {
+        id: "approach",
+        label: "Jump to Approach",
+        description: "See how Jonathan thinks about reliable automation.",
+        icon: <FaRoute />,
+        keywords: ["section", "process", "method", "testing"],
+        onSelect: () => scrollToSection("approach"),
+      },
+      {
         id: "about",
         label: "Jump to About",
         description: "Scroll to the About section.",
-        icon: <FaRegClock />,
+        icon: <FaUser />,
         keywords: ["section", "bio", "about"],
         onSelect: () => scrollToSection("about"),
       },
@@ -115,14 +153,6 @@ function App() {
         onSelect: () => openExternalLink(SITE_CONFIG.linkedinUrl),
       },
       {
-        id: "open-resume",
-        label: "Open Resume",
-        description: "Open resume page in a new tab.",
-        icon: <FaFileAlt />,
-        keywords: ["resume", "cv"],
-        onSelect: () => openExternalLink(SITE_CONFIG.resumeUrl),
-      },
-      {
         id: "toggle-motion",
         label: motionEnabled ? "Disable Motion Effects" : "Enable Motion Effects",
         description: "Override motion preference for this device.",
@@ -133,7 +163,7 @@ function App() {
       {
         id: "open-challenge",
         label: "Launch Squash the Bugs Game",
-        description: "Play a 20-second bug hunt mini-game.",
+        description: "Play a 25-second bug hunt mini-game.",
         icon: <FaMagic />,
         keywords: ["game", "challenge", "fun", "qa"],
         onSelect: openChallenge,
@@ -167,6 +197,47 @@ function App() {
   ]);
 
   useEffect(() => {
+    if (initialHashHandledRef.current) {
+      return undefined;
+    }
+    initialHashHandledRef.current = true;
+
+    const initialSectionId = window.location.hash.slice(1);
+    if (!SECTION_IDS.includes(initialSectionId)) {
+      return undefined;
+    }
+
+    const focusFrame = window.requestAnimationFrame(() => scrollToSection(initialSectionId));
+    return () => window.cancelAnimationFrame(focusFrame);
+  }, [scrollToSection]);
+
+  useEffect(() => {
+    if (typeof window.IntersectionObserver !== "function") {
+      return undefined;
+    }
+
+    const sections = SECTION_IDS.map((sectionId) => document.getElementById(sectionId)).filter(Boolean);
+    const observer = new window.IntersectionObserver(
+      (entries) => {
+        const visibleEntry = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort(
+            (firstEntry, secondEntry) =>
+              Math.abs(firstEntry.boundingClientRect.top) - Math.abs(secondEntry.boundingClientRect.top)
+          )[0];
+
+        if (visibleEntry?.target.id) {
+          setActiveSection(visibleEntry.target.id);
+        }
+      },
+      { rootMargin: "-25% 0px -65%", threshold: [0, 0.1] }
+    );
+
+    sections.forEach((section) => observer.observe(section));
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
     const handleKeyDown = (event) => {
       const target = event.target;
       const isTypingInField =
@@ -175,6 +246,10 @@ function App() {
           target.tagName === "INPUT" ||
           target.tagName === "TEXTAREA" ||
           target.tagName === "SELECT");
+
+      if (isChallengeOpen) {
+        return;
+      }
 
       if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
         event.preventDefault();
@@ -186,7 +261,7 @@ function App() {
         return;
       }
 
-      if (!isTypingInField && event.key === "/") {
+      if (!isTypingInField && !isCommandPaletteOpen && event.key === "/") {
         event.preventDefault();
         openCommandPalette();
       }
@@ -194,7 +269,12 @@ function App() {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isCommandPaletteOpen, openCommandPalette]);
+  }, [isChallengeOpen, isCommandPaletteOpen, openCommandPalette]);
+
+  useEffect(() => {
+    document.documentElement.dataset.motion = motionEnabled ? "on" : "off";
+    return () => delete document.documentElement.dataset.motion;
+  }, [motionEnabled]);
 
   useEffect(() => {
     if (!toastMessage) {
@@ -206,88 +286,89 @@ function App() {
   }, [toastMessage]);
 
   useEffect(() => {
-    if (isCommandPaletteOpen || isChallengeOpen) {
-      document.body.style.overflow = "hidden";
-      document.documentElement.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-      document.documentElement.style.overflow = "";
+    if (!isCommandPaletteOpen && !isChallengeOpen) {
+      return undefined;
     }
+
+    const previousBodyOverflow = document.body.style.overflow;
+    const previousDocumentOverflow = document.documentElement.style.overflow;
+    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
+
     return () => {
-      document.body.style.overflow = "";
-      document.documentElement.style.overflow = "";
+      document.body.style.overflow = previousBodyOverflow;
+      document.documentElement.style.overflow = previousDocumentOverflow;
     };
   }, [isCommandPaletteOpen, isChallengeOpen]);
 
+  const hasOpenModal = isCommandPaletteOpen || isChallengeOpen;
+
   return (
     <ErrorBoundary>
-      <a
-        href="#main-content"
-        className="skip-link"
-      >
-        Skip to main content
-      </a>
-      <main
-        id="main-content"
-        className="bg-dark text-white min-h-screen w-full overflow-x-hidden selection:bg-primary selection:text-white relative"
-      >
+      <div inert={hasOpenModal ? true : undefined}>
+        <a href="#main-content" className="skip-link">
+          Skip to main content
+        </a>
 
-
-        <Hero
-          motionEnabled={motionEnabled}
-          pointerEffectsEnabled={pointerEffectsEnabled}
+        <SiteHeader
+          activeSection={activeSection}
           onOpenCommandPalette={openCommandPalette}
           onLaunchChallenge={openChallenge}
+          onNavigate={scrollToSection}
+          onPrepareCommandPalette={loadCommandPalette}
+          onPrepareChallenge={loadChallenge}
         />
 
-        <About motionEnabled={motionEnabled} pointerEffectsEnabled={pointerEffectsEnabled} />
-        <Contact motionEnabled={motionEnabled} />
+        <main
+          id="main-content"
+          tabIndex={-1}
+          className="relative min-h-screen w-full overflow-x-hidden bg-dark text-white selection:bg-primary selection:text-dark"
+        >
+          <Hero
+            motionEnabled={motionEnabled}
+            pointerEffectsEnabled={pointerEffectsEnabled}
+            onNavigate={scrollToSection}
+          />
+          <Work motionEnabled={motionEnabled} />
+          <Approach motionEnabled={motionEnabled} onLaunchChallenge={openChallenge} />
+          <About motionEnabled={motionEnabled} pointerEffectsEnabled={pointerEffectsEnabled} />
+          <Contact
+            motionEnabled={motionEnabled}
+            onCopyEmail={copyEmail}
+            onScrollTop={() => scrollToSection("top")}
+          />
+        </main>
+      </div>
 
-        {(isCommandPaletteOpen || isChallengeOpen) && (
-          <Suspense fallback={null}>
-            {isCommandPaletteOpen && (
-              <CommandPalette
-                key={commandPaletteSession}
-                isOpen={isCommandPaletteOpen}
-                onClose={() => setIsCommandPaletteOpen(false)}
-                actions={commandActions}
-                motionEnabled={motionEnabled}
-              />
-            )}
-            {isChallengeOpen && (
-              <QAChallengeModal
-                key={challengeSession}
-                isOpen={isChallengeOpen}
-                onClose={() => setIsChallengeOpen(false)}
-                motionEnabled={motionEnabled}
-              />
-            )}
-          </Suspense>
-        )}
+      {hasOpenModal && (
+        <Suspense
+          fallback={
+            <ModalLoadingFallback
+              label={isChallengeOpen ? "Loading QA challenge…" : "Loading quick actions…"}
+            />
+          }
+        >
+          {isCommandPaletteOpen && (
+            <CommandPalette
+              key={commandPaletteSession}
+              isOpen={isCommandPaletteOpen}
+              onClose={closeCommandPalette}
+              actions={commandActions}
+              motionEnabled={motionEnabled}
+            />
+          )}
+          {isChallengeOpen && (
+            <QAChallengeModal
+              key={challengeSession}
+              isOpen={isChallengeOpen}
+              onClose={closeChallenge}
+              motionEnabled={motionEnabled}
+            />
+          )}
+        </Suspense>
+      )}
 
-        <Toast message={toastMessage} />
-      </main>
-
-      {/* Easter Egg: Game Trigger */}
-      <button
-        onClick={openChallenge}
-        className="fixed top-6 left-6 z-[60] p-3 text-white/30 hover:text-primary hover:bg-primary/10 rounded-full transition-all duration-300 backdrop-blur-sm"
-        aria-label="Play Squash the Bugs"
-        title="Found a bug? Squash it!"
-      >
-        <FaBug className="text-xl" />
-      </button>
-
-      {/* Easter Egg: Command Palette Trigger */}
-      <button
-        onClick={openCommandPalette}
-        className="fixed top-6 right-6 z-[60] p-3 text-white/30 hover:text-white hover:bg-white/10 rounded-full transition-all duration-300 backdrop-blur-sm"
-        aria-label="Open Command Menu (Cmd+K)"
-        title="Command Menu (Cmd+K)"
-      >
-        <FaTerminal className="text-xl" />
-      </button>
-
+      <Toast message={toastMessage} />
     </ErrorBoundary>
   );
 }

@@ -1,9 +1,9 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { FaEnvelope, FaGithub, FaLinkedin, FaArrowUp } from "react-icons/fa";
+import { FaArrowUp, FaCopy, FaEnvelope, FaGithub, FaLinkedin } from "react-icons/fa";
 import SITE_CONFIG from "../config/site";
 
-const Contact = ({ motionEnabled = true }) => {
+const Contact = ({ motionEnabled = true, onCopyEmail, onScrollTop }) => {
     const [showScrollTop, setShowScrollTop] = useState(false);
 
     useEffect(() => {
@@ -16,96 +16,81 @@ const Contact = ({ motionEnabled = true }) => {
             }, 100);
         };
         window.addEventListener("scroll", handleScroll, { passive: true });
+        handleScroll();
         return () => {
             window.removeEventListener("scroll", handleScroll);
             if (timeoutId) window.clearTimeout(timeoutId);
         };
     }, []);
 
-    const handleConfetti = useCallback(async () => {
-        if (!motionEnabled) {
-            return;
-        }
-
-        let confetti;
-        try {
-            ({ default: confetti } = await import("canvas-confetti"));
-        } catch {
-            return;
-        }
-
-        const duration = 3000;
-        const animationEnd = Date.now() + duration;
-        const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
-
-        const randomInRange = (min, max) => Math.random() * (max - min) + min;
-
-        const interval = setInterval(function () {
-            const timeLeft = animationEnd - Date.now();
-
-            if (timeLeft <= 0) {
-                return clearInterval(interval);
-            }
-
-            const particleCount = 50 * (timeLeft / duration);
-            // since particles fall down, start a bit higher than random
-            confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } });
-            confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } });
-        }, 250);
-    }, [motionEnabled]);
-
     return (
-        <section id="contact" className="py-20 px-4 max-w-4xl mx-auto text-center relative" style={{ contentVisibility: 'auto' }}>
+        <section id="contact" tabIndex={-1} className="relative mx-auto max-w-5xl px-4 py-20 text-center md:py-28">
             <motion.div
                 initial={motionEnabled ? { opacity: 0, scale: 0.9 } : false}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: motionEnabled ? 0.8 : 0 }}
-                className="bg-gradient-to-br from-white/5 to-transparent border border-white/10 p-12 rounded-3xl backdrop-blur-sm"
+                className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/[0.07] to-transparent p-7 backdrop-blur-sm sm:p-12"
             >
-                <div className="mb-6">
-                    <h2 className="text-3xl md:text-5xl font-bold text-white block mb-2">Let's Connect</h2>
-                </div>
-                <p className="text-gray-300 text-lg mb-8 max-w-xl mx-auto">
-                    I'm always open to discussing new opportunities, creative ideas, or just having a chat.
+                <p className="section-eyebrow">Let&apos;s connect</p>
+                <h2 className="mt-4 text-3xl font-bold text-white md:text-5xl">Let&apos;s make the next release easier to trust.</h2>
+                <p className="mx-auto mb-8 mt-5 max-w-2xl text-base leading-relaxed text-zinc-300 sm:text-lg">
+                    Tell me what your team is shipping, where it feels fragile, or what you want to automate.
                 </p>
 
-                <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
+                <div className="mb-12 flex flex-col items-center justify-center gap-3 sm:flex-row sm:flex-wrap">
                     <a
                         href={`mailto:${SITE_CONFIG.email}`}
-                        onClick={handleConfetti}
-                        className="flex items-center gap-2 px-8 py-4 bg-primary text-dark font-bold rounded-full hover:bg-white transition-colors"
+                        className="flex min-h-12 items-center gap-2 rounded-full bg-primary px-7 py-3 font-bold text-dark transition-colors hover:bg-white"
                     >
-                        <FaEnvelope /> {SITE_CONFIG.email}
+                        <FaEnvelope aria-hidden="true" /> Email me
                     </a>
-                    <a
-                        href={SITE_CONFIG.resumeUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="px-8 py-4 border border-primary/50 text-primary font-semibold rounded-full hover:bg-primary hover:text-dark transition-all"
+                    <button
+                        type="button"
+                        onClick={onCopyEmail}
+                        className="inline-flex min-h-12 items-center gap-2 rounded-full border border-white/15 px-6 py-3 font-semibold text-zinc-200 transition-colors hover:border-white/30 hover:bg-white/10 hover:text-white"
                     >
-                        View Resume
+                        <FaCopy aria-hidden="true" /> Copy email
+                    </button>
+                    <a
+                        href={SITE_CONFIG.linkedinUrl}
+                        target="_blank"
+                        rel="me noopener noreferrer"
+                        className="inline-flex min-h-12 items-center rounded-full border border-primary/50 px-7 py-3 font-semibold text-primary transition-all hover:bg-primary hover:text-dark"
+                    >
+                        View LinkedIn
+                        <span className="sr-only"> (opens in a new tab)</span>
                     </a>
                 </div>
 
-                <div className="flex gap-6 justify-center text-3xl text-gray-400">
-                    <a href={SITE_CONFIG.githubUrl} target="_blank" rel="noopener noreferrer" aria-label="GitHub Profile" className="hover:text-white hover:scale-110 transition-all"><FaGithub /></a>
-                    <a href={SITE_CONFIG.linkedinUrl} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn Profile" className="hover:text-white hover:scale-110 transition-all"><FaLinkedin /></a>
+                <p className="-mt-7 mb-8 text-sm text-zinc-400">
+                    <a className="rounded underline decoration-white/25 underline-offset-4 hover:text-white" href={`mailto:${SITE_CONFIG.email}`}>
+                        {SITE_CONFIG.email}
+                    </a>
+                </p>
+
+                <div className="flex justify-center gap-2 text-2xl text-zinc-400">
+                    <a href={SITE_CONFIG.githubUrl} target="_blank" rel="me noopener noreferrer" aria-label="GitHub profile (opens in a new tab)" className="inline-flex h-11 w-11 items-center justify-center rounded-full transition-all hover:scale-110 hover:bg-white/5 hover:text-white"><FaGithub aria-hidden="true" /></a>
+                    <a href={SITE_CONFIG.linkedinUrl} target="_blank" rel="me noopener noreferrer" aria-label="LinkedIn profile (opens in a new tab)" className="inline-flex h-11 w-11 items-center justify-center rounded-full transition-all hover:scale-110 hover:bg-white/5 hover:text-white"><FaLinkedin aria-hidden="true" /></a>
                 </div>
             </motion.div>
 
-            <footer className="mt-20 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 text-gray-500 text-sm">
+            <footer className="mt-20 flex flex-col items-center justify-between gap-4 border-t border-white/5 pt-8 text-sm text-zinc-400 md:flex-row">
                 <p>&copy; {new Date().getFullYear()} Jonathan Biro. All rights reserved.</p>
-                <div className="flex items-center gap-2">
-                    <span>Built with React & Tailwind</span>
-                </div>
-                <button
-                    onClick={() => window.scrollTo({ top: 0, behavior: motionEnabled ? "smooth" : "auto" })}
-                    className={`fixed bottom-6 right-6 p-3 bg-primary/90 text-white shadow-lg shadow-primary/20 rounded-full hover:bg-primary transition-all duration-300 z-50 ${showScrollTop ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10 pointer-events-none'}`}
-                    aria-label="Scroll to top"
-                >
-                    <FaArrowUp />
-                </button>
+                <span>Built, tested, and maintained with care.</span>
+                {showScrollTop && (
+                    <button
+                        type="button"
+                        onClick={
+                            onScrollTop ||
+                            (() => window.scrollTo({ top: 0, behavior: motionEnabled ? "smooth" : "auto" }))
+                        }
+                        className="fixed bottom-5 right-5 z-50 inline-flex h-11 w-11 items-center justify-center rounded-full bg-primary/95 text-dark shadow-lg shadow-primary/20 transition-all duration-300 hover:bg-white"
+                        aria-label="Scroll to top"
+                    >
+                        <FaArrowUp aria-hidden="true" />
+                    </button>
+                )}
             </footer>
         </section>
     );

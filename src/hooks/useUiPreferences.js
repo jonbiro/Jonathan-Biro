@@ -36,6 +36,16 @@ const getUiPreferences = () => {
     };
 };
 
+const subscribeToMediaQuery = (mediaQuery, listener) => {
+    if (typeof mediaQuery.addEventListener === "function") {
+        mediaQuery.addEventListener("change", listener);
+        return () => mediaQuery.removeEventListener("change", listener);
+    }
+
+    mediaQuery.addListener?.(listener);
+    return () => mediaQuery.removeListener?.(listener);
+};
+
 const useUiPreferences = () => {
     const [preferences, setPreferences] = useState(getUiPreferences);
 
@@ -56,12 +66,12 @@ const useUiPreferences = () => {
         };
 
         updatePreferences();
-        reducedMotionMedia.addEventListener("change", updatePreferences);
-        finePointerMedia.addEventListener("change", updatePreferences);
+        const unsubscribeReducedMotion = subscribeToMediaQuery(reducedMotionMedia, updatePreferences);
+        const unsubscribeFinePointer = subscribeToMediaQuery(finePointerMedia, updatePreferences);
 
         return () => {
-            reducedMotionMedia.removeEventListener("change", updatePreferences);
-            finePointerMedia.removeEventListener("change", updatePreferences);
+            unsubscribeReducedMotion();
+            unsubscribeFinePointer();
         };
     }, []);
 

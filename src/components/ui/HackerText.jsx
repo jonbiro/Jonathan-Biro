@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { motion } from 'framer-motion';
+import { useCallback, useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
 
 const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()";
 
@@ -13,18 +13,23 @@ const buildScrambledText = (text, iteration) =>
 
 const HackerText = ({ text, className, as: Component = "span", animate = true, interactive = true }) => {
     const [displayText, setDisplayText] = useState(text);
+    const [isScrambling, setIsScrambling] = useState(false);
     const intervalRef = useRef(null);
 
     const scrambleText = useCallback(() => {
         let iteration = 0;
 
         clearInterval(intervalRef.current);
+        intervalRef.current = null;
+        setIsScrambling(true);
 
         intervalRef.current = setInterval(() => {
             setDisplayText(buildScrambledText(text, iteration));
 
             if (iteration >= text.length) {
                 clearInterval(intervalRef.current);
+                intervalRef.current = null;
+                setIsScrambling(false);
             }
 
             iteration += 1 / 3;
@@ -33,23 +38,26 @@ const HackerText = ({ text, className, as: Component = "span", animate = true, i
 
     useEffect(() => {
         clearInterval(intervalRef.current);
+        intervalRef.current = null;
+        const resetFrame = window.requestAnimationFrame(() => setIsScrambling(false));
 
-        if (animate) {
-            scrambleText();
-        }
-
-        return () => clearInterval(intervalRef.current);
-    }, [animate, scrambleText]);
+        return () => {
+            window.cancelAnimationFrame(resetFrame);
+            clearInterval(intervalRef.current);
+            intervalRef.current = null;
+        };
+    }, [animate, text]);
 
     const MotionComponent = motion[Component] || motion.span;
-    const renderedText = animate ? displayText : text;
+    const renderedText = animate && isScrambling ? displayText : text;
 
     return (
         <MotionComponent
             className={className}
             onMouseEnter={interactive && animate ? scrambleText : undefined}
+            aria-label={text}
         >
-            {renderedText}
+            <span aria-hidden="true">{renderedText}</span>
         </MotionComponent>
     );
 };

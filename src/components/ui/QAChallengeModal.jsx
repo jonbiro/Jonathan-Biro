@@ -10,6 +10,7 @@ import {
     FaVolumeMute,
     FaVolumeUp,
 } from "react-icons/fa";
+import useDialogFocus from "../../hooks/useDialogFocus";
 
 const GAME_DURATION_SECONDS = 25;
 const BASE_BUG_COUNT_DESKTOP = 12;
@@ -85,8 +86,17 @@ const isMobileLikeDevice = () => {
     return window.matchMedia("(max-width: 767px), (hover: none), (pointer: coarse)").matches;
 };
 
-const supportsHaptics = () =>
-    typeof navigator !== "undefined" && typeof navigator.vibrate === "function";
+const supportsHaptics = () => {
+    if (typeof navigator === "undefined") {
+        return false;
+    }
+
+    try {
+        return typeof navigator.vibrate === "function";
+    } catch {
+        return false;
+    }
+};
 
 const shouldHandlePrimaryActivation = (event) => {
     if ("pointerType" in event && event.pointerType === "mouse") {
@@ -151,7 +161,6 @@ const createBug = (wave, mobileLikeMode) => {
         bonusTime: variant.bonusTime,
         variantId: variant.id,
         variantName: variant.name,
-        squashed: false,
     };
 };
 
@@ -217,7 +226,9 @@ const QAChallengeModal = ({ isOpen, onClose, motionEnabled = true }) => {
     const [misses, setMisses] = useState(0);
     const [wave, setWave] = useState(1);
     const [flashMessage, setFlashMessage] = useState("");
+    const [liveMessage, setLiveMessage] = useState("");
     const [isArenaShaking, setIsArenaShaking] = useState(false);
+    const [isPaused, setIsPaused] = useState(false);
     const [bestScore, setBestScore] = useState(readBestScore);
     const [mobileLikeMode, setMobileLikeMode] = useState(() => isMobileLikeDevice());
     const [soundEnabled, setSoundEnabled] = useState(() =>
@@ -235,14 +246,25 @@ const QAChallengeModal = ({ isOpen, onClose, motionEnabled = true }) => {
     const shakeTimeoutRef = useRef(0);
     const waveSpawnQueuedRef = useRef(false);
     const audioContextRef = useRef(null);
+    const audioTimeoutsRef = useRef(new Set());
+    const gameEndedRef = useRef(false);
+    const gameDeadlineRef = useRef(0);
+    const pauseStartedAtRef = useRef(0);
+    const claimedBugIdsRef = useRef(new Set());
+    const dialogRef = useRef(null);
+    const arenaRef = useRef(null);
+    const startButtonRef = useRef(null);
+    const resultHeadingRef = useRef(null);
 
-    const activeBugs = useMemo(() => bugs.filter((bug) => !bug.squashed), [bugs]);
+    useDialogFocus({ isOpen, dialogRef, onClose, initialFocusRef: startButtonRef });
+
+    const activeBugs = bugs;
     const accuracy = useMemo(() => {
         const attempts = hits + misses;
         return attempts ? Math.round((hits / attempts) * 100) : 100;
     }, [hits, misses]);
     const progressPercent = useMemo(
-        () => clamp((timeLeft / GAME_DURATION_SECONDS) * 100, 0, 100),
+        () => clamp((timeLeft / MAX_TIME_CAP) * 100, 0, 100),
         [timeLeft]
     );
     const resultLabel = useMemo(
@@ -261,10 +283,26 @@ const QAChallengeModal = ({ isOpen, onClose, motionEnabled = true }) => {
         }
 
         if (!audioContextRef.current) {
-            audioContextRef.current = new Context();
+            try {
+                audioContextRef.current = new Context();
+            } catch {
+                return null;
+            }
         }
 
         return audioContextRef.current;
+    }, []);
+
+    const scheduleAudioFeedback = useCallback((callback, delay) => {
+        const timeoutId = window.setTimeout(() => {
+            audioTimeoutsRef.current.delete(timeoutId);
+            try {
+                callback();
+            } catch {
+                // Optional audio feedback must never interrupt gameplay.
+            }
+        }, delay);
+        audioTimeoutsRef.current.add(timeoutId);
     }, []);
 
     const playTone = useCallback(
@@ -282,28 +320,32 @@ const QAChallengeModal = ({ isOpen, onClose, motionEnabled = true }) => {
                 return;
             }
 
-            if (context.state === "suspended") {
-                void context.resume();
+            try {
+                if (context.state === "suspended") {
+                    void context.resume().catch(() => {});
+                }
+
+                const now = context.currentTime;
+                const oscillator = context.createOscillator();
+                const gain = context.createGain();
+
+                oscillator.type = type;
+                oscillator.frequency.setValueAtTime(frequency, now);
+                if (glideTo) {
+                    oscillator.frequency.exponentialRampToValueAtTime(glideTo, now + duration);
+                }
+
+                gain.gain.setValueAtTime(0.0001, now);
+                gain.gain.exponentialRampToValueAtTime(volume, now + 0.012);
+                gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+
+                oscillator.connect(gain);
+                gain.connect(context.destination);
+                oscillator.start(now);
+                oscillator.stop(now + duration + 0.03);
+            } catch {
+                return;
             }
-
-            const now = context.currentTime;
-            const oscillator = context.createOscillator();
-            const gain = context.createGain();
-
-            oscillator.type = type;
-            oscillator.frequency.setValueAtTime(frequency, now);
-            if (glideTo) {
-                oscillator.frequency.exponentialRampToValueAtTime(glideTo, now + duration);
-            }
-
-            gain.gain.setValueAtTime(0.0001, now);
-            gain.gain.exponentialRampToValueAtTime(volume, now + 0.012);
-            gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
-
-            oscillator.connect(gain);
-            gain.connect(context.destination);
-            oscillator.start(now);
-            oscillator.stop(now + duration + 0.03);
         },
         [getAudioContext, soundEnabled]
     );
@@ -313,22 +355,32 @@ const QAChallengeModal = ({ isOpen, onClose, motionEnabled = true }) => {
             if (!hapticsEnabled || !supportsHaptics()) {
                 return;
             }
-            navigator.vibrate(pattern);
+            try {
+                navigator.vibrate(pattern);
+            } catch {
+                return;
+            }
         },
         [hapticsEnabled]
     );
 
     const playStartFeedback = useCallback(() => {
         playTone(440, 0.08, { type: "sine", volume: 0.045 });
-        window.setTimeout(() => playTone(680, 0.1, { type: "triangle", volume: 0.04 }), 70);
+        scheduleAudioFeedback(
+            () => playTone(680, 0.1, { type: "triangle", volume: 0.04 }),
+            70
+        );
         triggerHaptic([12]);
-    }, [playTone, triggerHaptic]);
+    }, [playTone, scheduleAudioFeedback, triggerHaptic]);
 
     const playWaveFeedback = useCallback(() => {
         playTone(620, 0.08, { type: "triangle", volume: 0.045 });
-        window.setTimeout(() => playTone(780, 0.09, { type: "triangle", volume: 0.038 }), 65);
+        scheduleAudioFeedback(
+            () => playTone(780, 0.09, { type: "triangle", volume: 0.038 }),
+            65
+        );
         triggerHaptic([10, 26, 10]);
-    }, [playTone, triggerHaptic]);
+    }, [playTone, scheduleAudioFeedback, triggerHaptic]);
 
     const playMissFeedback = useCallback(() => {
         playTone(180, 0.14, { type: "sawtooth", volume: 0.034, glideTo: 120 });
@@ -356,7 +408,7 @@ const QAChallengeModal = ({ isOpen, onClose, motionEnabled = true }) => {
             });
 
             if (isGlitch) {
-                window.setTimeout(
+                scheduleAudioFeedback(
                     () =>
                         playTone(baseFrequency + comboBoost + 120, 0.06, {
                             type: "sine",
@@ -367,7 +419,7 @@ const QAChallengeModal = ({ isOpen, onClose, motionEnabled = true }) => {
             }
 
             if (isGold) {
-                window.setTimeout(
+                scheduleAudioFeedback(
                     () =>
                         playTone(baseFrequency + comboBoost + 240, 0.1, {
                             type: "triangle",
@@ -381,18 +433,18 @@ const QAChallengeModal = ({ isOpen, onClose, motionEnabled = true }) => {
 
             triggerHaptic(comboCount >= 4 ? [10, 18, 10] : 10);
         },
-        [playTone, triggerHaptic]
+        [playTone, scheduleAudioFeedback, triggerHaptic]
     );
 
     const playEndFeedback = useCallback(
         (finalScore) => {
             if (finalScore >= 260) {
                 playTone(520, 0.09, { type: "sine", volume: 0.045 });
-                window.setTimeout(
+                scheduleAudioFeedback(
                     () => playTone(700, 0.11, { type: "sine", volume: 0.038 }),
                     85
                 );
-                window.setTimeout(
+                scheduleAudioFeedback(
                     () => playTone(860, 0.13, { type: "triangle", volume: 0.04 }),
                     175
                 );
@@ -403,21 +455,28 @@ const QAChallengeModal = ({ isOpen, onClose, motionEnabled = true }) => {
             playTone(260, 0.16, { type: "sine", volume: 0.032, glideTo: 160 });
             triggerHaptic(30);
         },
-        [playTone, triggerHaptic]
+        [playTone, scheduleAudioFeedback, triggerHaptic]
     );
 
     const endGame = useCallback(
         (finalScore) => {
-            setPhase((currentPhase) => {
-                if (currentPhase !== "running") {
-                    return currentPhase;
-                }
-                return "finished";
-            });
+            if (gameEndedRef.current) {
+                return;
+            }
+
+            gameEndedRef.current = true;
+            setIsPaused(false);
+            setPhase("finished");
+            const isNewHighScore = finalScore > bestScoreRef.current;
+            setLiveMessage(
+                isNewHighScore
+                    ? `Game complete. Final score ${finalScore}. New high score unlocked.`
+                    : `Game complete. Final score ${finalScore}.`
+            );
 
             playEndFeedback(finalScore);
 
-            if (finalScore > bestScoreRef.current) {
+            if (isNewHighScore) {
                 bestScoreRef.current = finalScore;
                 setBestScore(finalScore);
                 persistBestScore(finalScore);
@@ -440,8 +499,13 @@ const QAChallengeModal = ({ isOpen, onClose, motionEnabled = true }) => {
         waveRef.current = 1;
         lastHitAtRef.current = 0;
         waveSpawnQueuedRef.current = false;
+        gameEndedRef.current = false;
+        gameDeadlineRef.current = Date.now() + GAME_DURATION_SECONDS * 1000;
+        pauseStartedAtRef.current = 0;
+        claimedBugIdsRef.current.clear();
 
         setMobileLikeMode(mobileLike);
+        setIsPaused(false);
         setPhase("running");
         setTimeLeft(GAME_DURATION_SECONDS);
         setScore(0);
@@ -450,9 +514,29 @@ const QAChallengeModal = ({ isOpen, onClose, motionEnabled = true }) => {
         setMisses(0);
         setWave(1);
         setFlashMessage("Hunt started");
+        setLiveMessage("Hunt started. Twenty-five seconds remaining.");
         setBugs(spawnBugs(initialBugCount, 1, mobileLike));
         playStartFeedback();
     }, [playStartFeedback]);
+
+    const togglePause = useCallback(() => {
+        if (phase !== "running") {
+            return;
+        }
+
+        if (isPaused) {
+            const pausedDuration = Date.now() - pauseStartedAtRef.current;
+            gameDeadlineRef.current += pausedDuration;
+            pauseStartedAtRef.current = 0;
+            setIsPaused(false);
+            setLiveMessage("Game resumed.");
+            return;
+        }
+
+        pauseStartedAtRef.current = Date.now();
+        setIsPaused(true);
+        setLiveMessage("Game paused.");
+    }, [isPaused, phase]);
 
     const toggleSound = useCallback(() => {
         setSoundEnabled((currentState) => {
@@ -472,20 +556,17 @@ const QAChallengeModal = ({ isOpen, onClose, motionEnabled = true }) => {
 
     const handleBugHit = useCallback(
         (bugId) => {
-            if (phase !== "running") {
+            if (phase !== "running" || isPaused || claimedBugIdsRef.current.has(bugId)) {
                 return;
             }
 
-            const targetBug = bugs.find((bug) => bug.id === bugId && !bug.squashed);
+            const targetBug = bugs.find((bug) => bug.id === bugId);
             if (!targetBug) {
                 return;
             }
 
-            setBugs((currentBugs) =>
-                currentBugs.map((bug) =>
-                    bug.id === bugId ? { ...bug, squashed: true } : bug
-                )
-            );
+            claimedBugIdsRef.current.add(bugId);
+            setBugs((currentBugs) => currentBugs.filter((bug) => bug.id !== bugId));
 
             const now = Date.now();
             const withinComboWindow = now - lastHitAtRef.current <= COMBO_WINDOW_MS;
@@ -504,20 +585,23 @@ const QAChallengeModal = ({ isOpen, onClose, motionEnabled = true }) => {
             playHitFeedback(targetBug.variantId, nextCombo);
 
             if (targetBug.bonusTime > 0) {
-                setTimeLeft((currentTime) =>
-                    Math.min(MAX_TIME_CAP, Number((currentTime + targetBug.bonusTime).toFixed(2)))
+                const nextTimeLeft = Math.min(
+                    MAX_TIME_CAP,
+                    Math.max(0, (gameDeadlineRef.current - Date.now()) / 1000) + targetBug.bonusTime
                 );
+                gameDeadlineRef.current = Date.now() + nextTimeLeft * 1000;
+                setTimeLeft(Number(nextTimeLeft.toFixed(2)));
                 setFlashMessage(`+${targetBug.bonusTime.toFixed(1)}s bonus bug`);
             } else if (nextCombo > 1) {
                 setFlashMessage(`Combo x${nextCombo}`);
             }
         },
-        [bugs, phase, playHitFeedback]
+        [bugs, isPaused, phase, playHitFeedback]
     );
 
     const handleArenaMiss = useCallback(
         (event) => {
-            if (event.target !== event.currentTarget || phase !== "running") {
+            if (event.target !== event.currentTarget || phase !== "running" || isPaused) {
                 return;
             }
 
@@ -527,27 +611,25 @@ const QAChallengeModal = ({ isOpen, onClose, motionEnabled = true }) => {
             setFlashMessage(`Miss! -${MISS_TIME_PENALTY.toFixed(1)}s`);
             playMissFeedback();
 
-            if (shakeTimeoutRef.current) {
-                window.clearTimeout(shakeTimeoutRef.current);
-            }
-            setIsArenaShaking(true);
-            shakeTimeoutRef.current = window.setTimeout(() => {
-                setIsArenaShaking(false);
-                shakeTimeoutRef.current = 0;
-            }, 200);
-
-            setTimeLeft((currentTime) => {
-                const nextTime = Math.max(
-                    0,
-                    Number((currentTime - MISS_TIME_PENALTY).toFixed(2))
-                );
-                if (nextTime <= 0) {
-                    endGame(scoreRef.current);
+            if (motionEnabled) {
+                if (shakeTimeoutRef.current) {
+                    window.clearTimeout(shakeTimeoutRef.current);
                 }
-                return nextTime;
-            });
+                setIsArenaShaking(true);
+                shakeTimeoutRef.current = window.setTimeout(() => {
+                    setIsArenaShaking(false);
+                    shakeTimeoutRef.current = 0;
+                }, 200);
+            }
+
+            const nextTimeLeft = Math.max(
+                0,
+                (gameDeadlineRef.current - Date.now()) / 1000 - MISS_TIME_PENALTY
+            );
+            gameDeadlineRef.current = Date.now() + nextTimeLeft * 1000;
+            setTimeLeft(Number(nextTimeLeft.toFixed(2)));
         },
-        [endGame, phase, playMissFeedback]
+        [isPaused, motionEnabled, phase, playMissFeedback]
     );
 
     const handleArenaPress = useCallback(
@@ -572,61 +654,81 @@ const QAChallengeModal = ({ isOpen, onClose, motionEnabled = true }) => {
         [handleBugHit]
     );
 
-    useEffect(() => {
-        if (!isOpen) {
-            return undefined;
-        }
-
-        const handleKeyDown = (event) => {
-            if (event.key === "Escape") {
-                event.preventDefault();
-                onClose();
+    const handleArenaKeyDown = useCallback(
+        (event) => {
+            if (
+                event.target !== event.currentTarget ||
+                phase !== "running" ||
+                isPaused ||
+                (event.key !== "Enter" && event.key !== " ")
+            ) {
                 return;
             }
 
-            if ((event.key === "Enter" || event.key === " ") && phase !== "running") {
+            const nextBug = arenaRef.current?.querySelector("[data-bug-button='true']");
+            if (nextBug) {
                 event.preventDefault();
-                startGame();
+                nextBug.focus();
+                setLiveMessage("Bug focused. Press Enter or Space to clear it.");
             }
-        };
-
-        window.addEventListener("keydown", handleKeyDown);
-        return () => window.removeEventListener("keydown", handleKeyDown);
-    }, [isOpen, onClose, phase, startGame]);
+        },
+        [isPaused, phase]
+    );
 
     useEffect(() => {
         if (phase !== "running") {
+            return undefined;
+        }
+
+        const pauseWhenHidden = () => {
+            if (!document.hidden || isPaused) {
+                return;
+            }
+
+            pauseStartedAtRef.current = Date.now();
+            setIsPaused(true);
+            setLiveMessage("Game paused automatically while this tab is hidden.");
+        };
+
+        document.addEventListener("visibilitychange", pauseWhenHidden);
+        pauseWhenHidden();
+        return () => document.removeEventListener("visibilitychange", pauseWhenHidden);
+    }, [isPaused, phase]);
+
+    useEffect(() => {
+        if (phase !== "running" || isPaused) {
             return undefined;
         }
 
         const timerId = window.setInterval(() => {
-            setTimeLeft((currentTime) => {
-                const nextTime = Math.max(
-                    0,
-                    Number((currentTime - TIMER_TICK_RATE_MS / 1000).toFixed(2))
-                );
-                if (nextTime <= 0) {
-                    endGame(scoreRef.current);
-                }
-                return nextTime;
-            });
+            if (document.hidden) {
+                return;
+            }
+            const nextTime = Math.max(0, (gameDeadlineRef.current - Date.now()) / 1000);
+            setTimeLeft(Number(nextTime.toFixed(2)));
         }, TIMER_TICK_RATE_MS);
 
         return () => window.clearInterval(timerId);
-    }, [endGame, phase]);
+    }, [isPaused, phase]);
 
     useEffect(() => {
-        if (phase !== "running") {
+        if (phase === "running" && timeLeft <= 0) {
+            endGame(scoreRef.current);
+        }
+    }, [endGame, phase, timeLeft]);
+
+    useEffect(() => {
+        if (phase !== "running" || isPaused || !motionEnabled) {
             return undefined;
         }
 
         const movementId = window.setInterval(() => {
+            if (document.hidden) {
+                return;
+            }
+
             setBugs((currentBugs) =>
                 currentBugs.map((bug) => {
-                    if (bug.squashed) {
-                        return bug;
-                    }
-
                     let nextX = bug.x + bug.vx;
                     let nextY = bug.y + bug.vy;
                     let nextVx = bug.vx;
@@ -653,10 +755,10 @@ const QAChallengeModal = ({ isOpen, onClose, motionEnabled = true }) => {
         }, MOVEMENT_TICK_RATE_MS);
 
         return () => window.clearInterval(movementId);
-    }, [phase]);
+    }, [isPaused, motionEnabled, phase]);
 
     useEffect(() => {
-        if (phase !== "running") {
+        if (phase !== "running" || isPaused) {
             waveSpawnQueuedRef.current = false;
             return undefined;
         }
@@ -673,6 +775,7 @@ const QAChallengeModal = ({ isOpen, onClose, motionEnabled = true }) => {
             waveRef.current = nextWave;
             setWave(nextWave);
             setFlashMessage(`Wave ${nextWave}`);
+            setLiveMessage(`Wave ${nextWave} started.`);
             playWaveFeedback();
 
             const extraBugs = mobileLikeMode
@@ -684,8 +787,11 @@ const QAChallengeModal = ({ isOpen, onClose, motionEnabled = true }) => {
             ]);
         }, 75);
 
-        return () => window.clearTimeout(spawnTimeoutId);
-    }, [activeBugs.length, mobileLikeMode, phase, playWaveFeedback]);
+        return () => {
+            window.clearTimeout(spawnTimeoutId);
+            waveSpawnQueuedRef.current = false;
+        };
+    }, [activeBugs.length, isPaused, mobileLikeMode, phase, playWaveFeedback]);
 
     useEffect(() => {
         if (phase !== "running" || combo === 0) {
@@ -701,11 +807,30 @@ const QAChallengeModal = ({ isOpen, onClose, motionEnabled = true }) => {
         }, COMBO_WINDOW_MS + 50);
 
         return () => window.clearTimeout(comboTimeoutId);
-    }, [combo, phase, timeLeft]);
+    }, [combo, phase]);
 
     useEffect(() => {
         bestScoreRef.current = bestScore;
     }, [bestScore]);
+
+    useEffect(() => {
+        if (phase === "finished") {
+            resultHeadingRef.current?.focus();
+        }
+    }, [phase]);
+
+    useEffect(() => {
+        if (phase !== "running") {
+            return undefined;
+        }
+
+        const focusFrame = window.requestAnimationFrame(() => {
+            const firstBug = arenaRef.current?.querySelector("[data-bug-button='true']");
+            (firstBug || arenaRef.current)?.focus();
+        });
+
+        return () => window.cancelAnimationFrame(focusFrame);
+    }, [phase]);
 
     useEffect(() => {
         if (!flashMessage) {
@@ -723,6 +848,12 @@ const QAChallengeModal = ({ isOpen, onClose, motionEnabled = true }) => {
         () => () => {
             if (shakeTimeoutRef.current) {
                 window.clearTimeout(shakeTimeoutRef.current);
+            }
+            audioTimeoutsRef.current.forEach((timeoutId) => window.clearTimeout(timeoutId));
+            audioTimeoutsRef.current.clear();
+            if (audioContextRef.current) {
+                void audioContextRef.current.close().catch(() => {});
+                audioContextRef.current = null;
             }
         },
         []
@@ -742,11 +873,17 @@ const QAChallengeModal = ({ isOpen, onClose, motionEnabled = true }) => {
                     onClick={onClose}
                 >
                     <motion.div
+                        ref={dialogRef}
+                        role="dialog"
+                        aria-modal="true"
+                        aria-labelledby="qa-challenge-title"
+                        aria-describedby="qa-challenge-description"
+                        tabIndex={-1}
                         initial={motionEnabled ? { opacity: 0, y: 18 } : false}
                         animate={{ opacity: 1, y: 0 }}
                         exit={motionEnabled ? { opacity: 0, y: 12 } : undefined}
                         transition={{ duration: motionEnabled ? 0.24 : 0, ease: "easeOut" }}
-                        className="mx-auto flex h-full w-full max-w-5xl flex-col rounded-none border border-white/10 bg-[#04070d]/95 p-3 shadow-[0_30px_90px_rgba(2,6,23,0.75)] sm:rounded-3xl sm:p-5"
+                        className="mx-auto flex h-full w-full max-w-5xl flex-col overflow-y-auto overscroll-contain rounded-none border border-white/10 bg-[#04070d]/95 p-3 shadow-[0_30px_90px_rgba(2,6,23,0.75)] sm:rounded-3xl sm:p-5"
                         style={{
                             paddingTop: "max(0.75rem, env(safe-area-inset-top))",
                             paddingBottom: "max(0.75rem, env(safe-area-inset-bottom))",
@@ -758,14 +895,15 @@ const QAChallengeModal = ({ isOpen, onClose, motionEnabled = true }) => {
                                 <p className="text-[10px] uppercase tracking-[0.24em] text-zinc-400">
                                     Mini Challenge
                                 </p>
-                                <h3 className="mt-1 text-xl font-bold text-white sm:text-2xl md:text-3xl">
+                                <h3 id="qa-challenge-title" className="mt-1 text-xl font-bold text-white sm:text-2xl md:text-3xl">
                                     Squash the Bugs Game
                                 </h3>
-                                <p className="mt-1 text-xs text-zinc-400 sm:text-sm">
+                                <p id="qa-challenge-description" className="mt-1 text-xs text-zinc-400 sm:text-sm">
                                     Smash moving bugs, chain combos, and survive escalating waves.
                                 </p>
                             </div>
                             <button
+                                type="button"
                                 onClick={onClose}
                                 className="min-h-[44px] rounded-lg border border-white/20 px-3 py-1.5 text-xs text-zinc-200 transition-colors hover:bg-white/10"
                             >
@@ -773,10 +911,19 @@ const QAChallengeModal = ({ isOpen, onClose, motionEnabled = true }) => {
                             </button>
                         </div>
 
-                        <div className="mt-3 h-2 overflow-hidden rounded-full bg-white/10">
+                        <div
+                            className="mt-3 h-2 overflow-hidden rounded-full bg-white/10"
+                            role="progressbar"
+                            aria-label="Time remaining"
+                            aria-valuemin="0"
+                            aria-valuemax={MAX_TIME_CAP}
+                            aria-valuenow={clamp(Number(timeLeft.toFixed(1)), 0, MAX_TIME_CAP)}
+                            aria-valuetext={`${timeLeft.toFixed(1)} seconds remaining`}
+                        >
                             <motion.div
                                 className="h-full bg-gradient-to-r from-primary via-secondary to-accent"
                                 animate={{ width: `${progressPercent}%` }}
+                                style={{ width: `${progressPercent}%` }}
                                 transition={{ duration: motionEnabled ? 0.12 : 0 }}
                             />
                         </div>
@@ -787,33 +934,52 @@ const QAChallengeModal = ({ isOpen, onClose, motionEnabled = true }) => {
                             <StatPill label="Combo" value={`x${combo}`} />
                             <StatPill label="Wave" value={wave} />
                             <StatPill label="Accuracy" value={`${accuracy}%`} />
-                            <StatPill label="Best" value={bestScore} icon={<FaTrophy />} />
+                            <StatPill label="Best" value={bestScore} icon={<FaTrophy aria-hidden="true" />} />
                         </div>
 
                         <div className="mt-3 flex flex-wrap items-center gap-2">
                             <button
+                                type="button"
                                 onClick={toggleSound}
-                                className="min-h-[38px] rounded-lg border border-white/15 bg-white/[0.03] px-3 py-1.5 text-xs text-zinc-200 transition-colors hover:bg-white/10"
+                                aria-pressed={soundEnabled}
+                                className="min-h-11 rounded-lg border border-white/15 bg-white/[0.03] px-3 py-1.5 text-xs text-zinc-200 transition-colors hover:bg-white/10"
                             >
                                 {soundEnabled ? <FaVolumeUp className="mr-1 inline-block" /> : <FaVolumeMute className="mr-1 inline-block" />}
                                 {soundEnabled ? "Sound On" : "Sound Off"}
                             </button>
                             {hapticsAvailable && (
                                 <button
+                                    type="button"
                                     onClick={toggleHaptics}
-                                    className="min-h-[38px] rounded-lg border border-white/15 bg-white/[0.03] px-3 py-1.5 text-xs text-zinc-200 transition-colors hover:bg-white/10"
+                                    aria-pressed={hapticsEnabled}
+                                    className="min-h-11 rounded-lg border border-white/15 bg-white/[0.03] px-3 py-1.5 text-xs text-zinc-200 transition-colors hover:bg-white/10"
                                 >
                                     <FaMobileAlt className="mr-1 inline-block" />
                                     {hapticsEnabled ? "Haptics On" : "Haptics Off"}
                                 </button>
                             )}
+                            {phase === "running" && (
+                                <button
+                                    type="button"
+                                    onClick={togglePause}
+                                    aria-pressed={isPaused}
+                                    className="min-h-11 rounded-lg border border-white/15 bg-white/[0.03] px-3 py-1.5 text-xs text-zinc-200 transition-colors hover:bg-white/10"
+                                >
+                                    {isPaused ? "Resume game" : "Pause game"}
+                                </button>
+                            )}
                         </div>
 
                         <motion.div
-                            className="relative mt-3 flex min-h-[360px] flex-1 overflow-hidden rounded-2xl border border-white/10 bg-[#02050c] sm:min-h-[430px]"
-                            animate={isArenaShaking ? { x: [0, -8, 7, -5, 0] } : { x: 0 }}
-                            transition={{ duration: 0.22 }}
+                            ref={arenaRef}
+                            className="relative mt-3 flex min-h-[280px] flex-1 overflow-hidden rounded-2xl border border-white/10 bg-[#02050c] sm:min-h-[430px]"
+                            animate={motionEnabled && isArenaShaking ? { x: [0, -8, 7, -5, 0] } : { x: 0 }}
+                            transition={{ duration: motionEnabled ? 0.22 : 0 }}
                             onPointerDown={handleArenaPress}
+                            onKeyDown={handleArenaKeyDown}
+                            tabIndex={phase === "running" ? 0 : -1}
+                            role="group"
+                            aria-label="Bug hunt arena. Press Enter or Space to focus a bug, then press again to clear it."
                             style={{ touchAction: "manipulation", cursor: "crosshair" }}
                         >
                             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,#1e293b_0%,#020617_62%)]" />
@@ -834,6 +1000,8 @@ const QAChallengeModal = ({ isOpen, onClose, motionEnabled = true }) => {
                                     </p>
                                     <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
                                         <button
+                                            type="button"
+                                            ref={startButtonRef}
                                             onClick={startGame}
                                             className="min-h-[48px] rounded-full bg-primary px-6 py-3 text-sm font-semibold text-dark transition-colors hover:bg-white"
                                         >
@@ -849,6 +1017,14 @@ const QAChallengeModal = ({ isOpen, onClose, motionEnabled = true }) => {
 
                             {phase === "running" && (
                                 <>
+                                    {isPaused && (
+                                        <div className="pointer-events-none absolute inset-0 z-20 grid place-items-center bg-black/65 backdrop-blur-sm">
+                                            <div className="rounded-2xl border border-white/15 bg-[#07101d] px-6 py-5 text-center shadow-2xl">
+                                                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Paused</p>
+                                                <p className="mt-2 text-sm text-zinc-300">Timer stopped. Resume when you&apos;re ready.</p>
+                                            </div>
+                                        </div>
+                                    )}
                                     {bugs.map((bug) => {
                                         const variant = BUG_VARIANTS[bug.variantId];
                                         const bugSize = mobileLikeMode
@@ -858,15 +1034,21 @@ const QAChallengeModal = ({ isOpen, onClose, motionEnabled = true }) => {
                                         return (
                                             <motion.button
                                                 key={bug.id}
+                                                type="button"
+                                                data-bug-button="true"
                                                 onPointerDown={(event) => handleBugPress(event, bug.id)}
                                                 onKeyDown={(event) => {
                                                     if (event.key === "Enter" || event.key === " ") {
                                                         event.preventDefault();
                                                         handleBugHit(bug.id);
+                                                        window.requestAnimationFrame(() => {
+                                                            const nextBug = arenaRef.current?.querySelector("[data-bug-button='true']");
+                                                            (nextBug || arenaRef.current)?.focus();
+                                                        });
                                                     }
                                                 }}
-                                                disabled={bug.squashed}
-                                                className={`absolute flex items-center justify-center rounded-full border text-[0.78rem] leading-none transition ${variant.className} ${bug.squashed ? "pointer-events-none" : ""}`}
+                                                disabled={isPaused}
+                                                className={`absolute flex items-center justify-center rounded-full border text-[0.78rem] leading-none transition ${variant.className}`}
                                                 style={{
                                                     left: `${bug.x}%`,
                                                     top: `${bug.y}%`,
@@ -880,22 +1062,17 @@ const QAChallengeModal = ({ isOpen, onClose, motionEnabled = true }) => {
                                                         ? `translate(-50%, -50%) ${generatedTransform}`
                                                         : "translate(-50%, -50%)"
                                                 }
-                                                initial={{ opacity: 0, scale: 0.5 }}
-                                                animate={
-                                                    bug.squashed
-                                                        ? { opacity: 0, scale: 0.2, rotate: 220 }
-                                                        : {
-                                                            opacity: 1,
-                                                            scale: 1,
-                                                            rotate:
-                                                                bug.variantId === "glitch"
-                                                                    ? [0, 14, -8, 8, 0]
-                                                                    : 0,
-                                                        }
-                                                }
+                                                initial={motionEnabled ? { opacity: 0, scale: 0.5 } : false}
+                                                animate={!motionEnabled
+                                                    ? { opacity: 1, scale: 1, rotate: 0 }
+                                                    : {
+                                                        opacity: 1,
+                                                        scale: 1,
+                                                        rotate: bug.variantId === "glitch" ? [0, 14, -8, 8, 0] : 0,
+                                                    }}
                                                 transition={
-                                                    bug.squashed
-                                                        ? { duration: 0.16 }
+                                                    !motionEnabled
+                                                        ? { duration: 0 }
                                                         : {
                                                             duration:
                                                                 bug.variantId === "glitch"
@@ -907,13 +1084,13 @@ const QAChallengeModal = ({ isOpen, onClose, motionEnabled = true }) => {
                                                                     : 0,
                                                         }
                                                 }
-                                                whileHover={{ scale: 1.16 }}
-                                                whileTap={{ scale: 0.9 }}
-                                                aria-label={`Smash ${bug.variantName} bug`}
+                                                whileHover={motionEnabled ? { scale: 1.16 } : undefined}
+                                                whileTap={motionEnabled ? { scale: 0.9 } : undefined}
+                                                aria-label={`Clear ${bug.variantName} bug for ${bug.points} points${bug.bonusTime ? ` and ${bug.bonusTime.toFixed(1)} bonus seconds` : ""}`}
                                                 title={`${bug.variantName}: ${bug.points} pts`}
                                             >
                                                 <span className="pointer-events-none">
-                                                    {bug.variantId === "gold" ? <FaBolt /> : <FaBug />}
+                                                    {bug.variantId === "gold" ? <FaBolt aria-hidden="true" /> : <FaBug aria-hidden="true" />}
                                                 </span>
                                             </motion.button>
                                         );
@@ -929,7 +1106,7 @@ const QAChallengeModal = ({ isOpen, onClose, motionEnabled = true }) => {
                                     <p className="text-xs uppercase tracking-[0.22em] text-zinc-400">
                                         Final Result
                                     </p>
-                                    <h4 className="mt-2 text-3xl font-bold text-white sm:text-4xl">
+                                    <h4 ref={resultHeadingRef} tabIndex={-1} className="mt-2 text-3xl font-bold text-white sm:text-4xl">
                                         {score} points
                                     </h4>
                                     <p className="mt-2 text-sm text-zinc-300">{resultLabel}</p>
@@ -943,6 +1120,7 @@ const QAChallengeModal = ({ isOpen, onClose, motionEnabled = true }) => {
 
                                     <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
                                         <button
+                                            type="button"
                                             onClick={startGame}
                                             className="min-h-[48px] rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-dark transition-colors hover:bg-white"
                                         >
@@ -950,6 +1128,7 @@ const QAChallengeModal = ({ isOpen, onClose, motionEnabled = true }) => {
                                             Play Again
                                         </button>
                                         <button
+                                            type="button"
                                             onClick={onClose}
                                             className="min-h-[48px] rounded-full border border-white/20 px-5 py-2.5 text-sm text-zinc-200 transition-colors hover:bg-white/10"
                                         >
@@ -960,10 +1139,13 @@ const QAChallengeModal = ({ isOpen, onClose, motionEnabled = true }) => {
                             )}
 
                             {flashMessage && (
-                                <div className="pointer-events-none absolute left-1/2 top-3 -translate-x-1/2 rounded-full border border-white/20 bg-black/60 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-white backdrop-blur-sm">
+                                <div aria-hidden="true" className="pointer-events-none absolute left-1/2 top-3 -translate-x-1/2 rounded-full border border-white/20 bg-black/60 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-white backdrop-blur-sm">
                                     {flashMessage}
                                 </div>
                             )}
+                            <p className="sr-only" role="status" aria-live="polite">
+                                {liveMessage}
+                            </p>
                         </motion.div>
                     </motion.div>
                 </motion.div>

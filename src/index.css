@@ -28,6 +28,11 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
+html {
+  scroll-padding-top: 6rem;
+  scrollbar-gutter: stable;
+}
+
 body {
   @apply bg-dark text-white font-sans antialiased;
 }
@@ -37,9 +42,40 @@ a {
   touch-action: manipulation;
 }
 
+section[id] {
+  scroll-margin-top: 6rem;
+}
+
+@layer components {
+  .section-eyebrow {
+    @apply text-xs font-semibold uppercase tracking-[0.22em] text-primary;
+  }
+
+  .section-title {
+    @apply text-balance text-3xl font-bold tracking-tight text-white sm:text-4xl md:text-5xl;
+  }
+
+  .section-intro {
+    @apply max-w-2xl text-pretty text-base leading-relaxed text-zinc-400 sm:text-lg;
+  }
+}
+
 /* Smooth scrolling */
 html {
   scroll-behavior: smooth;
+}
+
+html[data-motion="off"] {
+  scroll-behavior: auto;
+}
+
+html[data-motion="off"] *,
+html[data-motion="off"] *::before,
+html[data-motion="off"] *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
 }
 
 /* Skip to content link — invisible until focused */
@@ -50,8 +86,8 @@ html {
   z-index: 200;
   padding: 0.5rem 1rem;
   border-radius: 0.5rem;
-  background: #7c3aed;
-  color: #fff;
+  background: #60a5fa;
+  color: #0a0a0a;
   font-weight: 600;
   font-size: 0.875rem;
   text-decoration: none;
@@ -60,14 +96,29 @@ html {
 
 .skip-link:focus {
   top: 1rem;
-  outline: 2px solid #7c3aed;
+  outline: 2px solid #60a5fa;
   outline-offset: 2px;
 }
 
 /* Focus-visible outlines */
 :focus-visible {
-  outline: 2px solid #7c3aed;
+  outline: 2px solid #60a5fa;
   outline-offset: 2px;
+}
+
+@keyframes gradientShift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.animate-gradient {
+  animation: gradientShift 8s ease infinite;
 }
 
 /* Fade-in utility */
@@ -108,5 +159,21 @@ html {
   .cursor-none,
   .cursor-none * {
     cursor: auto !important;
+  }
+}
+
+@media (forced-colors: active) {
+  :focus-visible {
+    outline: 2px solid CanvasText;
+  }
+
+  .skip-link {
+    border: 2px solid CanvasText;
+  }
+
+  .hero-name {
+    background-image: none !important;
+    color: CanvasText !important;
+    -webkit-text-fill-color: CanvasText;
   }
 }
