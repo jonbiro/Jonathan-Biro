@@ -121,6 +121,7 @@ describe("SiteHeader", () => {
         renderHeader({ onPrepareCommandPalette, onPrepareChallenge });
 
         screen.getByRole("button", { name: /open quick actions/i }).focus();
+        fireEvent.click(screen.getByRole("button", { name: /open navigation menu/i }));
         screen.getAllByRole("button", { name: /launch qa challenge/i })[0].focus();
 
         expect(onPrepareCommandPalette).toHaveBeenCalled();

@@ -42,7 +42,6 @@ const About = ({ motionEnabled = true, pointerEffectsEnabled = true }) => {
             <div className="flex flex-col items-center gap-12 md:flex-row md:gap-20">
                 <motion.div {...leftRevealProps} className="flex w-full justify-center md:w-5/12 md:justify-end">
                     <div className="group relative">
-                        <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-primary to-accent opacity-25 blur transition duration-700 group-hover:opacity-60" aria-hidden="true" />
                         <picture>
                             <source srcSet={headshotWebp} type="image/webp" />
                             <img
@@ -50,7 +49,7 @@ const About = ({ motionEnabled = true, pointerEffectsEnabled = true }) => {
                                 alt="Jonathan Biro"
                                 loading="lazy"
                                 decoding="async"
-                                className="relative h-72 w-72 rounded-3xl object-cover shadow-2xl grayscale transition-all duration-500 group-hover:grayscale-0 md:h-80 md:w-80"
+                                className="relative h-72 w-72 rounded-lg border border-white/10 object-cover md:h-80 md:w-80"
                                 width="320"
                                 height="320"
                             />
@@ -60,18 +59,18 @@ const About = ({ motionEnabled = true, pointerEffectsEnabled = true }) => {
 
                 <motion.div {...rightRevealProps} className="w-full md:w-7/12">
                     <p className="section-eyebrow">About</p>
-                    <h2 className="section-title mt-4">Curious about how things break.</h2>
+                    <h2 className="section-title mt-4">Engineering with a user focus</h2>
 
                     <div className="mt-6 space-y-5 text-base leading-relaxed text-zinc-300 sm:text-lg">
                         <p>
                             I&apos;m {SITE_CONFIG.fullName}, a QA Automation Engineer and SDET in Los Angeles.
-                            I enjoy the detective work: turning an intermittent report into a clear
-                            reproduction, and following a small UI symptom to the assumption underneath it.
+                            My work connects reproducible defect investigation with automated coverage
+                            and practical release validation.
                         </p>
                         <p>
-                            Building products alongside their tests keeps me close to the user experience.
-                            The healthcare site, this portfolio, and the game each ask different questions
-                            about clarity, accessibility, timing, and recovery.
+                            Building interfaces alongside their tests helps me evaluate both implementation
+                            details and real user behavior, including accessibility, state transitions,
+                            and error recovery.
                         </p>
                     </div>
 
@@ -79,7 +78,7 @@ const About = ({ motionEnabled = true, pointerEffectsEnabled = true }) => {
                         {CAPABILITIES.map((capability) => (
                             <article key={capability.title} className="rounded-2xl border border-white/10 bg-white/[0.035] p-4">
                                 <h3 className="font-bold text-white">{capability.title}</h3>
-                                <p className="mt-1 text-xs leading-relaxed text-zinc-400">{capability.description}</p>
+                                <p className="mt-1 text-sm leading-relaxed text-zinc-400">{capability.description}</p>
                                 <ul className="mt-4 space-y-1.5 text-sm text-zinc-300">
                                     {capability.tools.map((tool) => (
                                         <li key={tool}>{tool}</li>

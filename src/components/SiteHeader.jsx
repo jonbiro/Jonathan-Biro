@@ -94,19 +94,19 @@ const SiteHeader = ({
     };
 
     return (
-        <header className="fixed inset-x-0 top-0 z-[70] px-3 pt-3 sm:px-5 sm:pt-4">
+        <header className="fixed inset-x-0 top-0 z-[70] border-b border-white/10 bg-[#0a0a0a]/95 backdrop-blur-lg">
             <nav
                 aria-label="Primary navigation"
-                className="mx-auto flex max-w-6xl flex-wrap items-center justify-between rounded-2xl border border-white/10 bg-[#07090d]/90 px-3 py-2 shadow-2xl shadow-black/30 backdrop-blur-xl sm:px-4"
+                className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-2 px-4 py-3"
             >
                 <a
                     href="#top"
                     onClick={(event) => navigateToSection(event, "top")}
-                    className={`flex min-h-11 min-w-11 items-center justify-center rounded-xl text-sm font-black tracking-tight transition-all hover:scale-105 ${activeSection === "top" ? "bg-primary text-dark shadow-lg shadow-primary/20" : "bg-white text-dark"}`}
+                    className="flex min-h-11 items-center text-base font-semibold tracking-tight text-white"
                     aria-label="Jonathan Biro, back to top"
                     aria-current={activeSection === "top" ? "location" : undefined}
                 >
-                    JB
+                    Jonathan Biro<span className="ml-3 hidden border-l border-white/20 pl-3 text-sm font-normal text-zinc-400 xl:inline">Quality engineering</span>
                 </a>
 
                 <div className="hidden items-center gap-1 md:flex">
@@ -126,31 +126,16 @@ const SiteHeader = ({
                 <div className="flex items-center gap-2">
                     <button
                         type="button"
-                        onClick={launchChallenge}
-                        onMouseEnter={onPrepareChallenge}
-                        onFocus={onPrepareChallenge}
-                        onTouchStart={onPrepareChallenge}
-                        className="hidden min-h-11 items-center gap-2 rounded-xl border border-white/10 px-3 text-sm font-medium text-zinc-300 transition-colors hover:border-primary/40 hover:bg-primary/10 hover:text-primary sm:inline-flex"
-                        aria-label="Launch QA challenge"
-                    >
-                        <FaBug aria-hidden="true" />
-                        <span className="hidden lg:inline">QA challenge</span>
-                    </button>
-                    <button
-                        type="button"
                         onClick={openCommandPalette}
                         onMouseEnter={onPrepareCommandPalette}
                         onFocus={onPrepareCommandPalette}
                         onTouchStart={onPrepareCommandPalette}
-                        className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 text-sm font-medium text-zinc-300 transition-colors hover:border-white/20 hover:bg-white/10 hover:text-white"
+                        className="inline-flex min-h-11 items-center gap-2 rounded-md px-3 text-sm font-medium text-zinc-400 transition-colors hover:bg-white/5 hover:text-white"
                         aria-label="Open quick actions"
                         title="Quick actions (Cmd or Ctrl + K)"
                     >
                         <FaTerminal aria-hidden="true" />
-                        <span className="hidden sm:inline">Quick actions</span>
-                        <kbd className="hidden rounded border border-white/10 bg-black/20 px-1.5 py-0.5 font-sans text-[10px] text-zinc-400 lg:inline">
-                            Ctrl/⌘ K
-                        </kbd>
+                        <span className="sr-only">Quick actions</span>
                     </button>
                     <button
                         type="button"

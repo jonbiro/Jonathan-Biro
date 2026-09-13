@@ -48,19 +48,19 @@ section[id] {
 
 @layer components {
   .action-primary {
-    @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-dark transition-colors hover:bg-white disabled:cursor-default disabled:opacity-60;
+    @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-md bg-primary px-5 py-3 text-sm font-semibold text-dark transition-colors hover:bg-white disabled:cursor-default disabled:opacity-60;
   }
   .action-secondary {
-    @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-white/15 px-4 py-2.5 text-sm font-semibold text-zinc-200 transition-colors hover:border-white/35 hover:bg-white/5;
+    @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-white/15 px-4 py-2.5 text-sm font-medium text-zinc-200 transition-colors hover:border-white/35 hover:bg-white/5;
   }
   .case-label {
-    @apply text-xs font-semibold uppercase tracking-[0.13em] text-primary;
+    @apply text-sm font-medium text-zinc-300;
   }
   .case-copy {
     @apply mt-3 text-base leading-relaxed text-zinc-400;
   }
   .tech-tag {
-    @apply rounded-md border border-white/10 bg-white/5 px-2.5 py-1.5 text-xs text-zinc-300;
+    @apply rounded border border-white/10 bg-white/5 px-2.5 py-1.5 text-sm text-zinc-300;
   }
   .code-sample {
     @apply overflow-x-auto rounded-xl border border-white/10 bg-black/30 p-4 text-sm leading-relaxed text-blue-200;
@@ -76,11 +76,11 @@ section[id] {
   .case-details > summary::-webkit-details-marker { display: none; }
   .case-details[open] > summary > span { transform: rotate(45deg); }
   .section-eyebrow {
-    @apply text-xs font-semibold uppercase tracking-[0.22em] text-primary;
+    @apply text-sm font-medium uppercase tracking-[0.12em] text-primary;
   }
 
   .section-title {
-    @apply text-balance text-3xl font-bold tracking-tight text-white sm:text-4xl md:text-5xl;
+    @apply text-balance text-3xl font-semibold tracking-tight text-white sm:text-4xl;
   }
 
   .section-intro {

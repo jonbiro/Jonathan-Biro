@@ -352,9 +352,9 @@ function App() {
           <Approach motionEnabled={motionEnabled} />
           <QALab onLaunchChallenge={openChallenge} />
           <Experience />
-          <About motionEnabled={motionEnabled} pointerEffectsEnabled={pointerEffectsEnabled} />
+          <About motionEnabled={false} pointerEffectsEnabled={false} />
           <Contact
-            motionEnabled={motionEnabled}
+            motionEnabled={false}
             onCopyEmail={copyEmail}
             onScrollTop={() => scrollToSection("top")}
           />

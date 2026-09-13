@@ -6,11 +6,11 @@ const External = ({ href, children }) => <a href={href} target="_blank" rel="noo
 const Work = () => (
     <section id="work" tabIndex={-1} className="mx-auto max-w-7xl px-4 py-10 md:py-14">
         <div className="flex flex-wrap items-end justify-between gap-4 border-t border-white/10 pt-8">
-            <div><p className="section-eyebrow">Selected public work</p><h2 className="section-title mt-3">Built. Tested. Explained.</h2></div>
+            <div><p className="section-eyebrow">Portfolio</p><h2 className="section-title mt-3">Selected projects</h2></div>
             <p className="max-w-sm text-sm leading-relaxed text-zinc-400">Independent projects, with the decisions and source evidence behind them.</p>
         </div>
 
-        <article className="mt-8 overflow-hidden rounded-3xl border border-white/10 bg-[#0a0e15]">
+        <article className="mt-8 overflow-hidden rounded-lg border border-white/10 bg-[#101114]">
             <div className="grid lg:grid-cols-[1.1fr_1fr]">
                 <figure className="border-b border-white/10 bg-[#e8edf0] lg:border-b-0 lg:border-r">
                     <img src={`${import.meta.env.BASE_URL}projects/biromd.jpg`} width="1440" height="1000" loading="lazy" decoding="async" alt="BiroMD homepage with physician introduction, consultation action, and patient navigation" className="aspect-[1.44] w-full object-cover object-top" />
@@ -19,7 +19,7 @@ const Work = () => (
                 <div className="p-6 sm:p-8">
                     <p className="section-eyebrow">Featured case study / Healthcare</p>
                     <h3 className="mt-3 text-3xl font-bold">BiroMD</h3>
-                    <p className="mt-4 text-base leading-relaxed text-zinc-300">Helping patients find the right care—and making sure the path to a consultation survives each release.</p>
+                    <p className="mt-4 text-base leading-relaxed text-zinc-300">A medical-practice website with automated validation of patient navigation, consultation links, and accessible interface states.</p>
                     <dl className="mt-6 grid grid-cols-2 gap-4 text-sm">
                         <div><dt className="text-zinc-500">Contribution</dt><dd className="mt-1 text-zinc-200">Frontend delivery and quality engineering</dd></div>
                         <div><dt className="text-zinc-500">Project type</dt><dd className="mt-1 text-zinc-200">Independent medical-practice website</dd></div>
@@ -59,7 +59,7 @@ await page.getByRole("button", {
 
 expect(await textContrast(cta))
   .toBeGreaterThanOrEqual(4.5);`}</code></pre>
-                        <p className="mt-3 text-xs leading-relaxed text-zinc-500">Source excerpt; not a claim that the live site was tested in this session.</p>
+                        <p className="mt-3 text-sm leading-relaxed text-zinc-400">Repository test excerpt. Live deployment results may vary by revision.</p>
                     </div>
                 </div>
             </details>
@@ -73,11 +73,11 @@ expect(await textContrast(cta))
         </article>
 
         <div className="mt-6 grid gap-6 md:grid-cols-2">
-            <article className="overflow-hidden rounded-3xl border border-white/10 bg-white/[0.025]">
+            <article className="overflow-hidden rounded-lg border border-white/10 bg-white/[0.025]">
                 <img src={`${import.meta.env.BASE_URL}projects/portfolio.jpg`} width="1440" height="1000" loading="lazy" decoding="async" alt="Jonathan Biro portfolio with selected work and direct contact links" className="aspect-video w-full border-b border-white/10 object-cover object-top" />
                 <div className="p-6"><p className="case-label">Accessibility / Interaction design</p><h3 className="mt-2 text-2xl font-bold">QA Portfolio</h3><p className="case-copy">A portfolio where keyboard access, reduced motion, and recoverable interaction states are part of the product.</p><details className="mt-5"><summary className="min-h-11 cursor-pointer py-2 text-sm font-semibold text-primary">What I tested</summary><p className="case-copy">Dialog focus and return, navigation, game timers, score persistence, and background-tab pausing. Coverage gates and production builds run in CI.</p><a href="#lab" className="mt-4 inline-flex min-h-11 items-center text-sm font-semibold text-primary">Try the defect investigation →</a></details></div>
             </article>
-            <article className="overflow-hidden rounded-3xl border border-white/10 bg-white/[0.025]">
+            <article className="overflow-hidden rounded-lg border border-white/10 bg-white/[0.025]">
                 <img src={`${import.meta.env.BASE_URL}projects/puppy-quest.jpg`} width="1440" height="1000" loading="lazy" decoding="async" alt="Puppy Quest browser game showing its illustrated adventure start screen" className="aspect-video w-full border-b border-white/10 object-cover object-top" />
                 <div className="p-6"><p className="case-label">Game development / Input and state</p><h3 className="mt-2 text-2xl font-bold">Puppy Quest</h3><p className="case-copy">A browser adventure that makes input timing, collision, checkpoints, and saved progress tangible engineering problems.</p><details className="mt-5"><summary className="min-h-11 cursor-pointer py-2 text-sm font-semibold text-primary">Explore the engineering</summary><p className="case-copy">Keyboard and touch inputs share the same game rules. Checkpoints, retries, and local progress create useful cases for testing state transitions and recovery.</p><div className="mt-4 flex flex-wrap gap-3"><External href="https://jonbiro.github.io/DogeQuest-1989/">Play the game</External><External href="https://github.com/jonbiro/DogeQuest-1989">Read the source</External></div></details></div>
             </article>

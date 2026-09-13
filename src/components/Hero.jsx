@@ -6,13 +6,13 @@ const Hero = ({ onNavigate }) => (
         <div className="grid items-end gap-8 lg:grid-cols-[1fr_280px]">
             <div>
                 <p className="section-eyebrow">QA Automation Engineer / SDET · Los Angeles</p>
-                <h1 className="mt-5 text-5xl font-bold tracking-[-0.05em] text-white sm:text-7xl lg:text-8xl">Jonathan Biro</h1>
-                <h2 className="mt-5 max-w-3xl text-balance text-2xl font-medium leading-snug text-zinc-200 sm:text-3xl">
-                    I build automated checks that help teams ship with confidence.
+                <h1 className="mt-5 text-5xl font-semibold tracking-[-0.04em] text-white sm:text-6xl lg:text-7xl">Jonathan Biro</h1>
+                <h2 className="mt-5 max-w-3xl text-balance text-2xl font-normal leading-snug text-zinc-200 sm:text-3xl">
+                    Quality engineering for reliable web products.
                 </h2>
                 <p className="mt-4 max-w-2xl text-base leading-relaxed text-zinc-400">
-                    Playwright, TypeScript, and a practical eye for the details that break user journeys.
-                    Explore the products, the defects, and the decisions behind my work.
+                    I develop automated tests and release checks with Playwright and TypeScript,
+                    with a focus on critical user journeys, accessibility, and regression prevention.
                 </p>
                 <div className="mt-7 flex flex-wrap items-center gap-3">
                     <a href="#work" onClick={(event) => {
@@ -25,11 +25,11 @@ const Hero = ({ onNavigate }) => (
                 </div>
             </div>
             <aside className="hidden border-l-2 border-primary/50 pl-5 lg:block">
-                <p className="text-xs uppercase tracking-widest text-zinc-500">What you can explore</p>
+                <p className="text-sm font-medium text-zinc-300">Areas of focus</p>
                 <ul className="mt-3 space-y-2 text-sm leading-relaxed text-zinc-300">
-                    <li>A healthcare release case study</li>
-                    <li>Real regression-test examples</li>
-                    <li>A hands-on defect investigation</li>
+                    <li>Browser and API test automation</li>
+                    <li>Accessible, responsive interfaces</li>
+                    <li>Release validation and CI</li>
                 </ul>
                 <nav aria-label="Professional profiles" className="mt-5 flex gap-4">
                     <a href={SITE_CONFIG.githubUrl} target="_blank" rel="me noopener noreferrer" aria-label="GitHub profile (opens in a new tab)" className="inline-flex min-h-11 items-center gap-2 text-sm text-zinc-400 hover:text-white"><FaGithub aria-hidden="true" /> GitHub</a>
