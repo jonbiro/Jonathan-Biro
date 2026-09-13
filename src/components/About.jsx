@@ -60,18 +60,18 @@ const About = ({ motionEnabled = true, pointerEffectsEnabled = true }) => {
 
                 <motion.div {...rightRevealProps} className="w-full md:w-7/12">
                     <p className="section-eyebrow">About</p>
-                    <h2 className="section-title mt-4">Quality engineering with a product mindset.</h2>
+                    <h2 className="section-title mt-4">Curious about how things break.</h2>
 
                     <div className="mt-6 space-y-5 text-base leading-relaxed text-zinc-300 sm:text-lg">
                         <p>
                             I&apos;m {SITE_CONFIG.fullName}, a QA Automation Engineer and SDET in Los Angeles.
-                            I help teams decide what needs coverage, automate the right UI and API paths,
-                            and turn failures into useful release decisions.
+                            I enjoy the detective work: turning an intermittent report into a clear
+                            reproduction, and following a small UI symptom to the assumption underneath it.
                         </p>
                         <p>
-                            My strongest work combines Playwright, TypeScript, deterministic data, CI
-                            feedback, and accessibility checks. I care less about test count than whether
-                            the signal is fast, explainable, and trusted.
+                            Building products alongside their tests keeps me close to the user experience.
+                            The healthcare site, this portfolio, and the game each ask different questions
+                            about clarity, accessibility, timing, and recovery.
                         </p>
                     </div>
 

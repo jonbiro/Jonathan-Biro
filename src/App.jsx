@@ -15,6 +15,8 @@ import Work from "./components/Work";
 import Approach from "./components/Approach";
 import About from "./components/About";
 import Contact from "./components/Contact";
+import QALab from "./components/QALab";
+import Experience from "./components/Experience";
 
 import ErrorBoundary from "./components/ui/ErrorBoundary";
 
@@ -22,7 +24,7 @@ import Toast from "./components/ui/Toast";
 import SITE_CONFIG from "./config/site";
 import useUiPreferences from "./hooks/useUiPreferences";
 
-const SECTION_IDS = ["top", "work", "approach", "about", "contact"];
+const SECTION_IDS = ["top", "work", "approach", "lab", "experience", "about", "contact"];
 const loadCommandPalette = () => import("./components/ui/CommandPalette");
 const loadChallenge = () => import("./components/ui/QAChallengeModal");
 const CommandPalette = lazy(loadCommandPalette);
@@ -96,6 +98,22 @@ function App() {
 
   const commandActions = useMemo(() => {
     const actions = [
+      {
+        id: "lab",
+        label: "Try the QA Lab",
+        description: "Reproduce and diagnose a scheduling defect.",
+        icon: <FaMagic />,
+        keywords: ["investigation", "exercise", "timezone", "lab"],
+        onSelect: () => scrollToSection("lab"),
+      },
+      {
+        id: "experience",
+        label: "View Experience and Project Résumé",
+        description: "Explore independent work and download a project summary.",
+        icon: <FaBriefcase />,
+        keywords: ["resume", "cv", "experience"],
+        onSelect: () => scrollToSection("experience"),
+      },
       {
         id: "work",
         label: "Jump to Selected Work",
@@ -200,14 +218,15 @@ function App() {
     if (initialHashHandledRef.current) {
       return undefined;
     }
-    initialHashHandledRef.current = true;
-
     const initialSectionId = window.location.hash.slice(1);
     if (!SECTION_IDS.includes(initialSectionId)) {
       return undefined;
     }
 
-    const focusFrame = window.requestAnimationFrame(() => scrollToSection(initialSectionId));
+    const focusFrame = window.requestAnimationFrame(() => {
+      initialHashHandledRef.current = true;
+      scrollToSection(initialSectionId);
+    });
     return () => window.cancelAnimationFrame(focusFrame);
   }, [scrollToSection]);
 
@@ -330,7 +349,9 @@ function App() {
             onNavigate={scrollToSection}
           />
           <Work motionEnabled={motionEnabled} />
-          <Approach motionEnabled={motionEnabled} onLaunchChallenge={openChallenge} />
+          <Approach motionEnabled={motionEnabled} />
+          <QALab onLaunchChallenge={openChallenge} />
+          <Experience />
           <About motionEnabled={motionEnabled} pointerEffectsEnabled={pointerEffectsEnabled} />
           <Contact
             motionEnabled={motionEnabled}

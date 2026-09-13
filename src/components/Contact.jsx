@@ -33,7 +33,7 @@ const Contact = ({ motionEnabled = true, onCopyEmail, onScrollTop }) => {
                 className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/[0.07] to-transparent p-7 backdrop-blur-sm sm:p-12"
             >
                 <p className="section-eyebrow">Let&apos;s connect</p>
-                <h2 className="mt-4 text-3xl font-bold text-white md:text-5xl">Let&apos;s make the next release easier to trust.</h2>
+                <h2 className="mt-4 text-3xl font-bold text-white md:text-5xl">Have a quality engineering role in mind?</h2>
                 <p className="mx-auto mb-8 mt-5 max-w-2xl text-base leading-relaxed text-zinc-300 sm:text-lg">
                     Tell me what your team is shipping, where it feels fragile, or what you want to automate.
                 </p>

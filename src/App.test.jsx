@@ -12,7 +12,7 @@ it("offers a direct recruiter path and manages quick-action modal state", async 
         "href",
         "mailto:jonathan@biro.dev"
     );
-    expect(screen.queryByText(/résumé|resume/i)).not.toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Project résumé" })).toHaveAttribute("download");
 
     await user.click(screen.getByRole("link", { name: /view selected work/i }));
     expect(document.getElementById("work")).toHaveFocus();

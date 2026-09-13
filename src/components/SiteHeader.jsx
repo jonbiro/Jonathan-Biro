@@ -3,7 +3,8 @@ import { FaBars, FaBug, FaTerminal, FaTimes } from "react-icons/fa";
 
 const NAV_LINKS = [
     { id: "work", label: "Work", href: "#work" },
-    { id: "approach", label: "Approach", href: "#approach" },
+    { id: "lab", label: "QA lab", href: "#lab" },
+    { id: "experience", label: "Experience", href: "#experience" },
     { id: "about", label: "About", href: "#about" },
     { id: "contact", label: "Contact", href: "#contact" },
 ];

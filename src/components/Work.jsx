@@ -1,184 +1,87 @@
-import { motion } from "framer-motion";
-import { FaArrowRight, FaCheck, FaExternalLinkAlt, FaGithub } from "react-icons/fa";
+import { FaExternalLinkAlt, FaGithub } from "react-icons/fa";
 
-const FEATURED_WORK = [
-    {
-        eyebrow: "Public build · Healthcare",
-        title: "BiroMD",
-        context: "Independent production build",
-        focus: "Quality engineering + frontend delivery",
-        description:
-            "A live medical-practice site built with Next.js and a static export, with browser checks and an allowlisted clinical-gallery pipeline.",
-        stack: ["Next.js", "TypeScript", "Playwright", "GitHub Actions"],
-        highlights: [
-            "Route, sitemap, internal-link, and responsive image validation",
-            "Browser coverage for mobile layout, contrast, navigation, and scheduling flows",
-            "Allowlisted clinical asset pipeline with metadata-safe public derivatives",
-        ],
-        proof:
-            "Playwright and export checks cover the high-risk paths that content-heavy healthcare releases can quietly break.",
-        liveUrl: "https://biromd.com",
-        sourceUrl: "https://github.com/jonbiro/BiroMD",
-        sourceLabel: "View BiroMD source",
-        featured: true,
-    },
-    {
-        eyebrow: "Public build · Portfolio",
-        title: "QA Portfolio",
-        context: "Independent portfolio build",
-        focus: "Accessible product design + engineering",
-        description:
-            "This single-page portfolio turns quality engineering principles into a recruiter-friendly, keyboard-ready product experience.",
-        stack: ["React", "Vite", "Accessibility", "Lighthouse CI"],
-        highlights: [
-            "Keyboard-first quick actions and focus-managed dialogs",
-            "System-aware motion controls and touch-sized interactions",
-            "Coverage-gated behavior tests, Lighthouse budgets, and dependency checks in CI",
-        ],
-        proof:
-            "The portfolio doubles as its own QA sample: usability, delivery safeguards, and interactive edge cases are visible in the product.",
-        isCurrentSite: true,
-    },
-    {
-        eyebrow: "Side project · Canvas game",
-        title: "Puppy Quest 1989",
-        context: "DogeQuest-1989 repository",
-        focus: "Interaction state + input edge cases",
-        description:
-            "A retro Canvas platformer exploring collision, input timing, mobile controls, and state transitions—the edge cases that make interactive products hard to verify.",
-        stack: ["JavaScript", "Canvas", "Game logic"],
-        highlights: [
-            "Double-jump, dash, coyote-time, and jump-buffer input behavior",
-            "Class-based game loop, collision logic, camera movement, and audio",
-            "Keyboard and mobile support across a state-heavy interface",
-        ],
-        proof:
-            "A compact demonstration of reasoning through timing, physics, input, and rendering behavior beyond standard form-based UI.",
-        liveUrl: "https://jonbiro.github.io/DogeQuest-1989/",
-        sourceUrl: "https://github.com/jonbiro/DogeQuest-1989",
-        sourceLabel: "View DogeQuest source",
-    },
-];
+const repo = "https://github.com/jonbiro/BiroMD";
+const External = ({ href, children }) => <a href={href} target="_blank" rel="noopener noreferrer" className="action-secondary">{children}<FaExternalLinkAlt aria-hidden="true" className="text-xs" /><span className="sr-only"> (opens in a new tab)</span></a>;
 
-const revealProps = (motionEnabled, delay = 0) => ({
-    initial: motionEnabled ? { opacity: 0, y: 24 } : false,
-    whileInView: { opacity: 1, y: 0 },
-    viewport: { once: true, margin: "-80px" },
-    transition: { duration: motionEnabled ? 0.55 : 0, delay: motionEnabled ? delay : 0 },
-});
-
-const ProjectLinks = ({ project }) => (
-    <div className="mt-6 flex flex-wrap gap-3">
-        {project.liveUrl && (
-            <a
-                href={project.liveUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex min-h-11 items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-bold text-dark transition-colors hover:bg-primary"
-            >
-                View {project.title} live <FaExternalLinkAlt className="text-xs" aria-hidden="true" />
-                <span className="sr-only"> (opens in a new tab)</span>
-            </a>
-        )}
-        {project.sourceUrl && (
-            <a
-                href={project.sourceUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex min-h-11 items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm font-semibold text-zinc-200 transition-colors hover:border-white/30 hover:bg-white/10"
-            >
-                <FaGithub aria-hidden="true" /> {project.sourceLabel}
-                <span className="sr-only"> (opens in a new tab)</span>
-            </a>
-        )}
-        {project.isCurrentSite && (
-            <span className="inline-flex min-h-11 items-center gap-2 rounded-full border border-primary/25 bg-primary/[0.08] px-4 py-2 text-sm font-semibold text-primary">
-                <FaCheck aria-hidden="true" /> You&apos;re viewing this project
-            </span>
-        )}
-    </div>
-);
-
-const Work = ({ motionEnabled = true }) => (
-    <section id="work" tabIndex={-1} className="relative mx-auto max-w-7xl px-4 py-20 md:py-28">
-        <motion.div {...revealProps(motionEnabled)} className="max-w-3xl">
-            <p className="section-eyebrow">Selected public work</p>
-            <h2 className="section-title mt-4">Proof lives in the details.</h2>
-            <p className="section-intro mt-5">
-                Public builds that show how I approach product risk, release validation, and the
-                interaction edge cases that quietly break real user journeys.
-            </p>
-        </motion.div>
-
-        <div className="mt-12 grid gap-5 lg:grid-cols-2">
-            {FEATURED_WORK.map((project, index) => (
-                <motion.article
-                    key={project.title}
-                    {...revealProps(motionEnabled, index * 0.08)}
-                    className={`group relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.035] p-6 transition-colors hover:border-white/20 md:p-8 ${project.featured ? "lg:row-span-2" : ""}`}
-                >
-                    <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-secondary/10 opacity-0 transition-opacity duration-500 group-hover:opacity-100" aria-hidden="true" />
-                    <div className="relative">
-                        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
-                            {project.eyebrow}
-                        </p>
-                        <h3 className="mt-3 text-2xl font-bold text-white md:text-3xl">{project.title}</h3>
-                        <p className="mt-4 max-w-2xl leading-relaxed text-zinc-300">{project.description}</p>
-
-                        <dl className="mt-6 grid gap-3 border-y border-white/10 py-4 sm:grid-cols-2">
-                            <div>
-                                <dt className="text-[10px] font-semibold uppercase tracking-[0.18em] text-zinc-400">Context</dt>
-                                <dd className="mt-1 text-sm font-semibold text-white">{project.context}</dd>
-                            </div>
-                            <div>
-                                <dt className="text-[10px] font-semibold uppercase tracking-[0.18em] text-zinc-400">Focus</dt>
-                                <dd className="mt-1 text-sm font-semibold text-white">{project.focus}</dd>
-                            </div>
-                        </dl>
-
-                        <div className="mt-5 flex flex-wrap gap-2">
-                            {project.stack.map((item) => (
-                                <span key={item} className="rounded-full border border-white/10 bg-black/20 px-3 py-1.5 text-xs text-zinc-300">
-                                    {item}
-                                </span>
-                            ))}
-                        </div>
-
-                        {project.highlights && (
-                            <ul className="mt-7 space-y-3" aria-label={`${project.title} quality highlights`}>
-                                {project.highlights.map((highlight) => (
-                                    <li key={highlight} className="flex gap-3 text-sm leading-relaxed text-zinc-300">
-                                        <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/15 text-[10px] text-primary">
-                                            <FaCheck aria-hidden="true" />
-                                        </span>
-                                        {highlight}
-                                    </li>
-                                ))}
-                            </ul>
-                        )}
-
-                        <div className="mt-6 rounded-2xl border border-primary/15 bg-primary/[0.06] p-4">
-                            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-primary">Why it matters</p>
-                            <p className="mt-2 text-sm leading-relaxed text-zinc-300">{project.proof}</p>
-                        </div>
-
-                        <ProjectLinks project={project} />
-                    </div>
-                </motion.article>
-            ))}
+const Work = () => (
+    <section id="work" tabIndex={-1} className="mx-auto max-w-7xl px-4 py-10 md:py-14">
+        <div className="flex flex-wrap items-end justify-between gap-4 border-t border-white/10 pt-8">
+            <div><p className="section-eyebrow">Selected public work</p><h2 className="section-title mt-3">Built. Tested. Explained.</h2></div>
+            <p className="max-w-sm text-sm leading-relaxed text-zinc-400">Independent projects, with the decisions and source evidence behind them.</p>
         </div>
 
-        <motion.a
-            {...revealProps(motionEnabled)}
-            href="https://github.com/jonbiro?tab=repositories"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-8 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-zinc-300 transition-colors hover:text-white"
-        >
-            Explore more work on GitHub <FaArrowRight aria-hidden="true" />
-            <span className="sr-only"> (opens in a new tab)</span>
-        </motion.a>
+        <article className="mt-8 overflow-hidden rounded-3xl border border-white/10 bg-[#0a0e15]">
+            <div className="grid lg:grid-cols-[1.1fr_1fr]">
+                <figure className="border-b border-white/10 bg-[#e8edf0] lg:border-b-0 lg:border-r">
+                    <img src={`${import.meta.env.BASE_URL}projects/biromd.jpg`} width="1440" height="1000" loading="lazy" decoding="async" alt="BiroMD homepage with physician introduction, consultation action, and patient navigation" className="aspect-[1.44] w-full object-cover object-top" />
+                    <figcaption className="flex justify-between gap-3 bg-[#101722] px-5 py-3 text-xs text-zinc-400"><span>BiroMD · Live homepage</span><span>Captured September 2026</span></figcaption>
+                </figure>
+                <div className="p-6 sm:p-8">
+                    <p className="section-eyebrow">Featured case study / Healthcare</p>
+                    <h3 className="mt-3 text-3xl font-bold">BiroMD</h3>
+                    <p className="mt-4 text-base leading-relaxed text-zinc-300">Helping patients find the right care—and making sure the path to a consultation survives each release.</p>
+                    <dl className="mt-6 grid grid-cols-2 gap-4 text-sm">
+                        <div><dt className="text-zinc-500">Contribution</dt><dd className="mt-1 text-zinc-200">Frontend delivery and quality engineering</dd></div>
+                        <div><dt className="text-zinc-500">Project type</dt><dd className="mt-1 text-zinc-200">Independent medical-practice website</dd></div>
+                    </dl>
+                    <ul className="mt-5 flex flex-wrap gap-2" aria-label="BiroMD technologies">{["Next.js", "TypeScript", "Playwright", "GitHub Actions"].map(x => <li className="tech-tag" key={x}>{x}</li>)}</ul>
+                    <div className="mt-6 flex flex-wrap gap-3"><External href="https://biromd.com">View BiroMD live</External><External href={repo}><FaGithub aria-hidden="true" /> Source</External></div>
+                </div>
+            </div>
+
+            <div className="grid gap-6 border-t border-white/10 p-6 sm:p-8 md:grid-cols-3">
+                <div><p className="case-label">01 / The problem</p><h4 className="mt-2 text-lg font-semibold">A working link is only part of the journey.</h4><p className="case-copy">Patients need readable consultation actions, usable mobile navigation, and the correct office destination. Content changes can break any of those without a compiler error.</p></div>
+                <div><p className="case-label">02 / The decision</p><h4 className="mt-2 text-lg font-semibold">Test each risk at the right layer.</h4><p className="case-copy">Check routes, links, and image exports at build time. Use a real browser for theme contrast, mobile overflow, keyboard behavior, and consultation links.</p></div>
+                <div><p className="case-label">03 / The outcome</p><h4 className="mt-2 text-lg font-semibold">Repeatable release checks.</h4><p className="case-copy">The repository includes an export verifier and browser regressions for these paths. Clinical images require an explicit case allowlist before public derivatives are generated.</p></div>
+            </div>
+            <details className="case-details">
+                <summary>Inside a real fix: the consultation button in dark mode <span aria-hidden="true">+</span></summary>
+                <div className="grid gap-6 pb-7 pt-3 lg:grid-cols-2">
+                    <div>
+                        <h4 className="text-xl font-semibold">Protect the action patients came to take.</h4>
+                        <p className="case-copy">The project history records consultation-button contrast changes on February 10, 2026, including an explicit dark-mode foreground correction. The current browser test checks the action in both themes and requires at least a 4.5:1 text-contrast ratio.</p>
+                        <p className="case-copy">A screenshot captures one state. This regression checks the actual foreground and background colors after the theme changes.</p>
+                        <div className="mt-5 flex flex-wrap gap-3"><External href={`${repo}/commit/3427224bcca966b8de74a6c5f038ef811783af24`}>Inspect the fix</External><External href={`${repo}/blob/main/tests/site.spec.ts`}>Read browser tests</External></div>
+                    </div>
+                    <div className="min-w-0">
+                        <p className="case-label mb-3">Excerpt / Existing Playwright test</p>
+                        <pre className="code-sample"><code>{`const cta = page.getByRole("link", {
+  name: "Request a Consultation"
+}).first();
+
+await expect(cta).toBeVisible();
+expect(await textContrast(cta))
+  .toBeGreaterThanOrEqual(4.5);
+
+await page.getByRole("button", {
+  name: "Switch to dark mode"
+}).click();
+
+expect(await textContrast(cta))
+  .toBeGreaterThanOrEqual(4.5);`}</code></pre>
+                        <p className="mt-3 text-xs leading-relaxed text-zinc-500">Source excerpt; not a claim that the live site was tested in this session.</p>
+                    </div>
+                </div>
+            </details>
+            <details className="case-details">
+                <summary>Explore the release-check workflow <span aria-hidden="true">+</span></summary>
+                <ol className="grid gap-4 pb-7 pt-3 sm:grid-cols-3">
+                    {[["Build", "Generate the static site and authorized public image derivatives."], ["Verify", "Check required routes, sitemap entries, internal links, and image budgets."], ["Exercise", "Run browser scenarios for consultation, navigation, themes, and gallery behavior."]].map(([title,body],i)=><li key={title} className="rounded-xl bg-white/[0.04] p-4"><span className="text-sm text-primary">0{i+1}</span><h4 className="mt-2 font-semibold">{title}</h4><p className="case-copy">{body}</p></li>)}
+                </ol>
+                <div className="pb-6"><External href={`${repo}/actions`}>View workflow runs</External></div>
+            </details>
+        </article>
+
+        <div className="mt-6 grid gap-6 md:grid-cols-2">
+            <article className="overflow-hidden rounded-3xl border border-white/10 bg-white/[0.025]">
+                <img src={`${import.meta.env.BASE_URL}projects/portfolio.jpg`} width="1440" height="1000" loading="lazy" decoding="async" alt="Jonathan Biro portfolio with selected work and direct contact links" className="aspect-video w-full border-b border-white/10 object-cover object-top" />
+                <div className="p-6"><p className="case-label">Accessibility / Interaction design</p><h3 className="mt-2 text-2xl font-bold">QA Portfolio</h3><p className="case-copy">A portfolio where keyboard access, reduced motion, and recoverable interaction states are part of the product.</p><details className="mt-5"><summary className="min-h-11 cursor-pointer py-2 text-sm font-semibold text-primary">What I tested</summary><p className="case-copy">Dialog focus and return, navigation, game timers, score persistence, and background-tab pausing. Coverage gates and production builds run in CI.</p><a href="#lab" className="mt-4 inline-flex min-h-11 items-center text-sm font-semibold text-primary">Try the defect investigation →</a></details></div>
+            </article>
+            <article className="overflow-hidden rounded-3xl border border-white/10 bg-white/[0.025]">
+                <img src={`${import.meta.env.BASE_URL}projects/puppy-quest.jpg`} width="1440" height="1000" loading="lazy" decoding="async" alt="Puppy Quest browser game showing its illustrated adventure start screen" className="aspect-video w-full border-b border-white/10 object-cover object-top" />
+                <div className="p-6"><p className="case-label">Game development / Input and state</p><h3 className="mt-2 text-2xl font-bold">Puppy Quest</h3><p className="case-copy">A browser adventure that makes input timing, collision, checkpoints, and saved progress tangible engineering problems.</p><details className="mt-5"><summary className="min-h-11 cursor-pointer py-2 text-sm font-semibold text-primary">Explore the engineering</summary><p className="case-copy">Keyboard and touch inputs share the same game rules. Checkpoints, retries, and local progress create useful cases for testing state transitions and recovery.</p><div className="mt-4 flex flex-wrap gap-3"><External href="https://jonbiro.github.io/DogeQuest-1989/">Play the game</External><External href="https://github.com/jonbiro/DogeQuest-1989">Read the source</External></div></details></div>
+            </article>
+        </div>
     </section>
 );
-
 export default Work;
