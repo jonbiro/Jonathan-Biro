@@ -14,11 +14,13 @@ const normalizeBasePath = (value) => {
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, cwd(), '')
+  const staticDeploy = env.VITE_DEPLOY_TARGET === 'static'
 
   return {
-    plugins: [react(), sites(), cloudflare({ viteEnvironment: { name: 'server' } })],
+    plugins: [react(), ...(staticDeploy ? [] : [sites(), cloudflare({ viteEnvironment: { name: 'server' } })])],
     base: normalizeBasePath(env.VITE_BASE_PATH ?? env.BASE_PATH ?? ''),
     build: {
+      ...(staticDeploy ? { outDir: 'dist/client' } : {}),
       rollupOptions: {
         output: {
           manualChunks(id) {

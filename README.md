@@ -40,23 +40,23 @@ npm run build
 
 ## Deploy on Netlify
 
-1. Connect this repo in Netlify.
+1. Connect `jonbiro/Jonathan-Biro`, branch `main`, to the existing Netlify project `jonbiro`.
 2. Keep the build settings from `netlify.toml`.
-3. Set `SITE_URL` in Netlify environment variables to your production domain (for example `https://biro.dev`).
+3. Keep DNS at Squarespace: apex `A` → `75.2.60.5`, `www` `CNAME` → `jonbiro.netlify.app`. Preserve email and verification records.
 
 Netlify will run:
 
 ```bash
-VITE_SITE_URL=${SITE_URL:-$URL} npm run build
+npm run build
 ```
 
-This ensures canonical tags, Open Graph URLs, `robots.txt`, and `sitemap.xml` are generated with the correct domain during the build.
+`netlify.toml` sets `VITE_DEPLOY_TARGET=static` and `VITE_SITE_URL=https://jonathanbiro.com`. This emits a portable browser-only build in `dist/client` and generates canonical tags, Open Graph URLs, `robots.txt`, and `sitemap.xml` for the production domain. The existing Cloudflare/Sites build remains available when the static target is not set.
 
 ## Deploy on GitHub Pages
 
 1. In GitHub, open `Settings` > `Pages`.
 2. Under `Build and deployment`, set `Source` to `GitHub Actions`.
-3. Push to `main` (or run the `Deploy to GitHub Pages` workflow manually).
+3. Run the `Deploy to GitHub Pages` workflow manually. Push-triggered Pages deployment is disabled because Netlify is the production host.
 
 The workflow in `.github/workflows/deploy-pages.yml` automatically:
 - Detects user-site vs project-site URLs.

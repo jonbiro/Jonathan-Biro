@@ -1,9 +1,11 @@
 [build]
-  command = "VITE_SITE_URL=${SITE_URL:-$URL} npm run build"
+  command = "npm run build"
   publish = "dist/client"
 
 [build.environment]
   NODE_VERSION = "22"
+  VITE_DEPLOY_TARGET = "static"
+  VITE_SITE_URL = "https://jonathanbiro.com"
 
 [[redirects]]
   from = "/*"

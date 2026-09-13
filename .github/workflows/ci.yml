@@ -15,6 +15,9 @@ permissions:
 
 jobs:
   quality:
+    env:
+      VITE_DEPLOY_TARGET: static
+      VITE_SITE_URL: https://jonathanbiro.com
     runs-on: ubuntu-latest
     timeout-minutes: 15
 

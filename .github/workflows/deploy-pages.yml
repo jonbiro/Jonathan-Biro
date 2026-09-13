@@ -1,9 +1,6 @@
 name: Deploy to GitHub Pages
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
 
 permissions:
@@ -17,6 +14,8 @@ concurrency:
 
 jobs:
   deploy:
+    env:
+      VITE_DEPLOY_TARGET: static
     timeout-minutes: 20
     environment:
       name: github-pages
