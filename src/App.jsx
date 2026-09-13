@@ -341,7 +341,7 @@ function App() {
         <main
           id="main-content"
           tabIndex={-1}
-          className="relative min-h-screen w-full overflow-x-hidden bg-dark text-white selection:bg-primary selection:text-dark"
+          className="relative min-h-screen w-full overflow-x-hidden bg-white text-slate-900 selection:bg-cyan-100 selection:text-slate-900"
         >
           <Hero
             motionEnabled={motionEnabled}

@@ -49,7 +49,7 @@ const About = ({ motionEnabled = true, pointerEffectsEnabled = true }) => {
                                 alt="Jonathan Biro"
                                 loading="lazy"
                                 decoding="async"
-                                className="relative h-72 w-72 rounded-lg border border-white/10 object-cover md:h-80 md:w-80"
+                                className="relative h-72 w-72 rounded-lg border border-slate-200 object-cover md:h-80 md:w-80"
                                 width="320"
                                 height="320"
                             />
@@ -61,7 +61,7 @@ const About = ({ motionEnabled = true, pointerEffectsEnabled = true }) => {
                     <p className="section-eyebrow">About</p>
                     <h2 className="section-title mt-4">Engineering with a user focus</h2>
 
-                    <div className="mt-6 space-y-5 text-base leading-relaxed text-zinc-300 sm:text-lg">
+                    <div className="mt-6 space-y-5 text-base leading-relaxed text-slate-700 sm:text-lg">
                         <p>
                             I&apos;m {SITE_CONFIG.fullName}, a QA Automation Engineer and SDET in Los Angeles.
                             My work connects reproducible defect investigation with automated coverage
@@ -76,10 +76,10 @@ const About = ({ motionEnabled = true, pointerEffectsEnabled = true }) => {
 
                     <div className="mt-9 grid gap-3 sm:grid-cols-3">
                         {CAPABILITIES.map((capability) => (
-                            <article key={capability.title} className="rounded-2xl border border-white/10 bg-white/[0.035] p-4">
-                                <h3 className="font-bold text-white">{capability.title}</h3>
-                                <p className="mt-1 text-sm leading-relaxed text-zinc-400">{capability.description}</p>
-                                <ul className="mt-4 space-y-1.5 text-sm text-zinc-300">
+                            <article key={capability.title} className="rounded-2xl border border-slate-200 bg-sky-50 p-4">
+                                <h3 className="font-bold text-slate-900">{capability.title}</h3>
+                                <p className="mt-1 text-sm leading-relaxed text-slate-600">{capability.description}</p>
+                                <ul className="mt-4 space-y-1.5 text-sm text-slate-700">
                                     {capability.tools.map((tool) => (
                                         <li key={tool}>{tool}</li>
                                     ))}
@@ -93,7 +93,7 @@ const About = ({ motionEnabled = true, pointerEffectsEnabled = true }) => {
                             href={SITE_CONFIG.linkedinUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex min-h-11 items-center gap-2 rounded-full border border-primary px-5 py-2.5 text-sm font-semibold text-primary transition-colors hover:bg-primary hover:text-dark"
+                            className="inline-flex min-h-11 items-center gap-2 rounded-full border border-primary px-5 py-2.5 text-sm font-semibold text-sky-700 transition-colors hover:bg-primary hover:text-dark"
                         >
                             View professional profile
                             <span className="sr-only"> (opens in a new tab)</span>

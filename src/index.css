@@ -15,12 +15,12 @@
 @tailwind utilities;
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 html,
 body {
-  background-color: #050505;
+  background-color: #ffffff;
   width: 100%;
   max-width: 100%;
   overflow-x: hidden;
@@ -34,7 +34,7 @@ html {
 }
 
 body {
-  @apply bg-dark text-white font-sans antialiased;
+  @apply bg-white text-slate-900 font-sans antialiased;
 }
 
 button,
@@ -48,43 +48,43 @@ section[id] {
 
 @layer components {
   .action-primary {
-    @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-md bg-primary px-5 py-3 text-sm font-semibold text-dark transition-colors hover:bg-white disabled:cursor-default disabled:opacity-60;
+    @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-md bg-sky-700 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-sky-800 disabled:cursor-default disabled:opacity-60;
   }
   .action-secondary {
-    @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-white/15 px-4 py-2.5 text-sm font-medium text-zinc-200 transition-colors hover:border-white/35 hover:bg-white/5;
+    @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-slate-300 px-4 py-2.5 text-sm font-medium text-slate-800 transition-colors hover:border-sky-700 hover:bg-sky-50;
   }
   .case-label {
-    @apply text-sm font-medium text-zinc-300;
+    @apply text-sm font-medium text-slate-700;
   }
   .case-copy {
-    @apply mt-3 text-base leading-relaxed text-zinc-400;
+    @apply mt-3 text-base leading-relaxed text-slate-600;
   }
   .tech-tag {
-    @apply rounded border border-white/10 bg-white/5 px-2.5 py-1.5 text-sm text-zinc-300;
+    @apply rounded border border-slate-200 bg-sky-50 px-2.5 py-1.5 text-sm text-slate-700;
   }
   .code-sample {
-    @apply overflow-x-auto rounded-xl border border-white/10 bg-black/30 p-4 text-sm leading-relaxed text-blue-200;
+    @apply overflow-x-auto rounded-xl border border-slate-200 bg-slate-900 p-4 text-sm leading-relaxed text-blue-200;
     tab-size: 2;
   }
   .case-details {
-    @apply border-t border-white/10 px-6 sm:px-8;
+    @apply border-t border-slate-200 px-6 sm:px-8;
   }
   .case-details > summary {
-    @apply flex min-h-16 cursor-pointer items-center justify-between gap-4 py-5 text-base font-semibold text-zinc-200;
+    @apply flex min-h-16 cursor-pointer items-center justify-between gap-4 py-5 text-base font-semibold text-slate-800;
     list-style: none;
   }
   .case-details > summary::-webkit-details-marker { display: none; }
   .case-details[open] > summary > span { transform: rotate(45deg); }
   .section-eyebrow {
-    @apply text-sm font-medium uppercase tracking-[0.12em] text-primary;
+    @apply text-sm font-medium uppercase tracking-[0.12em] text-sky-700;
   }
 
   .section-title {
-    @apply text-balance text-3xl font-semibold tracking-tight text-white sm:text-4xl;
+    @apply text-balance text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl;
   }
 
   .section-intro {
-    @apply max-w-2xl text-pretty text-base leading-relaxed text-zinc-400 sm:text-lg;
+    @apply max-w-2xl text-pretty text-base leading-relaxed text-slate-600 sm:text-lg;
   }
 }
 
@@ -204,4 +204,42 @@ html[data-motion="off"] *::after {
     color: CanvasText !important;
     -webkit-text-fill-color: CanvasText;
   }
+}
+
+/* Blue and turquoise geometry recalls the original personal portfolio. */
+.hero-intro { position: relative; isolation: isolate; overflow: hidden; background: #f2fbff; padding: 10rem 1.5rem 7rem; }
+.hero-inner { position: relative; z-index: 1; max-width: 1180px; margin: auto; display: grid; grid-template-columns: 1fr 300px; align-items: center; gap: 5rem; }
+.hero-plane { position: absolute; pointer-events: none; z-index: 0; }
+.hero-plane-teal { inset: 0 auto auto 0; width: 27%; height: 260px; background: #00ddbb; clip-path: polygon(0 0, 100% 0, 0 52%); }
+.hero-plane-blue { inset: auto 0 0 auto; width: 52%; height: 110px; background: #0076b4; clip-path: polygon(100% 0,100% 100%,0 100%); }
+.hero-hello { color: #334155; font-size: 1.5rem; }
+.hero-intro h1 { margin-top: .5rem; font-size: clamp(3rem, 5.5vw, 5rem); font-weight: 750; letter-spacing: -.05em; line-height: 1.08; color: #0075ad; }
+.hero-role { margin-top: 1.5rem; color: #0f172a; font-size: clamp(1.2rem,2.5vw,1.6rem); font-weight: 600; }
+.hero-description { margin-top: 1rem; max-width: 38rem; font-size: 1.125rem; line-height: 1.75; color: #475569; }
+.hero-socials { display: flex; flex-wrap: wrap; gap: 1.5rem; margin-top: 1.5rem; }
+.hero-socials a { display: inline-flex; align-items: center; gap: .5rem; min-height: 44px; color: #006b9f; font-weight: 500; }
+.hero-socials a:hover { text-decoration: underline; text-underline-offset: 5px; }
+.hero-portrait { text-align: center; }
+.hero-portrait-frame { border-radius: 50%; padding: 12px; background: #a8eddb; }
+.hero-portrait img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 50%; }
+.hero-portrait figcaption { margin-top: 1.5rem; color: #0f172a; font-weight: 600; line-height: 1.8; }
+.hero-portrait figcaption span { font-size: .875rem; font-weight: 400; }
+#lab { color: #f8fafc; color-scheme: dark; }
+#lab .section-title { color: #f8fafc; }
+#lab .section-eyebrow, #lab .case-label { color: #7dd3fc; }
+#lab .action-secondary { color: #e2e8f0; border-color: #475569; }
+#lab .action-secondary:hover { background: #1e293b; }
+#work > article { box-shadow: 0 10px 40px -20px #0c4a6e40; }
+#contact > div { background: #edf9ff; border-color: #c8e9f5; }
+@media (max-width: 900px) {
+  .hero-inner { grid-template-columns: 1fr 220px; gap: 2rem; }
+  .hero-intro { padding-top: 8rem; }
+}
+@media (max-width: 640px) {
+  .hero-intro { padding: 7rem 1.25rem 5rem; }
+  .hero-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+  .hero-plane-teal { width: 45%; height: 23%; }
+  .hero-plane-blue { width: 65%; height: 12%; }
+  .hero-portrait { display: none; }
+  .hero-description { font-size: 1rem; }
 }

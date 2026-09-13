@@ -94,7 +94,7 @@ const SiteHeader = ({
     };
 
     return (
-        <header className="fixed inset-x-0 top-0 z-[70] border-b border-white/10 bg-[#0a0a0a]/95 backdrop-blur-lg">
+        <header className="fixed inset-x-0 top-0 z-[70] border-b border-slate-200 bg-white/95 backdrop-blur-lg">
             <nav
                 aria-label="Primary navigation"
                 className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-2 px-4 py-3"
@@ -102,11 +102,11 @@ const SiteHeader = ({
                 <a
                     href="#top"
                     onClick={(event) => navigateToSection(event, "top")}
-                    className="flex min-h-11 items-center text-base font-semibold tracking-tight text-white"
+                    className="flex min-h-11 items-center text-base font-semibold tracking-tight text-slate-900"
                     aria-label="Jonathan Biro, back to top"
                     aria-current={activeSection === "top" ? "location" : undefined}
                 >
-                    Jonathan Biro<span className="ml-3 hidden border-l border-white/20 pl-3 text-sm font-normal text-zinc-400 xl:inline">Quality engineering</span>
+                    Jonathan Biro<span className="ml-3 hidden border-l border-slate-200/20 pl-3 text-sm font-normal text-slate-600 xl:inline">Quality engineering</span>
                 </a>
 
                 <div className="hidden items-center gap-1 md:flex">
@@ -116,7 +116,7 @@ const SiteHeader = ({
                             href={link.href}
                             onClick={(event) => navigateToSection(event, link.id)}
                             aria-current={activeSection === link.id ? "location" : undefined}
-                            className={`rounded-lg px-3 py-2 text-sm font-medium transition-colors ${activeSection === link.id ? "bg-primary/10 text-primary" : "text-zinc-300 hover:bg-white/5 hover:text-white"}`}
+                            className={`rounded-lg px-3 py-2 text-sm font-medium transition-colors ${activeSection === link.id ? "bg-primary/10 text-sky-700" : "text-slate-700 hover:bg-sky-50 hover:text-slate-900"}`}
                         >
                             {link.label}
                         </a>
@@ -130,7 +130,7 @@ const SiteHeader = ({
                         onMouseEnter={onPrepareCommandPalette}
                         onFocus={onPrepareCommandPalette}
                         onTouchStart={onPrepareCommandPalette}
-                        className="inline-flex min-h-11 items-center gap-2 rounded-md px-3 text-sm font-medium text-zinc-400 transition-colors hover:bg-white/5 hover:text-white"
+                        className="inline-flex min-h-11 items-center gap-2 rounded-md px-3 text-sm font-medium text-slate-600 transition-colors hover:bg-sky-50 hover:text-slate-900"
                         aria-label="Open quick actions"
                         title="Quick actions (Cmd or Ctrl + K)"
                     >
@@ -141,7 +141,7 @@ const SiteHeader = ({
                         type="button"
                         ref={mobileMenuToggleRef}
                         onClick={toggleMobileMenu}
-                        className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-zinc-200 transition-colors hover:border-white/20 hover:bg-white/10 hover:text-white md:hidden"
+                        className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-slate-200 bg-sky-50 text-slate-800 transition-colors hover:border-slate-200/20 hover:bg-sky-100 hover:text-slate-900 md:hidden"
                         aria-expanded={isMobileMenuOpen}
                         aria-controls="mobile-navigation"
                         aria-label={isMobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
@@ -151,7 +151,7 @@ const SiteHeader = ({
                 </div>
 
                 {isMobileMenuOpen && (
-                    <div id="mobile-navigation" className="mt-2 w-full border-t border-white/10 pt-2 md:hidden">
+                    <div id="mobile-navigation" className="mt-2 w-full border-t border-slate-200 pt-2 md:hidden">
                         <div className="grid grid-cols-2 gap-1">
                             {NAV_LINKS.map((link) => (
                                 <a
@@ -159,7 +159,7 @@ const SiteHeader = ({
                                     href={link.href}
                                     onClick={(event) => navigateToSection(event, link.id)}
                                     aria-current={activeSection === link.id ? "location" : undefined}
-                                    className={`flex min-h-11 items-center rounded-xl px-3 text-sm font-semibold transition-colors ${activeSection === link.id ? "bg-primary/10 text-primary" : "text-zinc-200 hover:bg-white/10 hover:text-white"}`}
+                                    className={`flex min-h-11 items-center rounded-xl px-3 text-sm font-semibold transition-colors ${activeSection === link.id ? "bg-primary/10 text-sky-700" : "text-slate-800 hover:bg-sky-100 hover:text-slate-900"}`}
                                 >
                                     {link.label}
                                 </a>
@@ -171,7 +171,7 @@ const SiteHeader = ({
                             onMouseEnter={onPrepareChallenge}
                             onFocus={onPrepareChallenge}
                             onTouchStart={onPrepareChallenge}
-                            className="mt-1 flex min-h-11 w-full items-center gap-2 rounded-xl px-3 text-left text-sm font-semibold text-primary transition-colors hover:bg-primary/10"
+                            className="mt-1 flex min-h-11 w-full items-center gap-2 rounded-xl px-3 text-left text-sm font-semibold text-sky-700 transition-colors hover:bg-primary/10"
                             aria-label="Launch QA challenge"
                         >
                             <FaBug aria-hidden="true" /> Try the QA challenge

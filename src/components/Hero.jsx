@@ -1,41 +1,35 @@
-import { FaArrowRight, FaEnvelope, FaFileDownload, FaGithub, FaLinkedin } from "react-icons/fa";
+import { FaArrowRight, FaFileDownload, FaGithub, FaLinkedin } from "react-icons/fa";
 import SITE_CONFIG from "../config/site";
+import headshot from "../assets/headshot.webp";
 
 const Hero = ({ onNavigate }) => (
-    <section id="top" tabIndex={-1} className="relative mx-auto max-w-7xl px-4 pb-10 pt-28 sm:pb-14 sm:pt-32">
-        <div className="grid items-end gap-8 lg:grid-cols-[1fr_280px]">
+    <section id="top" tabIndex={-1} className="hero-intro">
+        <div className="hero-plane hero-plane-teal" aria-hidden="true" />
+        <div className="hero-plane hero-plane-blue" aria-hidden="true" />
+        <div className="hero-inner">
             <div>
-                <p className="section-eyebrow">QA Automation Engineer / SDET · Los Angeles</p>
-                <h1 className="mt-5 text-5xl font-semibold tracking-[-0.04em] text-white sm:text-6xl lg:text-7xl">Jonathan Biro</h1>
-                <h2 className="mt-5 max-w-3xl text-balance text-2xl font-normal leading-snug text-zinc-200 sm:text-3xl">
-                    Quality engineering for reliable web products.
-                </h2>
-                <p className="mt-4 max-w-2xl text-base leading-relaxed text-zinc-400">
-                    I develop automated tests and release checks with Playwright and TypeScript,
-                    with a focus on critical user journeys, accessibility, and regression prevention.
-                </p>
-                <div className="mt-7 flex flex-wrap items-center gap-3">
-                    <a href="#work" onClick={(event) => {
+                <p className="hero-hello">Hello, I’m</p>
+                <h1>Jonathan Biro</h1>
+                <p className="hero-role">QA Automation Engineer &amp; SDET</p>
+                <p className="hero-description">I build web products and the tests that keep them reliable. My focus is practical automation, accessible interfaces, and the details that matter to users.</p>
+                <div className="mt-7 flex flex-wrap gap-3">
+                    <a href="#work" className="action-primary" onClick={(event) => {
                         if (onNavigate && event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) {
                             event.preventDefault(); onNavigate("work");
                         }
-                    }} className="action-primary">View selected work <FaArrowRight aria-hidden="true" /></a>
+                    }}>View selected work <FaArrowRight aria-hidden="true" /></a>
                     <a href={`${import.meta.env.BASE_URL}Jonathan-Biro-Resume.pdf`} download className="action-secondary"><FaFileDownload aria-hidden="true" /> Project résumé</a>
-                    <a href={`mailto:${SITE_CONFIG.email}`} className="inline-flex min-h-11 items-center gap-2 rounded-lg px-3 text-sm text-zinc-300 hover:text-white"><FaEnvelope aria-hidden="true" /> Email me</a>
                 </div>
-            </div>
-            <aside className="hidden border-l-2 border-primary/50 pl-5 lg:block">
-                <p className="text-sm font-medium text-zinc-300">Areas of focus</p>
-                <ul className="mt-3 space-y-2 text-sm leading-relaxed text-zinc-300">
-                    <li>Browser and API test automation</li>
-                    <li>Accessible, responsive interfaces</li>
-                    <li>Release validation and CI</li>
-                </ul>
-                <nav aria-label="Professional profiles" className="mt-5 flex gap-4">
-                    <a href={SITE_CONFIG.githubUrl} target="_blank" rel="me noopener noreferrer" aria-label="GitHub profile (opens in a new tab)" className="inline-flex min-h-11 items-center gap-2 text-sm text-zinc-400 hover:text-white"><FaGithub aria-hidden="true" /> GitHub</a>
-                    <a href={SITE_CONFIG.linkedinUrl} target="_blank" rel="me noopener noreferrer" aria-label="LinkedIn profile (opens in a new tab)" className="inline-flex min-h-11 items-center gap-2 text-sm text-zinc-400 hover:text-white"><FaLinkedin aria-hidden="true" /> LinkedIn</a>
+                <nav aria-label="Professional profiles" className="hero-socials">
+                    <a href={SITE_CONFIG.githubUrl} target="_blank" rel="me noopener noreferrer"><FaGithub aria-hidden="true" /> GitHub<span className="sr-only"> (opens in a new tab)</span></a>
+                    <a href={SITE_CONFIG.linkedinUrl} target="_blank" rel="me noopener noreferrer"><FaLinkedin aria-hidden="true" /> LinkedIn<span className="sr-only"> (opens in a new tab)</span></a>
+                    <a href={`mailto:${SITE_CONFIG.email}`}>Email me</a>
                 </nav>
-            </aside>
+            </div>
+            <figure className="hero-portrait">
+                <div className="hero-portrait-frame"><img src={headshot} alt="Jonathan Biro" width="320" height="320" fetchPriority="high" /></div>
+                <figcaption>Based in Los Angeles<br /><span>Playwright · TypeScript · React</span></figcaption>
+            </figure>
         </div>
     </section>
 );
