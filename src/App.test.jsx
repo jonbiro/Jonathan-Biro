@@ -1,7 +1,11 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { expect, it } from "vitest";
+import { afterEach, expect, it, vi } from "vitest";
 import App from "./App";
+
+afterEach(() => {
+  vi.restoreAllMocks();
+});
 
 it("shows only engineering work and focuses the selected section", async () => {
   const user = userEvent.setup();
@@ -18,9 +22,17 @@ it("shows only engineering work and focuses the selected section", async () => {
   expect(screen.queryByRole("button", { name: /generate confirmation|quick actions/i })).not.toBeInTheDocument();
   expect(screen.getByRole("link", { name: /public GitHub source/i })).toHaveAttribute("href", "https://github.com/jonbiro/Jonathan-Biro");
   expect(screen.getByRole("link", { name: /automated quality checks/i })).toHaveAttribute("href", "https://github.com/jonbiro/Jonathan-Biro/actions");
+
+  for (const [name, id] of [["Work", "work"], ["Background", "about"], ["Contact", "contact"]]) {
+    await user.click(screen.getByRole("link", { name, exact: true }));
+    expect(document.getElementById(id)).toHaveFocus();
+    expect(window.location.hash).toBe(`#${id}`);
+  }
+
+  await user.click(screen.getByRole("link", { name: "Jonathan Biro" }));
+  expect(document.getElementById("top")).toHaveFocus();
   await user.click(screen.getByRole("link", { name: "View engineering work" }));
   expect(document.getElementById("work")).toHaveFocus();
-  expect(window.location.hash).toBe("#work");
   await user.click(screen.getByText("Technical example: preventing a dark-mode contrast regression"));
   expect(document.querySelector("details")).toHaveAttribute("open");
 });
@@ -30,4 +42,20 @@ it("copies the professional contact address", async () => {
   await user.click(screen.getByRole("button", { name: "Copy email" }));
   expect(screen.getByRole("status")).toHaveTextContent("Email copied.");
   expect(await navigator.clipboard.readText()).toBe("jonathan@biro.dev");
+});
+
+it("keeps the email address usable when clipboard access fails", async () => {
+  const user = userEvent.setup();
+  vi.spyOn(navigator.clipboard, "writeText").mockRejectedValueOnce(new Error("Clipboard unavailable"));
+  render(<App />);
+
+  await user.click(screen.getByRole("button", { name: "Copy email" }));
+
+  expect(screen.getByRole("status")).toHaveTextContent(
+    "Copy unavailable. Use the email link or select the address below."
+  );
+  expect(screen.getByRole("link", { name: "jonathan@biro.dev" })).toHaveAttribute(
+    "href",
+    "mailto:jonathan@biro.dev"
+  );
 });

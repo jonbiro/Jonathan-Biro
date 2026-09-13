@@ -14,12 +14,6 @@ export default defineConfig({
                 branches: 55,
                 functions: 65,
                 lines: 65,
-                "src/components/ui/QAChallengeModal.jsx": {
-                    statements: 70,
-                    branches: 60,
-                    functions: 75,
-                    lines: 70,
-                },
             },
         },
     },

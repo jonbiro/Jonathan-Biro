@@ -9,7 +9,6 @@ afterEach(() => {
     if (typeof window !== "undefined") {
         animationFrameTimers.forEach((timerId) => window.clearTimeout(timerId));
         animationFrameTimers.clear();
-        window.localStorage.clear();
         window.history.replaceState(null, "", "/");
     }
 });

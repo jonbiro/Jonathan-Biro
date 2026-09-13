@@ -4,7 +4,6 @@
 
 [build.environment]
   NODE_VERSION = "22"
-  VITE_DEPLOY_TARGET = "static"
   VITE_SITE_URL = "https://jonathanbiro.com"
 
 [[headers]]

@@ -10,10 +10,8 @@ lerna-debug.log*
 node_modules
 coverage
 dist
-.wrangler
 .netlify
-.dev.vars*
-dist-ssr
+.tmp-screenshots
 *.local
 
 # Editor directories and files

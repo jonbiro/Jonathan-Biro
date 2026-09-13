@@ -14,8 +14,6 @@ concurrency:
 
 jobs:
   deploy:
-    env:
-      VITE_DEPLOY_TARGET: static
     timeout-minutes: 20
     environment:
       name: github-pages
