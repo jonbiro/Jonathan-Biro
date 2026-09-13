@@ -39,7 +39,7 @@ export default function App() {
           <p className="eng-greeting">Hi, I’m</p>
           <h1>Jonathan Biro</h1>
           <p className="eng-lead">I build software—and figure out<br className="eng-desktop-break" /> why it breaks.</p>
-          <p className="eng-summary">From a feature’s first implementation to the regression test that protects it, I work with TypeScript and Playwright to make web products more reliable.</p>
+          <p className="eng-summary">I bring QA automation and SDET experience from Priceline and DocMagic. Alongside that work, I build web products and regression tests with TypeScript and Playwright.</p>
           <div className="eng-actions">
             <a className="eng-button" href="#work" onClick={e => navigate(e, "work")}>View engineering work</a>
             <External href={SITE_CONFIG.githubUrl}>GitHub</External>
@@ -86,6 +86,13 @@ expect(await textContrast(cta))
         <section id="about" tabIndex={-1} className="eng-section eng-background">
           <div><p className="eng-eyebrow">A bit about me</p><h2>Curious about the why.<br />Practical about the fix.</h2></div>
           <div><p>I’m a QA Automation Engineer and SDET in Los Angeles. I like the part of engineering where a vague “something’s wrong” becomes a clear reproduction, an understood cause, and a fix you can verify.</p><p>Building interfaces alongside their tests keeps me close to both the code and the person using it. My aim is straightforward: useful automation, understandable failures, and fewer surprises when a change ships.</p><External href={SITE_CONFIG.linkedinUrl}>More about my background ↗</External></div>
+          <div className="eng-experience">
+            <h3>Professional experience</h3>
+            <ol className="eng-career" aria-label="Employment history, most recent first">
+              <li><h4>DocMagic</h4><p className="eng-career-dates"><time dateTime="2022-08">August 2022</time>–present</p><p>QA Automation Engineer</p></li>
+              <li><h4>Priceline</h4><p className="eng-career-dates">2019–2022 · 3 years, 1 month</p><p>Software Development Engineer in Test <span>(2020–2022)</span><br />QA Automation Engineer <span>(2019–2022)</span></p></li>
+            </ol>
+          </div>
         </section>
 
         <section id="contact" tabIndex={-1} className="eng-section eng-contact">
