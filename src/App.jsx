@@ -1,6 +1,7 @@
 import { useState } from "react";
 import ErrorBoundary from "./components/ui/ErrorBoundary";
 import SITE_CONFIG from "./config/site";
+import portrait from "./assets/headshot.webp";
 
 const repo = "https://github.com/jonbiro/BiroMD";
 const External = ({ href, children }) => <a href={href} target="_blank" rel="noopener noreferrer">{children}<span className="sr-only"> (opens in a new tab)</span></a>;
@@ -33,30 +34,36 @@ export default function App() {
       </header>
       <main id="main-content" tabIndex={-1}>
         <section id="top" tabIndex={-1} className="eng-hero">
+          <div className="eng-introduction">
           <p className="eng-eyebrow">Software engineering · Test automation · SDET</p>
+          <p className="eng-greeting">Hi, I’m</p>
           <h1>Jonathan Biro</h1>
-          <p className="eng-lead">Reliable software.<br />Repeatable verification.</p>
-          <p className="eng-summary">I build web applications and automated checks with TypeScript and Playwright. My work connects implementation, regression testing, and release validation.</p>
+          <p className="eng-lead">I build software—and figure out<br className="eng-desktop-break" /> why it breaks.</p>
+          <p className="eng-summary">From a feature’s first implementation to the regression test that protects it, I work with TypeScript and Playwright to make web products more reliable.</p>
           <div className="eng-actions">
             <a className="eng-button" href="#work" onClick={e => navigate(e, "work")}>View engineering work</a>
             <External href={SITE_CONFIG.githubUrl}>GitHub</External>
             <External href={SITE_CONFIG.linkedinUrl}>LinkedIn</External>
           </div>
-          <p className="eng-location">Los Angeles, California</p>
+          </div>
+          <figure className="eng-portrait">
+            <img src={portrait} alt="Illustrated portrait of Jonathan Biro" width="320" height="320" fetchPriority="high" />
+            <figcaption>Jonathan Biro <span>Los Angeles, California</span></figcaption>
+          </figure>
         </section>
 
         <section id="work" tabIndex={-1} className="eng-section">
-          <div className="eng-section-heading"><p className="eng-eyebrow">Selected engineering work</p><h2>Implementation. Tests. Release checks.</h2></div>
+          <div className="eng-section-heading"><p className="eng-eyebrow">Selected engineering work</p><h2>A closer look at my work.</h2></div>
           <article className="eng-case">
             <div className="eng-case-top">
               <div><p className="eng-meta">Independent project / Web application</p><h3>BiroMD — quality engineering</h3></div>
               <External href={repo}>View repository ↗</External>
             </div>
-            <p className="eng-case-intro">Frontend implementation and automated validation for a medical-practice website. The engineering work focuses on navigation, consultation paths, accessibility, and static-release integrity.</p>
+            <p className="eng-case-intro">I paired frontend development with automated release checks for a medical-practice website. My focus: making sure a patient’s path to a consultation still works after the next change.</p>
             <p className="eng-stack">TypeScript <span> / </span> Next.js <span> / </span> Playwright <span> / </span> GitHub Actions</p>
             <div className="eng-evidence">
-              <div><h4>Browser regression coverage</h4><p>Exercise consultation links, mobile navigation, keyboard behavior, and theme-dependent contrast in a real browser.</p><External href={`${repo}/blob/main/tests/site.spec.ts`}>Read the test suite ↗</External></div>
-              <div><h4>Build and release validation</h4><p>Verify exported routes, internal links, sitemap entries, and image budgets alongside the production build.</p><External href={`${repo}/actions`}>View CI workflows ↗</External></div>
+              <div><h4>What I check in the browser</h4><p>Consultation links, mobile navigation, keyboard behavior, and contrast across themes. These need working user journeys, not just a successful build.</p><External href={`${repo}/blob/main/tests/site.spec.ts`}>Read the test suite ↗</External></div>
+              <div><h4>What I catch before release</h4><p>Missing routes, broken internal links, sitemap mismatches, and oversized images. Automated export checks make these repeatable rather than a manual checklist.</p><External href={`${repo}/actions`}>View CI workflows ↗</External></div>
             </div>
             <details className="eng-details">
               <summary>Technical example: preventing a dark-mode contrast regression</summary>
@@ -77,12 +84,12 @@ expect(await textContrast(cta))
         </section>
 
         <section id="about" tabIndex={-1} className="eng-section eng-background">
-          <div><p className="eng-eyebrow">Background</p><h2>Software development,<br />with quality built in.</h2></div>
-          <div><p>I’m a QA Automation Engineer and SDET based in Los Angeles. I work across frontend implementation, automated testing, and release validation.</p><p>I focus on reproducible failures, maintainable checks, and useful CI feedback. The case study above links directly to source code so the implementation can be evaluated on its own merits.</p><External href={SITE_CONFIG.linkedinUrl}>Professional background on LinkedIn ↗</External></div>
+          <div><p className="eng-eyebrow">A bit about me</p><h2>Curious about the why.<br />Practical about the fix.</h2></div>
+          <div><p>I’m a QA Automation Engineer and SDET in Los Angeles. I like the part of engineering where a vague “something’s wrong” becomes a clear reproduction, an understood cause, and a fix you can verify.</p><p>Building interfaces alongside their tests keeps me close to both the code and the person using it. My aim is straightforward: useful automation, understandable failures, and fewer surprises when a change ships.</p><External href={SITE_CONFIG.linkedinUrl}>More about my background ↗</External></div>
         </section>
 
         <section id="contact" tabIndex={-1} className="eng-section eng-contact">
-          <div><p className="eng-eyebrow">Contact</p><h2>Let’s talk engineering.</h2><p>For software engineering, automation, and SDET opportunities.</p></div>
+          <div><p className="eng-eyebrow">Get in touch</p><h2>Tell me what you’re building.</h2><p>Let’s talk about software engineering, automation, or an SDET role.</p></div>
           <div className="eng-contact-links"><a className="eng-email" href={`mailto:${SITE_CONFIG.email}`}>{SITE_CONFIG.email}</a><button type="button" onClick={copyEmail}>Copy email</button><p role="status" aria-live="polite">{copyStatus}</p></div>
         </section>
       </main>
