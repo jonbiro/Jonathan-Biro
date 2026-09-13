@@ -78,5 +78,8 @@ describe("portfolio metadata", () => {
 
         expect(lighthouseConfig.ci.collect.staticDistDir).toBe("./dist/client");
         expect(lighthouseConfig.ci.collect.url).toEqual(["http://localhost/"]);
+        expect(lighthouseConfig.ci.assert.assertions["categories:performance"][0]).toBe("error");
+        expect(lighthouseConfig.ci.assert.assertions["total-blocking-time"][0]).toBe("error");
+        expect(lighthouseConfig.ci.assert.assertions["total-byte-weight"][1].maxNumericValue).toBe(225000);
     });
 });

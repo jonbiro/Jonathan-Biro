@@ -15,10 +15,10 @@ Personal portfolio for Jonathan Biro, built around clear quality-engineering pro
 
 ## Stack
 
-- React 19
+- Semantic HTML with progressively enhanced JavaScript
 - Vite 8
 - Hand-authored responsive CSS
-- Vitest and Testing Library
+- Vitest with jsdom
 - Netlify
 - GitHub Actions
 - ESLint 9
@@ -74,7 +74,7 @@ The workflow in `.github/workflows/deploy-pages.yml` automatically:
 - PWA metadata is configured in `public/manifest.json`.
 - Sitemap and robots source files live in `public/`; production-specific copies are generated directly into the build output.
 - `public/_headers` is the source template for Netlify security and cache policy; the built copy receives exact inline-script hashes.
-- The initial HTML includes meaningful portfolio content before React loads.
+- The complete portfolio is usable before JavaScript loads; the small client script adds focus management, live copyright text, and copy-to-clipboard feedback.
 - `scripts/generate-seo-files.mjs` keeps robots, sitemap, and the built Content Security Policy aligned with each deployment.
 
 ## CI

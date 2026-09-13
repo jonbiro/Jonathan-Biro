@@ -95,26 +95,183 @@
 </head>
 
 <body>
-  <div id="root">
-    <main style="max-width:1000px;margin:auto;padding:4rem 2rem;background:#131619;color:#e7eaee;font-family:Inter,system-ui,sans-serif;line-height:1.7">
-      <p>Software engineering · Test automation · SDET</p>
-      <h1>Jonathan Biro</h1>
-      <p>I build software. And figure out why it breaks.</p>
-      <p>QA automation and SDET experience at DocMagic and Priceline.</p>
-      <h2>Professional experience</h2>
-      <p>DocMagic · QA Automation Engineer · August 2022–present.</p>
-      <p>Priceline · 2019–2022 · 3 years, 1 month. Software Development Engineer in Test (2020–2022); QA Automation Engineer (2019–2022).</p>
-      <h2>Selected engineering work</h2>
-      <h3>BiroMD — quality engineering</h3>
-      <p>Frontend implementation, browser regression tests, and static-release validation.</p>
-      <a style="color:#b4c8de" href="https://github.com/jonbiro/BiroMD">View repository</a>
-      <h2>Background</h2>
-      <p>QA Automation Engineer and SDET based in Los Angeles.</p>
-      <h2>Contact</h2>
-      <a style="color:#b4c8de" href="mailto:jonathan@biro.dev">jonathan@biro.dev</a>
+  <div class="engineering">
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <header class="eng-header">
+      <a class="eng-wordmark" href="#top" data-section-link="top">
+        <span class="eng-monogram" aria-hidden="true">jb.</span>Jonathan Biro
+      </a>
+      <nav aria-label="Primary navigation">
+        <a href="#experience" data-section-link="experience">Experience</a>
+        <a href="#work" data-section-link="work">Work</a>
+        <a href="#about" data-section-link="about">Background</a>
+        <a href="#contact" data-section-link="contact">Contact</a>
+      </nav>
+    </header>
+
+    <main id="main-content" tabindex="-1">
+      <section id="top" tabindex="-1" class="eng-hero">
+        <div class="eng-introduction">
+          <p class="eng-eyebrow">Software engineering &amp; quality automation</p>
+          <p class="eng-greeting">Hi, I’m</p>
+          <h1>Jonathan <span>Biro</span></h1>
+          <p class="eng-lead">I build software.<br><span>And figure out why it breaks.</span></p>
+          <p class="eng-summary">QA automation and SDET experience at DocMagic and Priceline. A builder’s perspective, a tester’s curiosity, and a focus on software people can rely on.</p>
+          <div class="eng-actions">
+            <a class="eng-button" href="#work" data-section-link="work">View engineering work</a>
+            <a href="https://github.com/jonbiro" target="_blank" rel="me noopener noreferrer">GitHub<span class="sr-only"> (opens in a new tab)</span></a>
+            <a href="https://www.linkedin.com/in/jonathanbiro/" target="_blank" rel="me noopener noreferrer">LinkedIn<span class="sr-only"> (opens in a new tab)</span></a>
+          </div>
+          <p class="eng-delivery-proof">
+            This site deploys from <a href="https://github.com/jonbiro/Jonathan-Biro" target="_blank" rel="noopener noreferrer">public GitHub source<span class="sr-only"> (opens in a new tab)</span></a>
+            through <a href="https://github.com/jonbiro/Jonathan-Biro/actions" target="_blank" rel="noopener noreferrer">automated quality checks<span class="sr-only"> (opens in a new tab)</span></a> to Netlify.
+          </p>
+        </div>
+        <figure class="eng-portrait">
+          <div class="eng-portrait-frame">
+            <img
+              src="%BASE_URL%headshot.webp"
+              srcset="%BASE_URL%headshot-128.webp 128w, %BASE_URL%headshot-256.webp 256w, %BASE_URL%headshot.webp 400w"
+              sizes="(max-width: 640px) 96px, (max-width: 900px) 220px, 320px"
+              alt="Illustrated portrait of Jonathan Biro"
+              width="320"
+              height="320"
+              fetchpriority="high"
+            >
+          </div>
+          <figcaption>Jonathan Biro <span>Engineer · Los Angeles, California</span></figcaption>
+        </figure>
+      </section>
+
+      <section id="experience" tabindex="-1" class="eng-section eng-experience">
+        <div class="eng-section-heading">
+          <p class="eng-eyebrow"><span class="eng-index">01</span> Career</p>
+          <h2>Professional<br>experience.</h2>
+          <a href="https://www.linkedin.com/in/jonathanbiro/" target="_blank" rel="me noopener noreferrer">Full background on LinkedIn ↗<span class="sr-only"> (opens in a new tab)</span></a>
+        </div>
+        <ol class="eng-career" aria-label="Employment history, most recent first">
+          <li>
+            <div class="eng-career-heading">
+              <h3>DocMagic</h3>
+              <p class="eng-career-dates"><time datetime="2022-08">August 2022</time>–present</p>
+            </div>
+            <p>QA Automation Engineer</p>
+          </li>
+          <li>
+            <div class="eng-career-heading">
+              <h3>Priceline</h3>
+              <p class="eng-career-dates">2019–2022 · 3 years, 1 month</p>
+            </div>
+            <p>Software Development Engineer in Test <span>(2020–2022)</span><br>QA Automation Engineer <span>(2019–2022)</span></p>
+          </li>
+        </ol>
+      </section>
+
+      <section id="work" tabindex="-1" class="eng-section">
+        <div class="eng-section-heading">
+          <p class="eng-eyebrow"><span class="eng-index">02</span> Selected engineering work</p>
+          <h2>The product. The code.<br><em>The checks behind it.</em></h2>
+        </div>
+        <article class="eng-case">
+          <div class="eng-case-overview">
+            <div>
+              <div class="eng-case-top">
+                <div>
+                  <p class="eng-meta">Independent project / Web application</p>
+                  <h3>BiroMD <span>— quality engineering</span></h3>
+                </div>
+              </div>
+              <p class="eng-case-intro">I paired frontend development with automated release checks for a medical-practice website. My focus: making sure a patient’s path to a consultation still works after the next change.</p>
+              <p class="eng-stack">TypeScript <span> / </span> Next.js <span> / </span> Playwright <span> / </span> GitHub Actions</p>
+              <div class="eng-case-source"><a href="https://github.com/jonbiro/BiroMD" target="_blank" rel="noopener noreferrer">Explore the source code ↗<span class="sr-only"> (opens in a new tab)</span></a></div>
+            </div>
+            <figure class="eng-project-preview">
+              <img
+                src="%BASE_URL%projects/biromd.jpg"
+                srcset="%BASE_URL%projects/biromd-480.webp 480w, %BASE_URL%projects/biromd-640.webp 640w, %BASE_URL%projects/biromd-960.webp 960w, %BASE_URL%projects/biromd-1440.webp 1440w"
+                sizes="(max-width: 640px) calc(100vw - 112px), (max-width: 900px) calc(100vw - 150px), 540px"
+                alt="BiroMD interface showing the consultation entry point covered by the browser regression tests"
+                width="1440"
+                height="1000"
+                loading="lazy"
+                decoding="async"
+              >
+              <figcaption>BiroMD interface · Project screenshot</figcaption>
+            </figure>
+          </div>
+          <div class="eng-evidence">
+            <div>
+              <p class="eng-evidence-label">Browser regression</p>
+              <h4>Protect the patient journey.</h4>
+              <ul>
+                <li>Consultation links and mobile navigation</li>
+                <li>Keyboard behavior and accessible interactions</li>
+                <li>Text contrast across light and dark themes</li>
+              </ul>
+              <a href="https://github.com/jonbiro/BiroMD/blob/main/tests/site.spec.ts" target="_blank" rel="noopener noreferrer">Read the test suite ↗<span class="sr-only"> (opens in a new tab)</span></a>
+            </div>
+            <div>
+              <p class="eng-evidence-label">Release validation</p>
+              <h4>Catch what a build can miss.</h4>
+              <ul>
+                <li>Missing routes and broken internal links</li>
+                <li>Sitemap and exported-page mismatches</li>
+                <li>Images exceeding the asset budget</li>
+              </ul>
+              <a href="https://github.com/jonbiro/BiroMD/actions" target="_blank" rel="noopener noreferrer">View CI workflows ↗<span class="sr-only"> (opens in a new tab)</span></a>
+            </div>
+          </div>
+          <details class="eng-details">
+            <summary>Technical example: preventing a dark-mode contrast regression</summary>
+            <div class="eng-detail-body">
+              <p>A consultation-button fix explicitly corrected its dark-mode foreground. The browser regression checks the computed text contrast in both themes against a 4.5:1 minimum.</p>
+              <pre><code>const cta = page.getByRole("link", {
+  name: "Request a Consultation"
+}).first();
+
+await expect(cta).toBeVisible();
+expect(await textContrast(cta))
+  .toBeGreaterThanOrEqual(4.5);</code></pre>
+              <p class="eng-meta">Excerpt from the repository test suite; not a live test result.</p>
+              <a href="https://github.com/jonbiro/BiroMD/commit/3427224bcca966b8de74a6c5f038ef811783af24" target="_blank" rel="noopener noreferrer">Inspect the implementation change ↗<span class="sr-only"> (opens in a new tab)</span></a>
+            </div>
+          </details>
+        </article>
+      </section>
+
+      <section id="about" tabindex="-1" class="eng-section eng-background">
+        <div>
+          <p class="eng-eyebrow"><span class="eng-index">03</span> A bit about me</p>
+          <h2>Curious about the why.<br>Practical about the fix.</h2>
+        </div>
+        <div>
+          <p>I’m a QA Automation Engineer and SDET in Los Angeles. I like the part of engineering where a vague “something’s wrong” becomes a clear reproduction, an understood cause, and a fix you can verify.</p>
+          <p>Building interfaces alongside their tests keeps me close to both the code and the person using it. My aim is straightforward: useful automation, understandable failures, and fewer surprises when a change ships.</p>
+          <a href="https://www.linkedin.com/in/jonathanbiro/" target="_blank" rel="me noopener noreferrer">More about my background ↗<span class="sr-only"> (opens in a new tab)</span></a>
+        </div>
+      </section>
+
+      <section id="contact" tabindex="-1" class="eng-section eng-contact">
+        <div>
+          <p class="eng-eyebrow"><span class="eng-index">04</span> Get in touch</p>
+          <h2>Let’s build<br><em>something reliable.</em></h2>
+          <p>Software engineering · Automation · SDET</p>
+        </div>
+        <div class="eng-contact-links">
+          <a class="eng-email" href="mailto:jonathan@biro.dev">jonathan@biro.dev</a>
+          <button type="button" data-copy-email hidden>Copy email</button>
+          <p role="status" aria-live="polite" data-copy-status></p>
+        </div>
+      </section>
     </main>
+
+    <footer class="eng-footer">
+      <span>© <span data-current-year>2026</span> Jonathan Biro</span>
+      <a href="https://github.com/jonbiro" target="_blank" rel="me noopener noreferrer">GitHub<span class="sr-only"> (opens in a new tab)</span></a>
+      <a href="https://www.linkedin.com/in/jonathanbiro/" target="_blank" rel="me noopener noreferrer">LinkedIn<span class="sr-only"> (opens in a new tab)</span></a>
+    </footer>
   </div>
-  <script type="module" src="/src/main.jsx"></script>
+  <script type="module" src="/src/main.js"></script>
 </body>
 
 </html>

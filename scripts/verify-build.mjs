@@ -200,8 +200,8 @@ for (const relativePath of entryAssets) {
     entryRawBytes += source.byteLength;
     entryGzipBytes += gzipSync(source).byteLength;
 }
-assert(entryRawBytes <= 225_000, `Entry code exceeds the 225 KB raw budget (${formatKiB(entryRawBytes)}).`);
-assert(entryGzipBytes <= 75_000, `Entry code exceeds the 75 KB gzip budget (${formatKiB(entryGzipBytes)}).`);
+assert(entryRawBytes <= 25_000, `Entry code exceeds the 25 KB raw budget (${formatKiB(entryRawBytes)}).`);
+assert(entryGzipBytes <= 10_000, `Entry code exceeds the 10 KB gzip budget (${formatKiB(entryGzipBytes)}).`);
 
 let totalBytes = 0;
 for (const absolutePath of absoluteFiles) totalBytes += (await stat(absolutePath)).size;
