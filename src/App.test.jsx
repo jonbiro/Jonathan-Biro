@@ -23,6 +23,9 @@ it("shows only engineering work and focuses the selected section", async () => {
   expect(
     screen.getByAltText(/BiroMD interface/).getAttribute("srcset")
   ).toContain("/projects/biromd-480.webp 480w");
+  expect(
+    screen.getByAltText(/BiroMD interface/).getAttribute("srcset")
+  ).toContain("/projects/biromd-640.webp 640w");
   await user.click(screen.getByRole("link", { name: "Experience", exact: true }));
   expect(document.getElementById("experience")).toHaveFocus();
   expect(screen.queryByText(/puppy quest|bug hunt|QA Portfolio/i)).not.toBeInTheDocument();
