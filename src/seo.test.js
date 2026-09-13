@@ -34,9 +34,16 @@ describe("portfolio metadata", () => {
     });
 
     it("ships a valid installable manifest", async () => {
-        const manifest = JSON.parse(await readProjectFile("public/manifest.json"));
+        const [manifestSource, html] = await Promise.all([
+            readProjectFile("public/manifest.json"),
+            readProjectFile("index.html"),
+        ]);
+        const manifest = JSON.parse(manifestSource);
+        const documentThemeColor = html.match(/<meta name="theme-color" content="([^"]+)"/)?.[1];
 
         expect(manifest.id).toBe("./");
+        expect(manifest.background_color).toBe(documentThemeColor);
+        expect(manifest.theme_color).toBe(documentThemeColor);
         expect(manifest.icons).toEqual(
             expect.arrayContaining([expect.objectContaining({ sizes: "192x192" })])
         );

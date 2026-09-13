@@ -56,7 +56,9 @@ const inlineScriptHashes = new Set();
 
 for (const htmlFilePath of htmlFilePaths) {
     const sourceHtml = await readFile(htmlFilePath, "utf8");
-    const html = sourceHtml.replaceAll("__SITE_BASE_PATH__", SITE_BASE_PATH);
+    const html = sourceHtml
+        .replaceAll("__SITE_BASE_PATH__", SITE_BASE_PATH)
+        .replaceAll(`href="${DEFAULT_SITE_URL}/"`, `href="${SITE_URL}/"`);
     if (html !== sourceHtml) {
         await writeFile(htmlFilePath, html, "utf8");
     }

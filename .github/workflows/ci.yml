@@ -42,7 +42,7 @@ jobs:
       - name: Audit dependencies
         run: npm audit --audit-level=moderate
 
-      - name: Build
+      - name: Build and verify production artifact
         run: npm run build
 
       - name: Lighthouse CI

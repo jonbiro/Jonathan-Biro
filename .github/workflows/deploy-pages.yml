@@ -61,7 +61,7 @@ jobs:
       - name: Audit dependencies
         run: npm audit --audit-level=moderate
 
-      - name: Build
+      - name: Build and verify Pages artifact
         run: npm run build
 
       - name: Upload artifact

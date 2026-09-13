@@ -6,6 +6,7 @@ import portrait128 from "./assets/headshot-128.webp";
 import portrait256 from "./assets/headshot-256.webp";
 
 const repo = "https://github.com/jonbiro/BiroMD";
+const publicAsset = (assetPath) => `${import.meta.env.BASE_URL}${assetPath.replace(/^\/+/, "")}`;
 const External = ({ href, children }) => <a href={href} target="_blank" rel="noopener noreferrer">{children}<span className="sr-only"> (opens in a new tab)</span></a>;
 
 export default function App() {
@@ -89,7 +90,7 @@ export default function App() {
             <p className="eng-stack">TypeScript <span> / </span> Next.js <span> / </span> Playwright <span> / </span> GitHub Actions</p>
             <div className="eng-case-source"><External href={repo}>Explore the source code ↗</External></div>
             </div>
-            <figure className="eng-project-preview"><img src="/projects/biromd.jpg" srcSet="/projects/biromd-480.webp 480w, /projects/biromd-640.webp 640w, /projects/biromd-960.webp 960w, /projects/biromd-1440.webp 1440w" sizes="(max-width: 640px) calc(100vw - 112px), (max-width: 900px) calc(100vw - 150px), 540px" alt="BiroMD interface showing the consultation entry point covered by the browser regression tests" width="1440" height="1000" loading="lazy" decoding="async" /><figcaption>BiroMD interface · Project screenshot</figcaption></figure>
+            <figure className="eng-project-preview"><img src={publicAsset("projects/biromd.jpg")} srcSet={`${publicAsset("projects/biromd-480.webp")} 480w, ${publicAsset("projects/biromd-640.webp")} 640w, ${publicAsset("projects/biromd-960.webp")} 960w, ${publicAsset("projects/biromd-1440.webp")} 1440w`} sizes="(max-width: 640px) calc(100vw - 112px), (max-width: 900px) calc(100vw - 150px), 540px" alt="BiroMD interface showing the consultation entry point covered by the browser regression tests" width="1440" height="1000" loading="lazy" decoding="async" /><figcaption>BiroMD interface · Project screenshot</figcaption></figure>
             </div>
             <div className="eng-evidence">
               <div><p className="eng-evidence-label">Browser regression</p><h4>Protect the patient journey.</h4><ul><li>Consultation links and mobile navigation</li><li>Keyboard behavior and accessible interactions</li><li>Text contrast across light and dark themes</li></ul><External href={`${repo}/blob/main/tests/site.spec.ts`}>Read the test suite ↗</External></div>

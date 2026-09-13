@@ -10,6 +10,7 @@ Personal portfolio for Jonathan Biro, built around clear quality-engineering pro
 - Public GitHub and CI evidence surfaced directly in the recruiter journey.
 - Canonical metadata, structured data, a branded 404, and an installable web manifest.
 - Automated behavior tests, coverage floors, dependency auditing, production builds, and Lighthouse budgets.
+- A build-artifact gate that catches missing files, broken base paths, SEO drift, CSP regressions, and asset-budget overruns before deployment.
 - Netlify security headers, a hash-based script policy, and immutable caching for fingerprinted assets.
 
 ## Stack
@@ -40,6 +41,8 @@ npm run test:coverage
 npm run build
 ```
 
+`npm run build` also verifies the finished artifact. Run `npm run verify:build` to inspect an existing `dist/client` bundle without rebuilding it.
+
 ## Deploy on Netlify
 
 1. Connect `jonbiro/Jonathan-Biro`, branch `main`, to the existing Netlify project `jonbiro`.
@@ -52,7 +55,7 @@ Netlify will run:
 npm run build
 ```
 
-`netlify.toml` sets `VITE_SITE_URL=https://jonathanbiro.com`. The build emits a portable browser bundle in `dist/client`, generates production discovery files, and replaces the inline-script CSP placeholder with the exact SHA-256 hash from the built HTML.
+`netlify.toml` sets `VITE_SITE_URL=https://jonathanbiro.com`. The build emits a portable browser bundle in `dist/client`, generates production discovery files, replaces the inline-script CSP placeholder with the exact SHA-256 hash from the built HTML, and verifies the release artifact before Netlify can publish it.
 
 ## Deploy on GitHub Pages
 
@@ -76,4 +79,4 @@ The workflow in `.github/workflows/deploy-pages.yml` automatically:
 
 ## CI
 
-GitHub Actions runs linting, coverage-gated behavior tests, dependency auditing, a production build, and Lighthouse CI on every push and pull request.
+GitHub Actions runs linting, coverage-gated behavior tests, dependency auditing, verified production builds, and Lighthouse CI on every push and pull request.
