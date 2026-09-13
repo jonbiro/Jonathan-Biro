@@ -65,4 +65,11 @@ describe("portfolio metadata", () => {
         expect(sitemap).toContain("<loc>https://jonathanbiro.com/</loc>");
         expect(`${robots}\n${sitemap}`).not.toContain("https://biro.dev");
     });
+
+    it("applies Lighthouse's indexability score to the indexable page", async () => {
+        const lighthouseConfig = JSON.parse(await readProjectFile(".lighthouserc.json"));
+
+        expect(lighthouseConfig.ci.collect.staticDistDir).toBe("./dist/client");
+        expect(lighthouseConfig.ci.collect.url).toEqual(["http://localhost/"]);
+    });
 });

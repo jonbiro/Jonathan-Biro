@@ -1,7 +1,10 @@
 {
     "ci": {
         "collect": {
-            "staticDistDir": "./dist/client"
+            "staticDistDir": "./dist/client",
+            "url": [
+                "http://localhost/"
+            ]
         },
         "assert": {
             "assertions": {
