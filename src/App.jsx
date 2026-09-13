@@ -1,397 +1,92 @@
-import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import {
-  FaBriefcase,
-  FaEnvelope,
-  FaGithub,
-  FaLinkedin,
-  FaMagic,
-  FaMoon,
-  FaRoute,
-  FaUser,
-} from "react-icons/fa";
-import Hero from "./components/Hero";
-import SiteHeader from "./components/SiteHeader";
-import Work from "./components/Work";
-import Approach from "./components/Approach";
-import About from "./components/About";
-import Contact from "./components/Contact";
-import QALab from "./components/QALab";
-import Experience from "./components/Experience";
-
+import { useState } from "react";
 import ErrorBoundary from "./components/ui/ErrorBoundary";
-
-import Toast from "./components/ui/Toast";
 import SITE_CONFIG from "./config/site";
-import useUiPreferences from "./hooks/useUiPreferences";
 
-const SECTION_IDS = ["top", "work", "approach", "lab", "experience", "about", "contact"];
-const loadCommandPalette = () => import("./components/ui/CommandPalette");
-const loadChallenge = () => import("./components/ui/QAChallengeModal");
-const CommandPalette = lazy(loadCommandPalette);
-const QAChallengeModal = lazy(loadChallenge);
+const repo = "https://github.com/jonbiro/BiroMD";
+const External = ({ href, children }) => <a href={href} target="_blank" rel="noopener noreferrer">{children}<span className="sr-only"> (opens in a new tab)</span></a>;
 
-const ModalLoadingFallback = ({ label }) => (
-  <div className="fixed inset-0 z-[100] grid place-items-center bg-black/75 px-4 backdrop-blur-md">
-    <div role="status" aria-live="polite" className="rounded-2xl border border-white/10 bg-[#080b10] px-5 py-4 text-sm font-semibold text-zinc-200 shadow-2xl">
-      {label}
+export default function App() {
+  const [copyStatus, setCopyStatus] = useState("");
+  const navigate = (event, id) => {
+    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    event.preventDefault();
+    const section = document.getElementById(id);
+    section?.scrollIntoView({ block: "start", behavior: "auto" });
+    section?.focus({ preventScroll: true });
+    window.history.replaceState(null, "", `#${id}`);
+  };
+  const copyEmail = async () => {
+    try { await navigator.clipboard.writeText(SITE_CONFIG.email); setCopyStatus("Email copied."); }
+    catch { setCopyStatus("Copy unavailable. Use the email link or select the address below."); }
+  };
+
+  return <ErrorBoundary>
+    <div className="engineering">
+      <a href="#main-content" className="skip-link">Skip to main content</a>
+      <header className="eng-header">
+        <a className="eng-wordmark" href="#top" onClick={e => navigate(e, "top")}>Jonathan Biro</a>
+        <nav aria-label="Primary navigation">
+          <a href="#work" onClick={e => navigate(e, "work")}>Work</a>
+          <a href="#about" onClick={e => navigate(e, "about")}>Background</a>
+          <a href="#contact" onClick={e => navigate(e, "contact")}>Contact</a>
+        </nav>
+      </header>
+      <main id="main-content" tabIndex={-1}>
+        <section id="top" tabIndex={-1} className="eng-hero">
+          <p className="eng-eyebrow">Software engineering · Test automation · SDET</p>
+          <h1>Jonathan Biro</h1>
+          <p className="eng-lead">Reliable software.<br />Repeatable verification.</p>
+          <p className="eng-summary">I build web applications and automated checks with TypeScript and Playwright. My work connects implementation, regression testing, and release validation.</p>
+          <div className="eng-actions">
+            <a className="eng-button" href="#work" onClick={e => navigate(e, "work")}>View engineering work</a>
+            <External href={SITE_CONFIG.githubUrl}>GitHub</External>
+            <External href={SITE_CONFIG.linkedinUrl}>LinkedIn</External>
+          </div>
+          <p className="eng-location">Los Angeles, California</p>
+        </section>
+
+        <section id="work" tabIndex={-1} className="eng-section">
+          <div className="eng-section-heading"><p className="eng-eyebrow">Selected engineering work</p><h2>Implementation. Tests. Release checks.</h2></div>
+          <article className="eng-case">
+            <div className="eng-case-top">
+              <div><p className="eng-meta">Independent project / Web application</p><h3>BiroMD — quality engineering</h3></div>
+              <External href={repo}>View repository ↗</External>
+            </div>
+            <p className="eng-case-intro">Frontend implementation and automated validation for a medical-practice website. The engineering work focuses on navigation, consultation paths, accessibility, and static-release integrity.</p>
+            <p className="eng-stack">TypeScript <span> / </span> Next.js <span> / </span> Playwright <span> / </span> GitHub Actions</p>
+            <div className="eng-evidence">
+              <div><h4>Browser regression coverage</h4><p>Exercise consultation links, mobile navigation, keyboard behavior, and theme-dependent contrast in a real browser.</p><External href={`${repo}/blob/main/tests/site.spec.ts`}>Read the test suite ↗</External></div>
+              <div><h4>Build and release validation</h4><p>Verify exported routes, internal links, sitemap entries, and image budgets alongside the production build.</p><External href={`${repo}/actions`}>View CI workflows ↗</External></div>
+            </div>
+            <details className="eng-details">
+              <summary>Technical example: preventing a dark-mode contrast regression</summary>
+              <div className="eng-detail-body">
+                <p>A consultation-button fix explicitly corrected its dark-mode foreground. The browser regression checks the computed text contrast in both themes against a 4.5:1 minimum.</p>
+                <pre><code>{`const cta = page.getByRole("link", {
+  name: "Request a Consultation"
+}).first();
+
+await expect(cta).toBeVisible();
+expect(await textContrast(cta))
+  .toBeGreaterThanOrEqual(4.5);`}</code></pre>
+                <p className="eng-meta">Excerpt from the repository test suite; not a live test result.</p>
+                <External href={`${repo}/commit/3427224bcca966b8de74a6c5f038ef811783af24`}>Inspect the implementation change ↗</External>
+              </div>
+            </details>
+          </article>
+        </section>
+
+        <section id="about" tabIndex={-1} className="eng-section eng-background">
+          <div><p className="eng-eyebrow">Background</p><h2>Software development,<br />with quality built in.</h2></div>
+          <div><p>I’m a QA Automation Engineer and SDET based in Los Angeles. I work across frontend implementation, automated testing, and release validation.</p><p>I focus on reproducible failures, maintainable checks, and useful CI feedback. The case study above links directly to source code so the implementation can be evaluated on its own merits.</p><External href={SITE_CONFIG.linkedinUrl}>Professional background on LinkedIn ↗</External></div>
+        </section>
+
+        <section id="contact" tabIndex={-1} className="eng-section eng-contact">
+          <div><p className="eng-eyebrow">Contact</p><h2>Let’s talk engineering.</h2><p>For software engineering, automation, and SDET opportunities.</p></div>
+          <div className="eng-contact-links"><a className="eng-email" href={`mailto:${SITE_CONFIG.email}`}>{SITE_CONFIG.email}</a><button type="button" onClick={copyEmail}>Copy email</button><p role="status" aria-live="polite">{copyStatus}</p></div>
+        </section>
+      </main>
+      <footer className="eng-footer"><span>© {new Date().getFullYear()} Jonathan Biro</span><External href={SITE_CONFIG.githubUrl}>GitHub</External><External href={SITE_CONFIG.linkedinUrl}>LinkedIn</External></footer>
     </div>
-  </div>
-);
-
-function App() {
-  const { motionEnabled, motionPreference, pointerEffectsEnabled, setMotionPreference } = useUiPreferences();
-  const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
-  const [commandPaletteSession, setCommandPaletteSession] = useState(0);
-  const [isChallengeOpen, setIsChallengeOpen] = useState(false);
-  const [challengeSession, setChallengeSession] = useState(0);
-  const [toastMessage, setToastMessage] = useState("");
-  const [activeSection, setActiveSection] = useState("top");
-  const initialHashHandledRef = useRef(false);
-
-  const openCommandPalette = useCallback(() => {
-    setIsChallengeOpen(false);
-    setCommandPaletteSession((currentSession) => currentSession + 1);
-    setIsCommandPaletteOpen(true);
-  }, []);
-
-  const openChallenge = useCallback(() => {
-    setIsCommandPaletteOpen(false);
-    setChallengeSession((currentSession) => currentSession + 1);
-    setIsChallengeOpen(true);
-  }, []);
-
-  const closeCommandPalette = useCallback(() => setIsCommandPaletteOpen(false), []);
-  const closeChallenge = useCallback(() => setIsChallengeOpen(false), []);
-
-  const scrollToSection = useCallback(
-    (sectionId) => {
-      const sectionElement = document.getElementById(sectionId);
-      if (!sectionElement) {
-        return;
-      }
-
-      sectionElement.scrollIntoView({ behavior: motionEnabled ? "smooth" : "auto", block: "start" });
-      sectionElement.focus({ preventScroll: true });
-      setActiveSection(sectionId);
-      window.history.replaceState(null, "", `#${sectionId}`);
-    },
-    [motionEnabled]
-  );
-
-  const openExternalLink = useCallback((url) => {
-    window.open(url, "_blank", "noopener,noreferrer");
-  }, []);
-
-  const copyEmail = useCallback(async () => {
-    try {
-      await window.navigator.clipboard.writeText(SITE_CONFIG.email);
-      setToastMessage("Email copied to clipboard.");
-    } catch {
-      setToastMessage("Could not copy email automatically.");
-    }
-  }, []);
-
-  const toggleMotionPreference = useCallback(() => {
-    setMotionPreference(motionEnabled ? "off" : "on");
-    setToastMessage(motionEnabled ? "Motion effects disabled." : "Motion effects enabled.");
-  }, [motionEnabled, setMotionPreference]);
-
-  const commandActions = useMemo(() => {
-    const actions = [
-      {
-        id: "lab",
-        label: "Try the QA Lab",
-        description: "Reproduce and diagnose a scheduling defect.",
-        icon: <FaMagic />,
-        keywords: ["investigation", "exercise", "timezone", "lab"],
-        onSelect: () => scrollToSection("lab"),
-      },
-      {
-        id: "experience",
-        label: "View Experience and Project Résumé",
-        description: "Explore independent work and download a project summary.",
-        icon: <FaBriefcase />,
-        keywords: ["resume", "cv", "experience"],
-        onSelect: () => scrollToSection("experience"),
-      },
-      {
-        id: "work",
-        label: "Jump to Selected Work",
-        description: "See public projects and quality engineering details.",
-        icon: <FaBriefcase />,
-        keywords: ["section", "projects", "portfolio", "work"],
-        onSelect: () => scrollToSection("work"),
-      },
-      {
-        id: "approach",
-        label: "Jump to Approach",
-        description: "See how Jonathan thinks about reliable automation.",
-        icon: <FaRoute />,
-        keywords: ["section", "process", "method", "testing"],
-        onSelect: () => scrollToSection("approach"),
-      },
-      {
-        id: "about",
-        label: "Jump to About",
-        description: "Scroll to the About section.",
-        icon: <FaUser />,
-        keywords: ["section", "bio", "about"],
-        onSelect: () => scrollToSection("about"),
-      },
-      {
-        id: "contact",
-        label: "Jump to Contact",
-        description: "Scroll directly to contact options.",
-        icon: <FaEnvelope />,
-        keywords: ["section", "email", "contact"],
-        onSelect: () => scrollToSection("contact"),
-      },
-      {
-        id: "copy-email",
-        label: "Copy Email",
-        description: "Copy Jonathan's email to clipboard.",
-        icon: <FaEnvelope />,
-        keywords: ["mail", "copy", "clipboard"],
-        onSelect: copyEmail,
-      },
-      {
-        id: "open-github",
-        label: "Open GitHub",
-        description: "Open GitHub profile in a new tab.",
-        icon: <FaGithub />,
-        keywords: ["source", "repositories", "github"],
-        onSelect: () => openExternalLink(SITE_CONFIG.githubUrl),
-      },
-      {
-        id: "open-linkedin",
-        label: "Open LinkedIn",
-        description: "Open LinkedIn profile in a new tab.",
-        icon: <FaLinkedin />,
-        keywords: ["linkedin", "network", "profile"],
-        onSelect: () => openExternalLink(SITE_CONFIG.linkedinUrl),
-      },
-      {
-        id: "toggle-motion",
-        label: motionEnabled ? "Disable Motion Effects" : "Enable Motion Effects",
-        description: "Override motion preference for this device.",
-        icon: <FaMoon />,
-        keywords: ["animation", "motion", "performance"],
-        onSelect: toggleMotionPreference,
-      },
-      {
-        id: "open-challenge",
-        label: "Launch Squash the Bugs Game",
-        description: "Play a 25-second bug hunt mini-game.",
-        icon: <FaMagic />,
-        keywords: ["game", "challenge", "fun", "qa"],
-        onSelect: openChallenge,
-      },
-    ];
-
-    if (motionPreference !== "auto") {
-      actions.push({
-        id: "reset-motion",
-        label: "Use System Motion Preference",
-        description: "Clear manual override and follow OS settings.",
-        icon: <FaMoon />,
-        keywords: ["auto", "system", "motion"],
-        onSelect: () => {
-          setMotionPreference("auto");
-          setToastMessage("Using system motion preference.");
-        },
-      });
-    }
-
-    return actions;
-  }, [
-    copyEmail,
-    motionEnabled,
-    motionPreference,
-    openExternalLink,
-    openChallenge,
-    scrollToSection,
-    setMotionPreference,
-    toggleMotionPreference,
-  ]);
-
-  useEffect(() => {
-    if (initialHashHandledRef.current) {
-      return undefined;
-    }
-    const initialSectionId = window.location.hash.slice(1);
-    if (!SECTION_IDS.includes(initialSectionId)) {
-      return undefined;
-    }
-
-    const focusFrame = window.requestAnimationFrame(() => {
-      initialHashHandledRef.current = true;
-      scrollToSection(initialSectionId);
-    });
-    return () => window.cancelAnimationFrame(focusFrame);
-  }, [scrollToSection]);
-
-  useEffect(() => {
-    if (typeof window.IntersectionObserver !== "function") {
-      return undefined;
-    }
-
-    const sections = SECTION_IDS.map((sectionId) => document.getElementById(sectionId)).filter(Boolean);
-    const observer = new window.IntersectionObserver(
-      (entries) => {
-        const visibleEntry = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort(
-            (firstEntry, secondEntry) =>
-              Math.abs(firstEntry.boundingClientRect.top) - Math.abs(secondEntry.boundingClientRect.top)
-          )[0];
-
-        if (visibleEntry?.target.id) {
-          setActiveSection(visibleEntry.target.id);
-        }
-      },
-      { rootMargin: "-25% 0px -65%", threshold: [0, 0.1] }
-    );
-
-    sections.forEach((section) => observer.observe(section));
-    return () => observer.disconnect();
-  }, []);
-
-  useEffect(() => {
-    const handleKeyDown = (event) => {
-      const target = event.target;
-      const isTypingInField =
-        target instanceof HTMLElement &&
-        (target.isContentEditable ||
-          target.tagName === "INPUT" ||
-          target.tagName === "TEXTAREA" ||
-          target.tagName === "SELECT");
-
-      if (isChallengeOpen) {
-        return;
-      }
-
-      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
-        event.preventDefault();
-        if (isCommandPaletteOpen) {
-          setIsCommandPaletteOpen(false);
-        } else {
-          openCommandPalette();
-        }
-        return;
-      }
-
-      if (!isTypingInField && !isCommandPaletteOpen && event.key === "/") {
-        event.preventDefault();
-        openCommandPalette();
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isChallengeOpen, isCommandPaletteOpen, openCommandPalette]);
-
-  useEffect(() => {
-    document.documentElement.dataset.motion = motionEnabled ? "on" : "off";
-    return () => delete document.documentElement.dataset.motion;
-  }, [motionEnabled]);
-
-  useEffect(() => {
-    if (!toastMessage) {
-      return undefined;
-    }
-
-    const timeoutId = window.setTimeout(() => setToastMessage(""), 2200);
-    return () => window.clearTimeout(timeoutId);
-  }, [toastMessage]);
-
-  useEffect(() => {
-    if (!isCommandPaletteOpen && !isChallengeOpen) {
-      return undefined;
-    }
-
-    const previousBodyOverflow = document.body.style.overflow;
-    const previousDocumentOverflow = document.documentElement.style.overflow;
-    document.body.style.overflow = "hidden";
-    document.documentElement.style.overflow = "hidden";
-
-    return () => {
-      document.body.style.overflow = previousBodyOverflow;
-      document.documentElement.style.overflow = previousDocumentOverflow;
-    };
-  }, [isCommandPaletteOpen, isChallengeOpen]);
-
-  const hasOpenModal = isCommandPaletteOpen || isChallengeOpen;
-
-  return (
-    <ErrorBoundary>
-      <div inert={hasOpenModal ? true : undefined}>
-        <a href="#main-content" className="skip-link">
-          Skip to main content
-        </a>
-
-        <SiteHeader
-          activeSection={activeSection}
-          onOpenCommandPalette={openCommandPalette}
-          onLaunchChallenge={openChallenge}
-          onNavigate={scrollToSection}
-          onPrepareCommandPalette={loadCommandPalette}
-          onPrepareChallenge={loadChallenge}
-        />
-
-        <main
-          id="main-content"
-          tabIndex={-1}
-          className="relative min-h-screen w-full overflow-x-hidden bg-white text-slate-900 selection:bg-cyan-100 selection:text-slate-900"
-        >
-          <Hero
-            motionEnabled={motionEnabled}
-            pointerEffectsEnabled={pointerEffectsEnabled}
-            onNavigate={scrollToSection}
-          />
-          <Work motionEnabled={motionEnabled} />
-          <Approach motionEnabled={motionEnabled} />
-          <QALab onLaunchChallenge={openChallenge} />
-          <Experience />
-          <About motionEnabled={false} pointerEffectsEnabled={false} />
-          <Contact
-            motionEnabled={false}
-            onCopyEmail={copyEmail}
-            onScrollTop={() => scrollToSection("top")}
-          />
-        </main>
-      </div>
-
-      {hasOpenModal && (
-        <Suspense
-          fallback={
-            <ModalLoadingFallback
-              label={isChallengeOpen ? "Loading QA challenge…" : "Loading quick actions…"}
-            />
-          }
-        >
-          {isCommandPaletteOpen && (
-            <CommandPalette
-              key={commandPaletteSession}
-              isOpen={isCommandPaletteOpen}
-              onClose={closeCommandPalette}
-              actions={commandActions}
-              motionEnabled={motionEnabled}
-            />
-          )}
-          {isChallengeOpen && (
-            <QAChallengeModal
-              key={challengeSession}
-              isOpen={isChallengeOpen}
-              onClose={closeChallenge}
-              motionEnabled={motionEnabled}
-            />
-          )}
-        </Suspense>
-      )}
-
-      <Toast message={toastMessage} />
-    </ErrorBoundary>
-  );
+  </ErrorBoundary>;
 }
-
-export default App;

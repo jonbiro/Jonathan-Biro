@@ -30,109 +30,84 @@
   <meta name="twitter:image" content="%VITE_SITE_URL%/og-portfolio.jpg" />
   <meta name="twitter:image:alt" content="Jonathan Biro, QA Automation Engineer and SDET — reliable signal for confident releases." />
   <link rel="manifest" href="%BASE_URL%manifest.json" />
-  <meta name="theme-color" content="#60a5fa" />
+  <meta name="theme-color" content="#131619" />
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "Person",
-        "@id": "%VITE_SITE_URL%/#person",
-        "name": "Jonathan Biro",
-        "jobTitle": "QA Automation Engineer & SDET",
-        "url": "%VITE_SITE_URL%/",
-        "sameAs": [
-          "https://github.com/jonbiro",
-          "https://www.linkedin.com/in/jonathanbiro/"
-        ],
-        "description": "QA Automation Engineer & SDET building reliable Playwright and TypeScript test systems, CI quality gates, and accessible web experiences.",
-        "knowsAbout": ["QA Automation", "SDET", "Playwright", "TypeScript", "UI and API Testing", "CI/CD", "Accessibility Testing"],
-        "address": {
-          "@type": "PostalAddress",
-          "addressLocality": "Los Angeles",
-          "addressRegion": "CA"
-        }
-      },
-      {
-        "@type": "WebSite",
-        "@id": "%VITE_SITE_URL%/#website",
-        "url": "%VITE_SITE_URL%/",
-        "name": "Jonathan Biro Portfolio",
-        "description": "Selected public work and quality engineering approach by Jonathan Biro.",
-        "author": { "@id": "%VITE_SITE_URL%/#person" }
-      },
-      {
-        "@type": "ItemList",
-        "@id": "%VITE_SITE_URL%/#selected-work",
-        "name": "Selected public work",
-        "itemListElement": [
-          {
-            "@type": "ListItem",
-            "position": 1,
-            "item": {
-              "@type": "CreativeWork",
-              "name": "BiroMD",
-              "url": "https://biromd.com",
-              "description": "A healthcare website with browser checks, export verification, and a privacy-conscious clinical asset pipeline."
-            }
-          },
-          {
-            "@type": "ListItem",
-            "position": 2,
-            "item": {
-              "@type": "CreativeWork",
-              "name": "Jonathan Biro Portfolio",
-              "url": "%VITE_SITE_URL%/",
-              "description": "An accessible, keyboard-ready portfolio with automated behavior and Lighthouse checks."
-            }
-          },
-          {
-            "@type": "ListItem",
-            "position": 3,
-            "item": {
-              "@type": "CreativeWork",
-              "name": "Puppy Quest 1989",
-              "url": "https://jonbiro.github.io/DogeQuest-1989/",
-              "description": "A Canvas platformer exploring collision, input timing, mobile controls, and state transitions."
-            }
-          }
-        ]
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "%VITE_SITE_URL%/#person",
+      "name": "Jonathan Biro",
+      "jobTitle": "QA Automation Engineer & SDET",
+      "url": "%VITE_SITE_URL%/",
+      "sameAs": [
+        "https://github.com/jonbiro",
+        "https://www.linkedin.com/in/jonathanbiro/"
+      ],
+      "description": "QA Automation Engineer & SDET building reliable Playwright and TypeScript test systems, CI quality gates, and accessible web experiences.",
+      "knowsAbout": [
+        "QA Automation",
+        "SDET",
+        "Playwright",
+        "TypeScript",
+        "UI and API Testing",
+        "CI/CD",
+        "Accessibility Testing"
+      ],
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Los Angeles",
+        "addressRegion": "CA"
       }
-    ]
-  }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "%VITE_SITE_URL%/#website",
+      "url": "%VITE_SITE_URL%/",
+      "name": "Jonathan Biro Portfolio",
+      "description": "Selected public work and quality engineering approach by Jonathan Biro.",
+      "author": {
+        "@id": "%VITE_SITE_URL%/#person"
+      }
+    },
+    {
+      "@type": "ItemList",
+      "@id": "%VITE_SITE_URL%/#selected-work",
+      "name": "Selected public work",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "item": {
+            "@type": "CreativeWork",
+            "name": "BiroMD",
+            "url": "https://biromd.com",
+            "description": "A healthcare website with browser checks, export verification, and a privacy-conscious clinical asset pipeline."
+          }
+        }
+      ],
+      "numberOfItems": 1
+    }
+  ]
+}
   </script>
 </head>
 
 <body>
   <div id="root">
-    <main style="min-height:100vh;background:#f2fbff;color:#0f172a;font-family:Inter,system-ui,sans-serif;padding:2rem">
-      <section style="padding:2rem 0;display:grid;place-items:center;text-align:center">
-      <div style="max-width:52rem">
-        <p style="color:#0369a1;text-transform:uppercase;letter-spacing:.18em;font-size:.75rem;font-weight:700">QA Automation Engineer · SDET</p>
-        <h1 style="font-size:clamp(2.75rem,9vw,6rem);margin:1rem 0;line-height:.95;letter-spacing:-.05em">Jonathan Biro</h1>
-        <h2 style="font-size:clamp(1.5rem,4vw,2.5rem);margin:1.5rem 0 0">I build web products and the tests that keep them reliable.</h2>
-        <p style="color:#475569;font-size:clamp(1rem,2vw,1.2rem);line-height:1.7">I design UI, API, and end-to-end checks with Playwright and TypeScript, then connect them to CI so failures are fast to diagnose and safe to act on.</p>
-        <p style="margin-top:2rem">
-          <a href="mailto:jonathan@biro.dev" style="display:inline-block;border-radius:999px;background:#60a5fa;color:#050505;padding:.8rem 1.25rem;font-weight:700;text-decoration:none">Email Jonathan</a>
-        </p>
-      </div>
-      </section>
-      <section style="max-width:72rem;margin:0 auto;padding:5rem 0">
-        <p style="color:#0369a1;text-transform:uppercase;letter-spacing:.18em;font-size:.75rem;font-weight:700">Selected public work</p>
-        <h2 style="font-size:clamp(2rem,5vw,3.5rem);margin:.75rem 0 1rem">Selected projects</h2>
-        <p style="max-width:44rem;color:#475569;line-height:1.7">Public builds that show how I approach product risk, release validation, and interaction edge cases.</p>
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(16rem,1fr));gap:1rem;margin-top:2rem">
-          <article style="border:1px solid #dce7ee;border-radius:1.25rem;padding:1.5rem"><h3>BiroMD</h3><p style="color:#475569;line-height:1.6">A medical-practice site with Playwright browser checks, export verification, and an allowlisted clinical-gallery pipeline.</p></article>
-          <article style="border:1px solid #dce7ee;border-radius:1.25rem;padding:1.5rem"><h3>QA Portfolio</h3><p style="color:#475569;line-height:1.6">An accessible, keyboard-ready portfolio with coverage-gated behavior tests and Lighthouse budgets.</p></article>
-          <article style="border:1px solid #dce7ee;border-radius:1.25rem;padding:1.5rem"><h3>Puppy Quest 1989</h3><p style="color:#475569;line-height:1.6">A Canvas platformer exploring collision, input timing, mobile controls, and state transitions.</p></article>
-        </div>
-      </section>
-      <section style="max-width:52rem;margin:0 auto;padding:5rem 0;text-align:center">
-        <p style="color:#0369a1;text-transform:uppercase;letter-spacing:.18em;font-size:.75rem;font-weight:700">About</p>
-        <h2 style="font-size:clamp(2rem,5vw,3.5rem);margin:.75rem 0 1rem">Quality engineering with a product mindset.</h2>
-        <p style="color:#475569;line-height:1.7">I&apos;m a QA Automation Engineer and SDET in Los Angeles. My strongest work combines Playwright, TypeScript, deterministic data, CI feedback, and accessibility checks.</p>
-        <p style="margin-top:2rem"><a href="mailto:jonathan@biro.dev" style="color:#60a5fa">jonathan@biro.dev</a></p>
-      </section>
+    <main style="max-width:1000px;margin:auto;padding:4rem 2rem;background:#131619;color:#e7eaee;font-family:Inter,system-ui,sans-serif;line-height:1.7">
+      <p>Software engineering · Test automation · SDET</p>
+      <h1>Jonathan Biro</h1>
+      <p>I build web applications and automated checks with TypeScript and Playwright.</p>
+      <h2>Selected engineering work</h2>
+      <h3>BiroMD — quality engineering</h3>
+      <p>Frontend implementation, browser regression tests, and static-release validation.</p>
+      <a style="color:#b4c8de" href="https://github.com/jonbiro/BiroMD">View repository</a>
+      <h2>Background</h2>
+      <p>QA Automation Engineer and SDET based in Los Angeles.</p>
+      <h2>Contact</h2>
+      <a style="color:#b4c8de" href="mailto:jonathan@biro.dev">jonathan@biro.dev</a>
     </main>
   </div>
   <script type="module" src="/src/main.jsx"></script>

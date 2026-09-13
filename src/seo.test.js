@@ -15,8 +15,9 @@ describe("portfolio metadata", () => {
         expect(html).toContain("og-portfolio.jpg");
         expect(html).toContain('property="og:image:width" content="1200"');
         expect(html).toContain('property="og:image:height" content="630"');
-        expect(html).toContain("Selected public work");
-        expect(html).toContain("QA Portfolio");
+        expect(html).toContain("Selected engineering work");
+        expect(html).toContain("BiroMD");
+        expect(html).not.toMatch(/Puppy Quest|QA Portfolio|DogeQuest/);
         expect(html).not.toMatch(/kickresume|view résumé/i);
         expect(structuredDataSource).toBeTruthy();
 
