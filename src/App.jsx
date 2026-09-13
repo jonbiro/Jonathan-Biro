@@ -38,7 +38,7 @@ export default function App() {
           <div className="eng-introduction">
           <p className="eng-eyebrow">Software engineering & quality automation</p>
           <p className="eng-greeting">Hi, I’m</p>
-          <h1>Jonathan Biro</h1>
+          <h1>Jonathan <span>Biro</span></h1>
           <p className="eng-lead">I build software.<br /><span>And figure out why it breaks.</span></p>
           <p className="eng-summary">QA automation and SDET experience at DocMagic and Priceline. A builder’s perspective, a tester’s curiosity, and a focus on software people can rely on.</p>
           <div className="eng-actions">
@@ -48,7 +48,9 @@ export default function App() {
           </div>
           </div>
           <figure className="eng-portrait">
+            <div className="eng-portrait-frame">
             <img src={portrait} alt="Illustrated portrait of Jonathan Biro" width="320" height="320" fetchPriority="high" />
+            </div>
             <figcaption>Jonathan Biro <span>Engineer · Los Angeles, California</span></figcaption>
           </figure>
         </section>
@@ -62,12 +64,12 @@ export default function App() {
         </section>
 
         <section id="work" tabIndex={-1} className="eng-section">
-          <div className="eng-section-heading"><p className="eng-eyebrow"><span className="eng-index">02</span> Selected engineering work</p><h2>The product. The code.<br />The checks behind it.</h2></div>
+          <div className="eng-section-heading"><p className="eng-eyebrow"><span className="eng-index">02</span> Selected engineering work</p><h2>The product. The code.<br /><em>The checks behind it.</em></h2></div>
           <article className="eng-case">
             <div className="eng-case-overview">
             <div>
             <div className="eng-case-top">
-              <div><p className="eng-meta">Independent project / Web application</p><h3>BiroMD — quality engineering</h3></div>
+              <div><p className="eng-meta">Independent project / Web application</p><h3>BiroMD <span>— quality engineering</span></h3></div>
             </div>
             <p className="eng-case-intro">I paired frontend development with automated release checks for a medical-practice website. My focus: making sure a patient’s path to a consultation still works after the next change.</p>
             <p className="eng-stack">TypeScript <span> / </span> Next.js <span> / </span> Playwright <span> / </span> GitHub Actions</p>
