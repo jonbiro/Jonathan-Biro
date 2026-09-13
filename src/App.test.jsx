@@ -16,6 +16,13 @@ it("shows only engineering work and focuses the selected section", async () => {
   expect(screen.getByText("2019–2022 · 3 years, 1 month")).toBeInTheDocument();
   expect(screen.getByText("August 2022")).toHaveAttribute("datetime", "2022-08");
   expect(document.getElementById("experience").compareDocumentPosition(document.getElementById("work")) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  expect(screen.getByAltText("Illustrated portrait of Jonathan Biro")).toHaveAttribute(
+    "sizes",
+    "(max-width: 640px) 96px, (max-width: 900px) 220px, 320px"
+  );
+  expect(
+    screen.getByAltText(/BiroMD interface/).getAttribute("srcset")
+  ).toContain("/projects/biromd-480.webp 480w");
   await user.click(screen.getByRole("link", { name: "Experience", exact: true }));
   expect(document.getElementById("experience")).toHaveFocus();
   expect(screen.queryByText(/puppy quest|bug hunt|QA Portfolio/i)).not.toBeInTheDocument();

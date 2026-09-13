@@ -18,6 +18,7 @@ export default defineConfig(({ mode }) => {
     base: normalizeBasePath(env.VITE_BASE_PATH ?? env.BASE_PATH ?? ''),
     build: {
       outDir: 'dist/client',
+      assetsInlineLimit: 0,
       rollupOptions: {
         output: {
           manualChunks(id) {
