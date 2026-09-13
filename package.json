@@ -4,11 +4,11 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "VITE_SITE_URL=${VITE_SITE_URL:-https://biro.dev} vite",
-    "build": "VITE_SITE_URL=${VITE_SITE_URL:-https://biro.dev} vite build",
+    "dev": "VITE_DEPLOY_TARGET=${VITE_DEPLOY_TARGET:-static} VITE_SITE_URL=${VITE_SITE_URL:-https://jonathanbiro.com} vite",
+    "build": "VITE_DEPLOY_TARGET=${VITE_DEPLOY_TARGET:-static} VITE_SITE_URL=${VITE_SITE_URL:-https://jonathanbiro.com} vite build",
     "postbuild": "node scripts/generate-seo-files.mjs dist/client",
     "lint": "eslint .",
-    "preview": "VITE_SITE_URL=${VITE_SITE_URL:-https://biro.dev} vite preview",
+    "preview": "VITE_DEPLOY_TARGET=${VITE_DEPLOY_TARGET:-static} VITE_SITE_URL=${VITE_SITE_URL:-https://jonathanbiro.com} vite preview",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:watch": "vitest"

@@ -16,6 +16,8 @@ it("shows only engineering work and focuses the selected section", async () => {
   expect(document.getElementById("experience")).toHaveFocus();
   expect(screen.queryByText(/puppy quest|bug hunt|QA Portfolio/i)).not.toBeInTheDocument();
   expect(screen.queryByRole("button", { name: /generate confirmation|quick actions/i })).not.toBeInTheDocument();
+  expect(screen.getByRole("link", { name: /public GitHub source/i })).toHaveAttribute("href", "https://github.com/jonbiro/Jonathan-Biro");
+  expect(screen.getByRole("link", { name: /automated quality checks/i })).toHaveAttribute("href", "https://github.com/jonbiro/Jonathan-Biro/actions");
   await user.click(screen.getByRole("link", { name: "View engineering work" }));
   expect(document.getElementById("work")).toHaveFocus();
   expect(window.location.hash).toBe("#work");

@@ -46,6 +46,10 @@ export default function App() {
             <External href={SITE_CONFIG.githubUrl}>GitHub</External>
             <External href={SITE_CONFIG.linkedinUrl}>LinkedIn</External>
           </div>
+          <p className="eng-delivery-proof">
+            This site deploys from <External href={SITE_CONFIG.portfolioRepoUrl}>public GitHub source</External>
+            {" "}through <External href={SITE_CONFIG.portfolioActionsUrl}>automated quality checks</External> to Netlify.
+          </p>
           </div>
           <figure className="eng-portrait">
             <div className="eng-portrait-frame">

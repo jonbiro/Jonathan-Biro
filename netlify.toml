@@ -7,11 +7,6 @@
   VITE_DEPLOY_TARGET = "static"
   VITE_SITE_URL = "https://jonathanbiro.com"
 
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
-
 [[headers]]
   for = "/*"
   [headers.values]

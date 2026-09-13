@@ -29,6 +29,8 @@ npm install
 npm run dev
 ```
 
+Local development, production builds, and previews default to the static Netlify target and canonical `https://jonathanbiro.com` metadata. Set `VITE_DEPLOY_TARGET=sites` explicitly only when exercising the legacy Sites/Cloudflare build.
+
 ## Build and Verify
 
 ```bash

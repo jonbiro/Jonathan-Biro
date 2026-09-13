@@ -1,4 +1,4 @@
-const DEFAULT_SITE_URL = "https://biro.dev";
+const DEFAULT_SITE_URL = "https://jonathanbiro.com";
 const normalizedSiteUrl = (import.meta.env.VITE_SITE_URL || DEFAULT_SITE_URL).replace(/\/+$/, "");
 
 const SITE_CONFIG = {
@@ -10,6 +10,8 @@ const SITE_CONFIG = {
     location: "Los Angeles, CA",
     email: "jonathan@biro.dev",
     githubUrl: "https://github.com/jonbiro",
+    portfolioRepoUrl: "https://github.com/jonbiro/Jonathan-Biro",
+    portfolioActionsUrl: "https://github.com/jonbiro/Jonathan-Biro/actions",
     linkedinUrl: "https://www.linkedin.com/in/jonathanbiro/",
 };
 

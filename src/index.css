@@ -48,6 +48,8 @@ section[tabindex="-1"]:focus, main[tabindex="-1"]:focus { outline: none; }
 .eng-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 26px; margin-top: 28px; font-size: 14px; }
 .engineering .eng-button { background: linear-gradient(135deg, #c3d8ce, #a9c5b9); border: 1px solid #d0e1d7; border-radius: 6px; padding: 13px 21px; color: #142320; font-weight: 600; min-height: 44px; box-shadow: 0 3px 0 #678679, 0 8px 24px #0003; transition: background .18s, transform .18s, box-shadow .18s; }
 .engineering .eng-button:hover { background: #c4d8d1; color: #142320; text-decoration: none; transform: translateY(-2px); }
+.eng-delivery-proof { max-width: 620px; margin: 26px 0 0; padding: 11px 0 11px 16px; border-left: 1px solid #53695f; color: #929da9; font-size: .8125rem; line-height: 1.65; }
+.engineering .eng-delivery-proof a { color: #b5c9c2; }
 .eng-location { color: #929ca9; font-size: 13px; margin-top: 22px; }
 .eng-section { border-top: 1px solid #303b3c; padding: 64px 0; scroll-margin-top: 2rem; }
 .engineering h2 { font-size: clamp(1.65rem, 3vw, 2.35rem); line-height: 1.25; letter-spacing: -.035em; font-weight: 500; margin: 0; }
@@ -134,6 +136,7 @@ section[tabindex="-1"]:focus, main[tabindex="-1"]:focus { outline: none; }
   .eng-portrait-frame { flex: 0 0 108px; padding: 5px; border-radius: 48% 48% 8px 8px; box-shadow: 5px 7px 0 -1px #15201e, 5px 7px 0 0 #42584f; }
   .eng-portrait img { border-radius: 48% 48% 4px 4px; }
   .eng-portrait figcaption { margin: 0; padding: 0; }
+  .eng-delivery-proof { margin-top: 24px; }
   .eng-desktop-break { display: none; }
   .eng-eyebrow { font-size: 12px; }
   .eng-section { padding: 40px 0; }

@@ -41,4 +41,28 @@ describe("portfolio metadata", () => {
             expect.arrayContaining([expect.objectContaining({ sizes: "192x192" })])
         );
     });
+
+    it("uses a branded, index-safe 404 instead of a soft homepage fallback", async () => {
+        const [notFoundHtml, netlifyConfig] = await Promise.all([
+            readProjectFile("public/404.html"),
+            readProjectFile("netlify.toml"),
+        ]);
+
+        expect(notFoundHtml).toContain('content="noindex,follow"');
+        expect(notFoundHtml).toContain('href="https://jonathanbiro.com/"');
+        expect(notFoundHtml).toContain("https://github.com/jonbiro/Jonathan-Biro");
+        expect(notFoundHtml).not.toContain("__SITE_BASE_PATH__");
+        expect(netlifyConfig).not.toMatch(/\[\[redirects\]\][\s\S]*?status\s*=\s*200/);
+    });
+
+    it("keeps checked-in discovery files on the production domain", async () => {
+        const [robots, sitemap] = await Promise.all([
+            readProjectFile("public/robots.txt"),
+            readProjectFile("public/sitemap.xml"),
+        ]);
+
+        expect(robots).toContain("Sitemap: https://jonathanbiro.com/sitemap.xml");
+        expect(sitemap).toContain("<loc>https://jonathanbiro.com/</loc>");
+        expect(`${robots}\n${sitemap}`).not.toContain("https://biro.dev");
+    });
 });

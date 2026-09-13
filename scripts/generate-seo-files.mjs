@@ -2,7 +2,7 @@ import { createHash } from "node:crypto";
 import { mkdir, readFile, readdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 
-const DEFAULT_SITE_URL = "https://biro.dev";
+const DEFAULT_SITE_URL = "https://jonathanbiro.com";
 const SITE_URL = (process.env.VITE_SITE_URL || DEFAULT_SITE_URL).replace(/\/+$/, "");
 const normalizeBasePath = (value) => {
     if (!value || value.trim() === "/") return "/";

@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://biro.dev/sitemap.xml
+Sitemap: https://jonathanbiro.com/sitemap.xml
