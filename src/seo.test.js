@@ -17,6 +17,7 @@ describe("portfolio metadata", () => {
         expect(html).toContain('property="og:image:height" content="630"');
         expect(html).toContain("Selected engineering work");
         expect(html).toContain("BiroMD");
+        expect(html).toContain("with 7+ years at DocMagic and Priceline");
         expect(html).not.toMatch(/Puppy Quest|QA Portfolio|DogeQuest/);
         expect(html).not.toMatch(/kickresume|view résumé/i);
         expect(structuredDataSource).toBeTruthy();

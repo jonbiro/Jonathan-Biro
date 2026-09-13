@@ -31,8 +31,11 @@ describe("portfolio experience", () => {
         expect(document.querySelector("h1")?.textContent.replace(/\s+/g, " ").trim()).toBe("Jonathan Biro");
         expect(document.querySelector("#experience")?.textContent).toContain("DocMagic");
         expect(document.querySelector("#experience")?.textContent).toContain("Priceline");
+        expect(document.querySelector(".eng-summary")?.textContent).toContain("7+ years");
+        expect(document.querySelector("#experience")?.textContent).toContain("present · 4+ years");
         expect(document.querySelector("#work")?.textContent).toContain("BiroMD");
         expect(document.querySelector("#work")?.textContent).not.toMatch(/puppy quest|bug hunt|QA Portfolio/i);
+        expect(document.querySelector("#about")?.textContent).toContain("automation that catches real regressions");
         expect(document.querySelector('time[datetime="2022-08"]')?.textContent).toBe("August 2022");
         expect(document.querySelector("[data-copy-email]")?.hidden).toBe(false);
     });
